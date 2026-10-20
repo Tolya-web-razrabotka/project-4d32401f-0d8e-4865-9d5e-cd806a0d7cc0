@@ -61,7 +61,8 @@ export function RequestFieldsBlock({
       {hint && <p className="mt-1 text-base text-muted-foreground">{hint}</p>}
       <div className="mt-4 grid gap-5 sm:grid-cols-2">
         {editable.map((f) => (
-          <Field key={f.id} label={f.label} required={f.is_required}>
+          // Подпись — из снимка в заявке, если значение уже сохранено: переименование поля в справочнике её не меняет
+          <Field key={f.id} label={values.find((v) => v.field_id === f.id)?.label ?? f.label} required={f.is_required}>
             <FieldInput
               field={f}
               value={draft[f.id]}
