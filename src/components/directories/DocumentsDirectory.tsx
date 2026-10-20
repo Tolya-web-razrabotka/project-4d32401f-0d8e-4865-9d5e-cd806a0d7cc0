@@ -1,0 +1,210 @@
+import { useState } from "react";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { toast } from "sonner";
+import { supabase } from "@/integrations/supabase/client";
+import { useProfile } from "@/lib/profile";
+import { showError } from "@/lib/format";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { Switch } from "@/components/ui/switch";
+import { Button } from "@/components/ui/button";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { DeleteButton, EditSheet, EmptyRow, Field, FormActions, Toolbar, emptyToNull, matches } from "./common";
+
+export const DOC_SECTIONS = ["ГСН", "ГСВ", "МосГаз", "МГГТ и Геотрест", "Органы города"];
+const NONE = "__none";
+const KEY = ["dir-documents"];
+
+type Doc = {
+  id: string;
+  name: string;
+  section: string;
+  stage_template_id: string | null;
+  to_id_folder: boolean;
+  comment: string | null;
+};
+
+export function useStageTemplates() {
+  return useQuery({
+    queryKey: ["dir-stage-templates-short"],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("stage_templates")
+        .select("id, number, name")
+        .is("deleted_at", null)
+        .order("number");
+      if (error) throw error;
+      return data;
+    },
+  });
+}
+
+export function DocumentsDirectory() {
+  const { is_admin } = useProfile();
+  const [search, setSearch] = useState("");
+  const [section, setSection] = useState("all");
+  const [editing, setEditing] = useState<Doc | "new" | null>(null);
+  const { data: templates = [] } = useStageTemplates();
+  const { data = [], isLoading } = useQuery({
+    queryKey: KEY,
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("documents")
+        .select("id, name, section, stage_template_id, to_id_folder, comment")
+        .is("deleted_at", null)
+        .order("sort");
+      if (error) throw error;
+      return data as Doc[];
+    },
+  });
+  const tplLabel = (id: string | null) => {
+    const t = templates.find((x) => x.id === id);
+    return t ? `${t.number}. ${t.name}` : "";
+  };
+  const rows = data.filter(
+    (d) => (section === "all" || d.section === section) && matches(search, d.name, d.comment, tplLabel(d.stage_template_id)),
+  );
+
+  return (
+    <div>
+      <Toolbar search={search} onSearch={setSearch} onAdd={is_admin ? () => setEditing("new") : undefined}>
+        <Select value={section} onValueChange={setSection}>
+          <SelectTrigger className="h-12 w-60 text-lg">
+            <SelectValue />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="all" className="text-base">Все разделы</SelectItem>
+            {DOC_SECTIONS.map((s) => (
+              <SelectItem key={s} value={s} className="text-base">{s}</SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+      </Toolbar>
+      <div className="rounded-lg border">
+        <Table className="text-base">
+          <TableHeader>
+            <TableRow>
+              <TableHead>Название</TableHead>
+              <TableHead>Раздел</TableHead>
+              <TableHead>Этап</TableHead>
+              <TableHead>В папку ИД</TableHead>
+              <TableHead>Комментарий</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {isLoading ? null : rows.length === 0 ? (
+              <EmptyRow cols={5} />
+            ) : (
+              rows.map((d) => (
+                <TableRow key={d.id} className={is_admin ? "cursor-pointer" : ""} onClick={() => is_admin && setEditing(d)}>
+                  <TableCell className="font-medium">{d.name}</TableCell>
+                  <TableCell>{d.section}</TableCell>
+                  <TableCell>{tplLabel(d.stage_template_id)}</TableCell>
+                  <TableCell>{d.to_id_folder ? "Да" : "Нет"}</TableCell>
+                  <TableCell className="text-muted-foreground">{d.comment}</TableCell>
+                </TableRow>
+              ))
+            )}
+          </TableBody>
+        </Table>
+      </div>
+      <EditSheet
+        open={editing !== null}
+        onOpenChange={(o) => !o && setEditing(null)}
+        title={editing === "new" ? "Новый документ" : "Документ"}
+      >
+        {editing !== null && (
+          <DocForm key={editing === "new" ? "new" : editing.id} doc={editing === "new" ? null : editing} templates={templates} onClose={() => setEditing(null)} />
+        )}
+      </EditSheet>
+    </div>
+  );
+}
+
+function DocForm({
+  doc,
+  templates,
+  onClose,
+}: {
+  doc: Doc | null;
+  templates: { id: string; number: number; name: string }[];
+  onClose: () => void;
+}) {
+  const qc = useQueryClient();
+  const [name, setName] = useState(doc?.name ?? "");
+  const [section, setSection] = useState(doc?.section ?? "");
+  const [tpl, setTpl] = useState(doc?.stage_template_id ?? NONE);
+  const [toId, setToId] = useState(doc?.to_id_folder ?? false);
+  const [comment, setComment] = useState(doc?.comment ?? "");
+  const m = useMutation({
+    mutationFn: async () => {
+      const payload = {
+        name: name.trim(),
+        section,
+        stage_template_id: tpl === NONE ? null : tpl,
+        to_id_folder: toId,
+        comment: emptyToNull(comment),
+      };
+      const { error } = doc
+        ? await supabase.from("documents").update(payload).eq("id", doc.id)
+        : await supabase.from("documents").insert(payload);
+      if (error) throw error;
+    },
+    onSuccess: () => {
+      toast.success("Сохранено");
+      qc.invalidateQueries({ queryKey: KEY });
+      onClose();
+    },
+    onError: showError,
+  });
+  return (
+    <form
+      className="space-y-5"
+      onSubmit={(e) => {
+        e.preventDefault();
+        if (!name.trim() || !section) return toast.error("Заполните название и раздел");
+        m.mutate();
+      }}
+    >
+      <Field label="Название" required>
+        <Input value={name} onChange={(e) => setName(e.target.value)} className="h-12 text-lg" />
+      </Field>
+      <Field label="Раздел" required>
+        <Select value={section} onValueChange={setSection}>
+          <SelectTrigger className="h-12 text-lg"><SelectValue placeholder="Выберите раздел" /></SelectTrigger>
+          <SelectContent>
+            {DOC_SECTIONS.map((s) => (
+              <SelectItem key={s} value={s} className="text-base">{s}</SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+      </Field>
+      <Field label="Этап">
+        <Select value={tpl} onValueChange={setTpl}>
+          <SelectTrigger className="h-12 text-lg"><SelectValue /></SelectTrigger>
+          <SelectContent>
+            <SelectItem value={NONE} className="text-base">— не выбран —</SelectItem>
+            {templates.map((t) => (
+              <SelectItem key={t.id} value={t.id} className="text-base">{t.number}. {t.name}</SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+      </Field>
+      <label className="flex items-center gap-3 text-lg">
+        <Switch checked={toId} onCheckedChange={setToId} /> В папку ИД
+      </label>
+      <Field label="Комментарий">
+        <Textarea value={comment} onChange={(e) => setComment(e.target.value)} className="text-lg" />
+      </Field>
+      <FormActions pending={m.isPending} onCancel={onClose} />
+      {doc && (
+        <div className="border-t pt-4">
+          <DeleteButton table="documents" id={doc.id} name={doc.name} invalidate={KEY} onDone={onClose} />
+        </div>
+      )}
+    </form>
+  );
+}
+
+export { Button };
