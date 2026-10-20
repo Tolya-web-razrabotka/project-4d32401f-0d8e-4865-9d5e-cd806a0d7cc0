@@ -6,6 +6,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTitle } from "@/components/ui/sheet";
 import { ProfileContext, type CurrentProfile } from "@/lib/profile";
+import { OverdueDialog, clearOverdueAck } from "@/components/OverdueDialog";
 
 export const Route = createFileRoute("/_authenticated")({
   ssr: false,
@@ -23,6 +24,7 @@ function useSignOut() {
   return async () => {
     await qc.cancelQueries();
     qc.clear();
+    clearOverdueAck();
     await supabase.auth.signOut();
     navigate({ to: "/login", replace: true });
   };
@@ -160,6 +162,7 @@ function Shell({ profile, onSignOut }: { profile: CurrentProfile; onSignOut: () 
         <main className="flex-1 p-6 lg:p-8">
           <Outlet />
         </main>
+        <OverdueDialog />
       </div>
     </div>
   );

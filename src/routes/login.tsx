@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { showError } from "@/lib/format";
+import { clearOverdueAck } from "@/components/OverdueDialog";
 
 export const Route = createFileRoute("/login")({
   ssr: false,
@@ -36,6 +37,7 @@ function LoginPage() {
       showError(error.message === "Invalid login credentials" ? { message: "Неверный email или пароль" } : error);
       return;
     }
+    clearOverdueAck(); // окно «Просрочено» показывается при каждом входе
     navigate({ to: "/objects", replace: true });
   }
 
