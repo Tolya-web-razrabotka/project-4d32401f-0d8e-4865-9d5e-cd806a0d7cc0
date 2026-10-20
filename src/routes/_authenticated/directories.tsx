@@ -6,6 +6,7 @@ import { CustomersDirectory } from "@/components/directories/CustomersDirectory"
 import { EmployeesDirectory } from "@/components/directories/EmployeesDirectory";
 import { StatusesDirectory } from "@/components/directories/StatusesDirectory";
 import { StagesDirectory } from "@/components/directories/stages/StagesDirectory";
+import { RequestTypesDirectory } from "@/components/directories/request-types/RequestTypesDirectory";
 
 const TABS = [
   { v: "stages", label: "Этапы" },
@@ -37,9 +38,6 @@ export const Route = createFileRoute("/_authenticated/directories")({
   }),
 });
 
-function Stub() {
-  return <p className="py-10 text-center text-xl text-muted-foreground">Раздел в разработке</p>;
-}
 
 function DirectoriesPage() {
   const { tab = "stages" } = Route.useSearch();
@@ -61,7 +59,7 @@ function DirectoriesPage() {
         </TabsList>
         <TabsContent value="stages"><StagesDirectory /></TabsContent>
         <TabsContent value="documents"><DocumentsDirectory /></TabsContent>
-        <TabsContent value="request-types"><Stub /></TabsContent>
+        <TabsContent value="request-types"><RequestTypesDirectory /></TabsContent>
         <TabsContent value="representatives"><RepresentativesDirectory /></TabsContent>
         <TabsContent value="customers"><CustomersDirectory /></TabsContent>
         <TabsContent value="employees"><EmployeesDirectory /></TabsContent>
