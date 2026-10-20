@@ -69,7 +69,7 @@ export function CustomerForm({
       className="space-y-5"
       onSubmit={(e) => {
         e.preventDefault();
-        if (!v.name.trim()) return toast.error("Заполните название");
+        if (!v.name.trim()) { toast.error("Заполните название"); return; }
         m.mutate();
       }}
     >

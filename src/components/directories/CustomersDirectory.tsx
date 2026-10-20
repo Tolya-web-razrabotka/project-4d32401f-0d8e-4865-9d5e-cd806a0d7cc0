@@ -221,7 +221,7 @@ function ContactForm({
       className="space-y-4 rounded-lg border bg-muted/40 p-4"
       onSubmit={(e) => {
         e.preventDefault();
-        if (!v.full_name.trim()) return toast.error("Заполните ФИО");
+        if (!v.full_name.trim()) { toast.error("Заполните ФИО"); return; }
         m.mutate();
       }}
     >

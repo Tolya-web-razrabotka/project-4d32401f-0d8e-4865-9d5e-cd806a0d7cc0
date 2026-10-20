@@ -108,7 +108,7 @@ function EmpForm({ emp, roles, onClose }: { emp: Emp | null; roles: { code: stri
       className="space-y-5"
       onSubmit={(e) => {
         e.preventDefault();
-        if (!name.trim() || !role) return toast.error("Заполните ФИО и роль");
+        if (!name.trim() || !role) { toast.error("Заполните ФИО и роль"); return; }
         m.mutate();
       }}
     >

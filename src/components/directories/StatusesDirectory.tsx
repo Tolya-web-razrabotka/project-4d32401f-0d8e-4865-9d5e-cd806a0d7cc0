@@ -23,7 +23,7 @@ export function StatusBadge({ name, color }: { name: string; color: string }) {
 function textOn(hex: string) {
   const m = /^#?([0-9a-f]{6})$/i.exec(hex);
   if (!m) return "inherit";
-  const n = parseInt(m[1], 16);
+  const n = parseInt(m[1]!, 16);
   const l = (0.299 * (n >> 16) + 0.587 * ((n >> 8) & 255) + 0.114 * (n & 255)) / 255;
   return l > 0.6 ? "#000" : "#fff";
 }
@@ -101,9 +101,9 @@ function StForm({ st, onClose }: { st: St; onClose: () => void }) {
       className="space-y-5"
       onSubmit={(e) => {
         e.preventDefault();
-        if (!name.trim()) return toast.error("Заполните название");
-        if (!validHex) return toast.error("Цвет должен быть в формате #RRGGBB");
-        if (!Number.isInteger(Number(sort))) return toast.error("Порядок должен быть целым числом");
+        if (!name.trim()) { toast.error("Заполните название"); return; }
+        if (!validHex) { toast.error("Цвет должен быть в формате #RRGGBB"); return; }
+        if (!Number.isInteger(Number(sort))) { toast.error("Порядок должен быть целым числом"); return; }
         m.mutate();
       }}
     >

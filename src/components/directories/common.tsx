@@ -27,7 +27,7 @@ export function Toolbar({
 }: {
   search: string;
   onSearch: (v: string) => void;
-  onAdd?: () => void;
+  onAdd?: (() => void) | undefined;
   children?: ReactNode;
 }) {
   return (

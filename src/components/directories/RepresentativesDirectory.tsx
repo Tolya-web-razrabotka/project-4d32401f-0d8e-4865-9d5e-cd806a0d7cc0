@@ -97,7 +97,7 @@ function RepForm({ rep, onClose }: { rep: Rep | null; onClose: () => void }) {
       className="space-y-5"
       onSubmit={(e) => {
         e.preventDefault();
-        if (!name.trim()) return toast.error("Заполните название");
+        if (!name.trim()) { toast.error("Заполните название"); return; }
         m.mutate();
       }}
     >

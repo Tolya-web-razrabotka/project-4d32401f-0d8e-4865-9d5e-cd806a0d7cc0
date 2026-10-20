@@ -162,7 +162,7 @@ function DocForm({
       className="space-y-5"
       onSubmit={(e) => {
         e.preventDefault();
-        if (!name.trim() || !section) return toast.error("Заполните название и раздел");
+        if (!name.trim() || !section) { toast.error("Заполните название и раздел"); return; }
         m.mutate();
       }}
     >
