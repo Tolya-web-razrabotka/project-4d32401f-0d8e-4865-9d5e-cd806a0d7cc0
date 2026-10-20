@@ -16,6 +16,7 @@ import { Route as AuthenticatedDirectoriesRouteImport } from './routes/_authenti
 import { Route as AuthenticatedHistoryRouteImport } from './routes/_authenticated/history'
 import { Route as AuthenticatedObjectsRouteImport } from './routes/_authenticated/objects'
 import { Route as AuthenticatedRequestsRouteImport } from './routes/_authenticated/requests'
+import { Route as AuthenticatedDirectoriesStagesIdRouteImport } from './routes/_authenticated/directories_.stages.$id'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -52,6 +53,12 @@ const AuthenticatedRequestsRoute = AuthenticatedRequestsRouteImport.update({
   path: '/requests',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedDirectoriesStagesIdRoute =
+  AuthenticatedDirectoriesStagesIdRouteImport.update({
+    id: '/directories_/stages/$id',
+    path: '/directories/stages/$id',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -60,6 +67,7 @@ export interface FileRoutesByFullPath {
   '/history': typeof AuthenticatedHistoryRoute
   '/objects': typeof AuthenticatedObjectsRoute
   '/requests': typeof AuthenticatedRequestsRoute
+  '/directories/stages/$id': typeof AuthenticatedDirectoriesStagesIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -68,6 +76,7 @@ export interface FileRoutesByTo {
   '/history': typeof AuthenticatedHistoryRoute
   '/objects': typeof AuthenticatedObjectsRoute
   '/requests': typeof AuthenticatedRequestsRoute
+  '/directories/stages/$id': typeof AuthenticatedDirectoriesStagesIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -78,13 +87,27 @@ export interface FileRoutesById {
   '/_authenticated/history': typeof AuthenticatedHistoryRoute
   '/_authenticated/objects': typeof AuthenticatedObjectsRoute
   '/_authenticated/requests': typeof AuthenticatedRequestsRoute
+  '/_authenticated/directories_/stages/$id': typeof AuthenticatedDirectoriesStagesIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
-    '/' | '/login' | '/directories' | '/history' | '/objects' | '/requests'
+    | '/'
+    | '/login'
+    | '/directories'
+    | '/history'
+    | '/objects'
+    | '/requests'
+    | '/directories/stages/$id'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/login' | '/directories' | '/history' | '/objects' | '/requests'
+  to:
+    | '/'
+    | '/login'
+    | '/directories'
+    | '/history'
+    | '/objects'
+    | '/requests'
+    | '/directories/stages/$id'
   id:
     | '__root__'
     | '/'
@@ -94,6 +117,7 @@ export interface FileRouteTypes {
     | '/_authenticated/history'
     | '/_authenticated/objects'
     | '/_authenticated/requests'
+    | '/_authenticated/directories_/stages/$id'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -153,6 +177,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedRequestsRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/directories_/stages/$id': {
+      id: '/_authenticated/directories_/stages/$id'
+      path: '/directories/stages/$id'
+      fullPath: '/directories/stages/$id'
+      preLoaderRoute: typeof AuthenticatedDirectoriesStagesIdRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
   }
 }
 
@@ -161,6 +192,7 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedHistoryRoute: typeof AuthenticatedHistoryRoute
   AuthenticatedObjectsRoute: typeof AuthenticatedObjectsRoute
   AuthenticatedRequestsRoute: typeof AuthenticatedRequestsRoute
+  AuthenticatedDirectoriesStagesIdRoute: typeof AuthenticatedDirectoriesStagesIdRoute
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
@@ -168,6 +200,7 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedHistoryRoute: AuthenticatedHistoryRoute,
   AuthenticatedObjectsRoute: AuthenticatedObjectsRoute,
   AuthenticatedRequestsRoute: AuthenticatedRequestsRoute,
+  AuthenticatedDirectoriesStagesIdRoute: AuthenticatedDirectoriesStagesIdRoute,
 }
 
 const AuthenticatedRouteRouteWithChildren =

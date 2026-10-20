@@ -1,10 +1,11 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { DocumentsDirectory } from "@/components/directories/DocumentsDirectory";
 import { RepresentativesDirectory } from "@/components/directories/RepresentativesDirectory";
 import { CustomersDirectory } from "@/components/directories/CustomersDirectory";
 import { EmployeesDirectory } from "@/components/directories/EmployeesDirectory";
 import { StatusesDirectory } from "@/components/directories/StatusesDirectory";
+import { StagesDirectory } from "@/components/directories/stages/StagesDirectory";
 
 const TABS = [
   { v: "stages", label: "Этапы" },
@@ -16,7 +17,13 @@ const TABS = [
   { v: "statuses", label: "Статусы этапа" },
 ] as const;
 
+type TabValue = (typeof TABS)[number]["v"];
+
 export const Route = createFileRoute("/_authenticated/directories")({
+  validateSearch: (search: Record<string, unknown>): { tab?: TabValue } => {
+    const tab = TABS.find((t) => t.v === search["tab"])?.v;
+    return tab ? { tab } : {};
+  },
   component: DirectoriesPage,
   head: () => ({
     meta: [
@@ -35,10 +42,12 @@ function Stub() {
 }
 
 function DirectoriesPage() {
+  const { tab = "stages" } = Route.useSearch();
+  const navigate = useNavigate({ from: "/directories" });
   return (
     <div>
       <h1 className="mb-6 text-3xl font-bold">Справочники</h1>
-      <Tabs defaultValue="documents">
+      <Tabs value={tab} onValueChange={(v) => navigate({ search: { tab: v as TabValue }, replace: true })}>
         <TabsList className="mb-6 flex h-auto flex-wrap justify-start gap-2 bg-transparent p-0">
           {TABS.map((t) => (
             <TabsTrigger
@@ -50,7 +59,7 @@ function DirectoriesPage() {
             </TabsTrigger>
           ))}
         </TabsList>
-        <TabsContent value="stages"><Stub /></TabsContent>
+        <TabsContent value="stages"><StagesDirectory /></TabsContent>
         <TabsContent value="documents"><DocumentsDirectory /></TabsContent>
         <TabsContent value="request-types"><Stub /></TabsContent>
         <TabsContent value="representatives"><RepresentativesDirectory /></TabsContent>
