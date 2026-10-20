@@ -1,4 +1,14 @@
-/** Заявки объекта (ТЗ 7.7) — наполняется на шаге 5. */
-export function ObjectRequests(_props: { objectId: string; typeId: string | undefined; onClearType: () => void }) {
-  return <p className="py-10 text-center text-xl text-muted-foreground">Заявки — в разработке</p>;
+import { RequestsList } from "./RequestsList";
+
+/** Заявки объекта: все виды или вид, выбранный кнопкой слева (ТЗ 7.4, 7.7). */
+export function ObjectRequests({
+  objectId,
+  typeId,
+  onClearType,
+}: {
+  objectId: string;
+  typeId: string | undefined;
+  onClearType: () => void;
+}) {
+  return <RequestsList objectId={objectId} typeId={typeId} onClearType={onClearType} />;
 }

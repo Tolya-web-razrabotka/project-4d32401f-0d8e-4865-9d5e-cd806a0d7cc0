@@ -16,6 +16,8 @@ import { Route as AuthenticatedDirectoriesRouteImport } from './routes/_authenti
 import { Route as AuthenticatedHistoryRouteImport } from './routes/_authenticated/history'
 import { Route as AuthenticatedObjectsRouteImport } from './routes/_authenticated/objects'
 import { Route as AuthenticatedRequestsRouteImport } from './routes/_authenticated/requests'
+import { Route as AuthenticatedRequestsRequestIdRouteImport } from './routes/_authenticated/requests_.$requestId'
+import { Route as AuthenticatedRequestsNewRouteImport } from './routes/_authenticated/requests_.new'
 import { Route as AuthenticatedObjectsIdStagesStageIdRouteImport } from './routes/_authenticated/objects_.$id_.stages.$stageId'
 import { Route as AuthenticatedObjectsIdEditRouteImport } from './routes/_authenticated/objects_.$id_.edit'
 import { Route as AuthenticatedObjectsIdRouteImport } from './routes/_authenticated/objects_.$id'
@@ -90,6 +92,16 @@ const AuthenticatedObjectsIdStagesStageIdRoute = AuthenticatedObjectsIdStagesSta
   path: '/objects/$id/stages/$stageId',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedRequestsNewRoute = AuthenticatedRequestsNewRouteImport.update({
+  id: '/requests_/new',
+  path: '/requests/new',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedRequestsRequestIdRoute = AuthenticatedRequestsRequestIdRouteImport.update({
+  id: '/requests_/$requestId',
+  path: '/requests/$requestId',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -98,6 +110,8 @@ export interface FileRoutesByFullPath {
   '/history': typeof AuthenticatedHistoryRoute
   '/objects': typeof AuthenticatedObjectsRoute
   '/requests': typeof AuthenticatedRequestsRoute
+  '/requests/$requestId': typeof AuthenticatedRequestsRequestIdRoute
+  '/requests/new': typeof AuthenticatedRequestsNewRoute
   '/objects/$id/stages/$stageId': typeof AuthenticatedObjectsIdStagesStageIdRoute
   '/objects/$id/edit': typeof AuthenticatedObjectsIdEditRoute
   '/objects/$id': typeof AuthenticatedObjectsIdRoute
@@ -112,6 +126,8 @@ export interface FileRoutesByTo {
   '/history': typeof AuthenticatedHistoryRoute
   '/objects': typeof AuthenticatedObjectsRoute
   '/requests': typeof AuthenticatedRequestsRoute
+  '/requests/$requestId': typeof AuthenticatedRequestsRequestIdRoute
+  '/requests/new': typeof AuthenticatedRequestsNewRoute
   '/objects/$id/stages/$stageId': typeof AuthenticatedObjectsIdStagesStageIdRoute
   '/objects/$id/edit': typeof AuthenticatedObjectsIdEditRoute
   '/objects/$id': typeof AuthenticatedObjectsIdRoute
@@ -128,6 +144,8 @@ export interface FileRoutesById {
   '/_authenticated/history': typeof AuthenticatedHistoryRoute
   '/_authenticated/objects': typeof AuthenticatedObjectsRoute
   '/_authenticated/requests': typeof AuthenticatedRequestsRoute
+  '/_authenticated/requests_/$requestId': typeof AuthenticatedRequestsRequestIdRoute
+  '/_authenticated/requests_/new': typeof AuthenticatedRequestsNewRoute
   '/_authenticated/objects_/$id_/stages/$stageId': typeof AuthenticatedObjectsIdStagesStageIdRoute
   '/_authenticated/objects_/$id_/edit': typeof AuthenticatedObjectsIdEditRoute
   '/_authenticated/objects_/$id': typeof AuthenticatedObjectsIdRoute
@@ -144,6 +162,8 @@ export interface FileRouteTypes {
     | '/history'
     | '/objects'
     | '/requests'
+    | '/requests/$requestId'
+    | '/requests/new'
     | '/objects/$id/stages/$stageId'
     | '/objects/$id/edit'
     | '/objects/$id'
@@ -158,6 +178,8 @@ export interface FileRouteTypes {
     | '/history'
     | '/objects'
     | '/requests'
+    | '/requests/$requestId'
+    | '/requests/new'
     | '/objects/$id/stages/$stageId'
     | '/objects/$id/edit'
     | '/objects/$id'
@@ -173,6 +195,8 @@ export interface FileRouteTypes {
     | '/_authenticated/history'
     | '/_authenticated/objects'
     | '/_authenticated/requests'
+    | '/_authenticated/requests_/$requestId'
+    | '/_authenticated/requests_/new'
     | '/_authenticated/objects_/$id_/stages/$stageId'
     | '/_authenticated/objects_/$id_/edit'
     | '/_authenticated/objects_/$id'
@@ -238,6 +262,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedRequestsRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/requests_/$requestId': {
+      id: '/_authenticated/requests_/$requestId'
+      path: '/requests/$requestId'
+      fullPath: '/requests/$requestId'
+      preLoaderRoute: typeof AuthenticatedRequestsRequestIdRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/requests_/new': {
+      id: '/_authenticated/requests_/new'
+      path: '/requests/new'
+      fullPath: '/requests/new'
+      preLoaderRoute: typeof AuthenticatedRequestsNewRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/objects_/$id_/stages/$stageId': {
       id: '/_authenticated/objects_/$id_/stages/$stageId'
       path: '/objects/$id/stages/$stageId'
@@ -288,6 +326,8 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedHistoryRoute: typeof AuthenticatedHistoryRoute
   AuthenticatedObjectsRoute: typeof AuthenticatedObjectsRoute
   AuthenticatedRequestsRoute: typeof AuthenticatedRequestsRoute
+  AuthenticatedRequestsRequestIdRoute: typeof AuthenticatedRequestsRequestIdRoute
+  AuthenticatedRequestsNewRoute: typeof AuthenticatedRequestsNewRoute
   AuthenticatedObjectsIdStagesStageIdRoute: typeof AuthenticatedObjectsIdStagesStageIdRoute
   AuthenticatedObjectsIdEditRoute: typeof AuthenticatedObjectsIdEditRoute
   AuthenticatedObjectsIdRoute: typeof AuthenticatedObjectsIdRoute
@@ -301,6 +341,8 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedHistoryRoute: AuthenticatedHistoryRoute,
   AuthenticatedObjectsRoute: AuthenticatedObjectsRoute,
   AuthenticatedRequestsRoute: AuthenticatedRequestsRoute,
+  AuthenticatedRequestsRequestIdRoute: AuthenticatedRequestsRequestIdRoute,
+  AuthenticatedRequestsNewRoute: AuthenticatedRequestsNewRoute,
   AuthenticatedObjectsIdStagesStageIdRoute: AuthenticatedObjectsIdStagesStageIdRoute,
   AuthenticatedObjectsIdEditRoute: AuthenticatedObjectsIdEditRoute,
   AuthenticatedObjectsIdRoute: AuthenticatedObjectsIdRoute,

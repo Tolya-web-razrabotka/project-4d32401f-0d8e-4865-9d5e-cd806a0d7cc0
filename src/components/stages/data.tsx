@@ -84,6 +84,7 @@ export const conditionsKey = (objectId: string) => ["object-stage-conditions", o
 export function useObjectStages(objectId: string) {
   return useQuery({
     queryKey: stagesKey(objectId),
+    enabled: !!objectId,
     queryFn: async () => {
       const { data, error } = await supabase
         .from("v_object_stages")
