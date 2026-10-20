@@ -13,6 +13,7 @@ import { OBJECTS_KEY } from "@/components/objects/data";
 import { ObjectCardFields, draftToPayload, validateDraft, type ObjectDraft } from "@/components/objects/ObjectCardFields";
 import { MembersPicker } from "@/components/objects/MembersPicker";
 import { StagesPicker, useAvailableTemplates } from "@/components/objects/StagesPicker";
+import { useObjectStages } from "@/components/stages/data";
 
 export const Route = createFileRoute("/_authenticated/objects_/$id_/edit")({
   component: EditObjectPage,
@@ -193,19 +194,7 @@ function StagesTab({ id }: { id: string }) {
   const invalidate = useInvalidateObject(id);
   const [adding, setAdding] = useState(false);
   const [picked, setPicked] = useState<string[]>([]);
-  const { data: stages = [], isLoading } = useQuery({
-    queryKey: ["object-stages", id],
-    queryFn: async () => {
-      const { data, error } = await supabase
-        .from("v_object_stages")
-        .select("id, number, name, status_name, status_color, is_excluded, template_id")
-        .eq("object_id", id)
-        .order("sort")
-        .order("number");
-      if (error) throw error;
-      return data ?? [];
-    },
-  });
+  const { data: stages = [], isLoading } = useObjectStages(id);
   const { templates } = useAvailableTemplates(stages.map((s) => s.template_id).filter((x): x is string => !!x));
 
   const exclude = useMutation({
@@ -267,7 +256,7 @@ function StagesTab({ id }: { id: string }) {
               variant="outline"
               className="h-10 text-base"
               disabled={exclude.isPending}
-              onClick={() => exclude.mutate({ stageId: s.id!, excluded: !s.is_excluded })}
+              onClick={() => exclude.mutate({ stageId: s.id, excluded: !s.is_excluded })}
             >
               {s.is_excluded ? "Вернуть" : "Исключить"}
             </Button>
