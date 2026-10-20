@@ -160,7 +160,8 @@ export function StagesTable({
         {toolbar && <div className="ml-auto flex gap-2">{toolbar(visible)}</div>}
       </div>
 
-      <div className="overflow-x-auto rounded-lg border">
+      {/* По эскизу «Рабочий стол прораба»: таблица прокручивается в своей области, шапка колонок закреплена */}
+      <div className="max-h-[70vh] overflow-auto rounded-lg border">
         <table className="w-full min-w-[1100px] text-base">
           <StagesHead />
           <tbody>
@@ -217,7 +218,7 @@ export function StagesTable({
 function StagesHead() {
   const th = "px-3 py-3 text-left font-semibold text-muted-foreground";
   return (
-    <thead>
+    <thead className="sticky top-0 z-10 bg-background shadow-[0_1px_0_var(--color-border)]">
       <tr className="border-b">
         <th className={`${th} w-14`}>N</th>
         <th className={`${th} min-w-64`}>Название этапа</th>
