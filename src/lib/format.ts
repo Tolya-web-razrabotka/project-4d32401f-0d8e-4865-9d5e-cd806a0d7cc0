@@ -22,5 +22,5 @@ export function showError(error: unknown) {
   const msg =
     (error && typeof error === "object" && "message" in error && String((error as { message: unknown }).message)) ||
     "Произошла ошибка";
-  toast.error(msg);
+  toast.error(String(msg));
 }
