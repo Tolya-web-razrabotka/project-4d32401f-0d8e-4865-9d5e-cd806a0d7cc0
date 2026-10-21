@@ -1,6 +1,6 @@
 -- =====================================================================
 -- ООО «Лидер» · Демо-данные для показа заказчику (правка 1.5, docs/ПРАВКИ.md)
--- Выполнить один раз после 00…02 в Supabase → SQL Editor (весь файл целиком).
+-- Выполнить один раз ПОСЛЕ db/02_fixes.sql в Supabase → SQL Editor (весь файл целиком).
 --
 -- Что появится:
 --   • нормативные сроки и роли у этапов справочника (только где пусто);
@@ -208,6 +208,11 @@ declare
   v_mosgaz uuid; v_sever uuid; v_prom uuid; v_alfa uuid;
   o1 uuid; o2 uuid; o3 uuid; o4 uuid; o5 uuid; o6 uuid;
 begin
+  -- Без исправления из 02_fixes.sql любое изменение этапа или заявки падает («record "new" has no field»)
+  if not exists (select 1 from pg_proc where proname = 'tg_guard_status'
+                 and prosrc like '%elsif tg_table_name = ''requests'' then%') then
+    raise exception 'Сначала выполните db/02_fixes.sql (исправление триггера статусов), затем запустите этот файл снова';
+  end if;
   if exists (select 1 from public.objects where name like 'Газопровод среднего давления по ул. Профсоюзной%' and deleted_at is null) then
     raise exception 'Демо-данные уже загружены — повторный запуск не нужен';
   end if;
