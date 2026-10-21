@@ -48,10 +48,11 @@ const PROBLEMS: { key: Problem; label: string; tone: "bad" | "warn" | "info" }[]
   { key: "requests_overdue", label: "Просроченные заявки", tone: "bad" },
 ];
 
+/** Цвет числа на плитке сводки, когда проблема есть. Сама плитка — белая. */
 const TILE_TONE = {
-  bad: "border-red-300 bg-red-50 text-red-900 dark:border-red-800 dark:bg-red-950/50 dark:text-red-100",
-  warn: "border-orange-300 bg-orange-50 text-orange-900 dark:border-orange-800 dark:bg-orange-950/50 dark:text-orange-100",
-  info: "border-pink-300 bg-pink-50 text-pink-900 dark:border-pink-800 dark:bg-pink-950/50 dark:text-pink-100",
+  bad: "text-red-700",
+  warn: "text-orange-700",
+  info: "text-fuchsia-700",
 };
 
 function ObjectsPage() {
@@ -102,12 +103,14 @@ function ObjectsPage() {
               key={p.key}
               type="button"
               onClick={() => setProblem(active ? null : p.key)}
-              className={`rounded-lg border p-4 text-left transition-shadow ${
-                n > 0 ? TILE_TONE[p.tone] : "border-border bg-card text-muted-foreground"
-              } ${active ? "ring-4 ring-primary/40" : "hover:shadow-md"}`}
+              className={`rounded-lg border bg-card px-4 py-3 text-left transition-colors ${
+                active ? "border-primary ring-2 ring-primary/15" : "hover:border-foreground/25"
+              }`}
             >
-              <div className="text-2xl font-bold leading-none">{n}</div>
-              <div className="mt-2 text-sm font-medium leading-tight">{p.label}</div>
+              <div className={`text-2xl font-semibold leading-none tabular-nums ${n > 0 ? TILE_TONE[p.tone] : "text-muted-foreground/60"}`}>
+                {n}
+              </div>
+              <div className="mt-1.5 text-xs leading-tight text-muted-foreground">{p.label}</div>
             </button>
           );
         })}
@@ -193,12 +196,12 @@ function ObjectsPage() {
 function ObjectTableRow({ o, onOpen }: { o: ObjectRow; onOpen: () => void }) {
   const tone = o.status === "completed" ? "none" : contractTone(o.contract_days_left);
   const chips: { n: number; text: string; cls: string }[] = [
-    { n: o.stages_overdue, text: "просрочено", cls: "bg-red-600 text-white" },
+    { n: o.stages_overdue, text: "просрочено", cls: "bg-red-50 text-red-800 ring-1 ring-inset ring-red-200" },
     { n: o.stages_no_response, text: "нет ответа", cls: "border border-red-600 text-red-700 dark:text-red-300" },
-    { n: o.stages_on_review, text: "на проверке", cls: "bg-pink-600 text-white" },
-    { n: o.stages_no_executor, text: "без исполн.", cls: "bg-orange-500 text-white" },
-    { n: o.requests_new, text: "новых заявок", cls: "bg-red-600 text-white" },
-    { n: o.requests_overdue, text: "заявок просроч.", cls: "bg-red-800 text-white" },
+    { n: o.stages_on_review, text: "на проверке", cls: "bg-fuchsia-50 text-fuchsia-800 ring-1 ring-inset ring-fuchsia-200" },
+    { n: o.stages_no_executor, text: "без исполн.", cls: "bg-orange-50 text-orange-800 ring-1 ring-inset ring-orange-200" },
+    { n: o.requests_new, text: "новых заявок", cls: "bg-destructive text-destructive-foreground" },
+    { n: o.requests_overdue, text: "заявок просроч.", cls: "bg-red-50 text-red-800 ring-1 ring-inset ring-red-200" },
   ].filter((c) => c.n > 0);
 
   return (

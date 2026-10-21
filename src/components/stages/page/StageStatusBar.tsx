@@ -101,7 +101,7 @@ export function StageStatusBar({
               disabled={!canClose || setStatus.isPending}
               title={canClose ? undefined : "Закрыть этап может только адресат или руководитель"}
               onClick={() => setStatus.mutate({ to: "closed" })}
-              className="h-10 bg-green-600 px-4 text-sm text-white hover:bg-green-700"
+              className="h-10 bg-emerald-700 px-4 text-sm text-white hover:bg-emerald-800"
             >
               Принять и закрыть
             </Button>

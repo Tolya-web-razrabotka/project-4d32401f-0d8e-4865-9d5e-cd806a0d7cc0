@@ -250,7 +250,7 @@ export function RequestsList({
                     <td className="px-3 py-2 font-semibold">
                       {r.number}
                       {r.is_new && (
-                        <span className="ml-2 inline-block rounded bg-red-600 px-1.5 py-0.5 text-xs font-bold text-white">Новая</span>
+                        <span className="ml-2 inline-block rounded bg-destructive px-1.5 py-0.5 text-[11px] font-semibold text-destructive-foreground">Новая</span>
                       )}
                     </td>
                     <td className="whitespace-nowrap px-3 py-2">{formatDate(r.created_at)}</td>

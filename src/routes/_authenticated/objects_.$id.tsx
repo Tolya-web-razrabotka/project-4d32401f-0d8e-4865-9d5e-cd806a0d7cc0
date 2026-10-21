@@ -150,18 +150,18 @@ function RequestTypeButtons({
               key={t.id}
               type="button"
               onClick={() => onPick(t.id)}
-              className={`flex min-h-9 items-center gap-2 rounded-md border px-4 py-2 text-left text-sm font-medium transition-colors ${
+              className={`flex min-h-9 items-center gap-2 rounded-md border px-3 py-1.5 text-left text-sm font-medium transition-colors ${
                 active ? "border-primary bg-primary text-primary-foreground" : "bg-card hover:bg-accent"
               }`}
             >
               <span className="flex-1">{t.name}</span>
               {c && c.fresh > 0 && (
-                <span title="Новые" className="rounded-full bg-red-600 px-2 text-sm font-bold text-white">
+                <span title="Новые" className="min-w-5 rounded-full bg-destructive px-1.5 text-center text-[11px] font-semibold leading-5 text-destructive-foreground">
                   {c.fresh}
                 </span>
               )}
               {c && c.overdue > 0 && (
-                <span title="Просроченные" className="rounded-full bg-red-900 px-2 text-sm font-bold text-white">
+                <span title="Просроченные" className="min-w-5 rounded-full bg-red-100 px-1.5 text-center text-[11px] font-semibold leading-5 text-red-800 ring-1 ring-inset ring-red-300">
                   !{c.overdue}
                 </span>
               )}

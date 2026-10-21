@@ -97,7 +97,7 @@ function RequestCard() {
           <h1 className="min-w-0 flex-1 text-xl font-bold leading-tight">
             <span className="font-medium text-muted-foreground">№{r.number}</span> {r.type_name}
           </h1>
-          {r.is_new && <span className="rounded bg-red-600 px-3 py-1 text-sm font-bold text-white">Новая</span>}
+          {r.is_new && <span className="rounded bg-destructive px-2 py-0.5 text-xs font-semibold text-destructive-foreground">Новая</span>}
           <RequestStatusBadge status={r.status} />
         </div>
         <div className="mt-3 flex flex-wrap gap-x-6 gap-y-2 text-sm">
