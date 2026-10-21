@@ -22,6 +22,27 @@ language sql immutable as $$ select (p_day + make_time(p_hour, 0, 0)) at time zo
 create or replace function pg_temp.pid(p_name text) returns uuid
 language sql stable as $$ select id from public.profiles where full_name = p_name and deleted_at is null limit 1 $$;
 
+-- Сотрудник: по точному имени → по началу имени → первый активный с этой ролью → создать.
+-- Так скрипт работает, даже если сотрудников переименовали или удалили при тестировании.
+create or replace function pg_temp.person(p_name text, p_role text) returns uuid
+language plpgsql as $$
+declare v uuid;
+begin
+  select id into v from public.profiles where full_name = p_name and deleted_at is null limit 1;
+  if v is null then
+    select id into v from public.profiles
+    where full_name ilike split_part(p_name, ' ', 1) || '%' and deleted_at is null and is_active limit 1;
+  end if;
+  if v is null then
+    select id into v from public.profiles where role_code = p_role and deleted_at is null and is_active
+    order by user_id is null, created_at limit 1;
+  end if;
+  if v is null then
+    insert into public.profiles(full_name, role_code) values (p_name, p_role) returning id into v;
+  end if;
+  return v;
+end $$;
+
 create or replace function pg_temp.sid(p_obj uuid, p_no int) returns uuid
 language sql stable as $$ select id from public.object_stages where object_id = p_obj and number = p_no and deleted_at is null $$;
 
@@ -244,18 +265,26 @@ begin
   ) as v(n, r, ph)
   where not exists (select 1 from public.profiles p where p.full_name = v.n and p.deleted_at is null);
 
-  v_nikitin := coalesce(pg_temp.pid('Никитин Роман Андреевич'),
-    (select id from public.profiles where role_code = 'foreman' and user_id is not null and deleted_at is null limit 1));
-  v_sergeev := pg_temp.pid('Сергеев Андрей Викторович');
-  v_kovalev := pg_temp.pid('Ковалёв Дмитрий Олегович');
-  v_galina  := pg_temp.pid('Галина Ивановна');
-  v_belova  := pg_temp.pid('Белова Ирина Сергеевна');
-  v_milana  := pg_temp.pid('Милана');
-  v_muslim  := pg_temp.pid('Муслим');
-  v_fomina  := coalesce(pg_temp.pid('Фомина Ольга Петровна'),
-    (select id from public.profiles where role_code = 'supply' and deleted_at is null limit 1));
-  if v_nikitin is null or v_galina is null or v_milana is null or v_muslim is null then
-    raise exception 'Не найдены сотрудники из 01_after_migration.sql (прораб с логином, Галина Ивановна, Милана, Муслим)';
+  -- Прораб с логином — тот, под кем заходят «как прораб»; если логина у прораба нет — любой прораб
+  select id into v_nikitin from public.profiles
+  where role_code = 'foreman' and user_id is not null and deleted_at is null and is_active order by created_at limit 1;
+  if v_nikitin is null then v_nikitin := pg_temp.person('Никитин Роман Андреевич', 'foreman'); end if;
+  v_sergeev := pg_temp.person('Сергеев Андрей Викторович', 'foreman');
+  v_kovalev := pg_temp.person('Ковалёв Дмитрий Олегович', 'foreman');
+  v_galina  := pg_temp.person('Галина Ивановна', 'pto');
+  v_belova  := pg_temp.person('Белова Ирина Сергеевна', 'pto');
+  v_milana  := pg_temp.person('Милана', 'office');
+  v_muslim  := pg_temp.person('Муслим', 'director');
+  v_fomina  := pg_temp.person('Фомина Ольга Петровна', 'supply');
+  -- Разные люди на разных ролях: если по роли нашёлся тот же человек, создаём отдельного
+  if v_sergeev = v_nikitin then
+    insert into public.profiles(full_name, role_code) values ('Сергеев Андрей Викторович', 'foreman') returning id into v_sergeev;
+  end if;
+  if v_kovalev in (v_nikitin, v_sergeev) then
+    insert into public.profiles(full_name, role_code) values ('Ковалёв Дмитрий Олегович', 'foreman') returning id into v_kovalev;
+  end if;
+  if v_belova = v_galina then
+    insert into public.profiles(full_name, role_code) values ('Белова Ирина Сергеевна', 'pto') returning id into v_belova;
   end if;
 
   -- 3. Заказчики
