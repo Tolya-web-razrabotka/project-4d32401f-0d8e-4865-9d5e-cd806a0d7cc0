@@ -1,4 +1,5 @@
 import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { ToneBadge } from "@/components/ToneBadge";
 import { supabase } from "@/integrations/supabase/client";
 import { formatDate } from "@/lib/format";
 import { daysBetween, mskToday } from "@/lib/dates";
@@ -7,11 +8,11 @@ import { OBJECTS_KEY } from "@/components/objects/data";
 export type RequestStatus = "new" | "ready" | "sent" | "accepted" | "done";
 
 export const REQUEST_STATUSES: { v: RequestStatus; label: string; next: string; color: string }[] = [
-  { v: "new", label: "Новая", next: "", color: "#DC2626" },
-  { v: "ready", label: "Готова к отправке", next: "Готова к отправке", color: "#D97706" },
-  { v: "sent", label: "Отправлена", next: "Отправлена", color: "#7C3AED" },
-  { v: "accepted", label: "Принята заказчиком", next: "Принята заказчиком", color: "#2563EB" },
-  { v: "done", label: "Исполнена", next: "Исполнено", color: "#16A34A" },
+  { v: "new", label: "Новая", next: "", color: "#C2412D" },
+  { v: "ready", label: "Готова к отправке", next: "Готова к отправке", color: "#B7791F" },
+  { v: "sent", label: "Отправлена", next: "Отправлена", color: "#5B5FA8" },
+  { v: "accepted", label: "Принята заказчиком", next: "Принята заказчиком", color: "#2F6F8F" },
+  { v: "done", label: "Исполнена", next: "Исполнено", color: "#2E7D4F" },
 ];
 
 export const statusInfo = (s: string) => REQUEST_STATUSES.find((x) => x.v === s) ?? REQUEST_STATUSES[0]!;
@@ -109,15 +110,7 @@ export function overdueDays(r: RequestRow) {
 
 export function RequestStatusBadge({ status }: { status: string }) {
   const s = statusInfo(status);
-  return (
-    <span
-      className="inline-block whitespace-nowrap rounded-full px-3 py-0.5 text-sm font-medium text-white"
-      style={{ backgroundColor: s.color }}
-    >
-      {s.v === "done" ? "✓ " : ""}
-      {s.label}
-    </span>
-  );
+  return <ToneBadge color={s.color}>{s.label}</ToneBadge>;
 }
 
 /** Сбросить всё, что зависит от заявок: списки, счётчики меню и кнопок, сводку объектов, историю. */

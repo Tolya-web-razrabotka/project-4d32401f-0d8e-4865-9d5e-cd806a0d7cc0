@@ -36,7 +36,7 @@ export function StagesExport({ objectName, stages }: { objectName: string; stage
         variant="outline"
         className="h-9 text-sm"
         disabled={stages.length === 0}
-        onClick={() => printTable(`Этапы — ${objectName}`, `На ${today} · этапов: ${stages.length}`, COLUMNS, stages)}
+        onClick={() => printTable(`Этапы — ${objectName}`, `Сформировано ${today}. Этапов в списке: ${stages.length}`, COLUMNS, stages)}
       >
         <Printer className="size-4" /> Печать
       </Button>

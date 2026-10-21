@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { ToneBadge } from "@/components/ToneBadge";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
@@ -14,19 +15,10 @@ type St = { code: string; name: string; color: string; sort: number };
 export function StatusBadge({ name, color }: { name: string; color: string }) {
   // Цвет статуса хранится в базе, поэтому задаётся inline.
   return (
-    <span className="inline-block rounded-full px-3 py-1 text-sm font-medium" style={{ backgroundColor: color, color: textOn(color) }}>
-      {name}
-    </span>
+    <ToneBadge color={color}>{name}</ToneBadge>
   );
 }
 
-function textOn(hex: string) {
-  const m = /^#?([0-9a-f]{6})$/i.exec(hex);
-  if (!m) return "inherit";
-  const n = parseInt(m[1]!, 16);
-  const l = (0.299 * (n >> 16) + 0.587 * ((n >> 8) & 255) + 0.114 * (n & 255)) / 255;
-  return l > 0.6 ? "#000" : "#fff";
-}
 
 export function StatusesDirectory() {
   const { is_admin } = useProfile();

@@ -60,7 +60,9 @@ export function RequestTypesDirectory() {
             <div className="min-w-0 flex-1">
               <div className="text-base font-semibold">
                 {t.name}
-                {!t.is_active && <span className="ml-3 text-sm font-normal">· неактивен</span>}
+                {!t.is_active && (
+                  <span className="ml-2 rounded bg-muted px-1.5 py-0.5 align-middle text-xs font-normal text-muted-foreground">неактивен</span>
+                )}
               </div>
               <div className="mt-1 flex flex-wrap gap-x-5 gap-y-1 text-sm text-muted-foreground">
                 <span>Полей: {countFields(t.id)}</span>

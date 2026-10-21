@@ -175,9 +175,9 @@ export function StagesTable({
             {groups.map((g) => [
               <tr key={`g-${g.id}`} className="border-t bg-muted/70">
                 <td colSpan={8} className="px-3 py-2 text-sm font-semibold">
-                  {g.name}{" "}
-                  <span className="font-normal text-muted-foreground">
-                    · закрыто {g.closed} из {g.total}
+                  {g.name}
+                  <span className="ml-2 font-normal text-muted-foreground">
+                    закрыто {g.closed} из {g.total}
                   </span>
                 </td>
               </tr>,
@@ -195,7 +195,8 @@ export function StagesTable({
             className="flex w-full items-center gap-3 px-4 py-2 text-left text-sm font-semibold hover:bg-muted/50"
           >
             {closedOpen ? <ChevronDown className="size-4" /> : <ChevronRight className="size-4" />}
-            Закрытые (выполненные) · {closed.length}
+            Закрытые (выполненные)
+            <span className="rounded-full bg-muted px-2 text-xs font-medium text-muted-foreground">{closed.length}</span>
           </button>
           {closedOpen && (
             <div className="overflow-x-auto border-t">
@@ -275,10 +276,9 @@ function StageRow({
           </span>
         )}
         {(s.outgoing_doc || s.expected_doc) && (
-          <div className="mt-1 text-xs text-muted-foreground">
-            {s.outgoing_doc && <>от нас: {s.outgoing_doc}</>}
-            {s.outgoing_doc && s.expected_doc && " · "}
-            {s.expected_doc && <>ждём: {s.expected_doc}</>}
+          <div className="mt-1 flex flex-wrap gap-x-3 text-xs text-muted-foreground">
+            {s.outgoing_doc && <span>от нас: {s.outgoing_doc}</span>}
+            {s.expected_doc && <span>ждём: {s.expected_doc}</span>}
           </div>
         )}
         {s.is_excluded && <div className="mt-1 text-xs">исключён из работы</div>}

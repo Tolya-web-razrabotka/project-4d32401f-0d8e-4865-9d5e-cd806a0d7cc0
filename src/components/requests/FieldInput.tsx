@@ -49,7 +49,7 @@ export function FieldInput({
         >
           <SelectTrigger className={cls}><SelectValue /></SelectTrigger>
           <SelectContent>
-            <SelectItem value={EMPTY} className="text-sm">— не выбрано —</SelectItem>
+            <SelectItem value={EMPTY} className="text-sm">Не выбрано</SelectItem>
             {field.options.map((o) => (
               <SelectItem key={o} value={o} className="text-sm">{o}</SelectItem>
             ))}

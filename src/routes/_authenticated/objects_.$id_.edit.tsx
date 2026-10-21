@@ -14,7 +14,7 @@ import { OBJECTS_KEY } from "@/components/objects/data";
 import { ObjectCardFields, draftToPayload, validateDraft, type ObjectDraft } from "@/components/objects/ObjectCardFields";
 import { MembersPicker } from "@/components/objects/MembersPicker";
 import { StagesPicker, useAvailableTemplates } from "@/components/objects/StagesPicker";
-import { useObjectStages } from "@/components/stages/data";
+import { StatusBadge, useObjectStages } from "@/components/stages/data";
 
 export const Route = createFileRoute("/_authenticated/objects_/$id_/edit")({
   component: EditObjectPage,
@@ -244,12 +244,7 @@ function StagesTab({ id }: { id: string }) {
             <span className="w-8 font-semibold">{s.number}</span>
             <span className={`flex-1 ${s.is_excluded ? "text-muted-foreground line-through" : ""}`}>{s.name}</span>
             {!s.is_excluded && (
-              <span
-                className="rounded-full px-3 py-0.5 text-sm font-medium text-white"
-                style={{ backgroundColor: s.status_color ?? "#9CA3AF" }}
-              >
-                {s.status_name}
-              </span>
+              <StatusBadge name={s.status_name} color={s.status_color} />
             )}
             <Button
               variant="outline"

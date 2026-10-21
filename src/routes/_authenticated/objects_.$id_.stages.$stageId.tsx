@@ -81,7 +81,12 @@ function StagePage() {
         <TabsList className={tabsListClass}>
           <TabsTrigger value="main" className={tabTriggerClass}>Основное</TabsTrigger>
           <TabsTrigger value="conditions" className={tabTriggerClass}>
-            Условия закрытия{stage.conditions_total ? ` · ${stage.conditions_done}/${stage.conditions_total}` : ""}
+            Условия закрытия
+            {stage.conditions_total > 0 && (
+              <span className="ml-1.5 rounded bg-muted px-1.5 text-xs tabular-nums text-muted-foreground">
+                {stage.conditions_done}/{stage.conditions_total}
+              </span>
+            )}
           </TabsTrigger>
           <TabsTrigger value="documents" className={tabTriggerClass}>Документы</TabsTrigger>
           {steps.length > 0 && <TabsTrigger value="steps" className={tabTriggerClass}>Сценарий</TabsTrigger>}

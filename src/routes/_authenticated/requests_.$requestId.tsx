@@ -95,7 +95,7 @@ function RequestCard() {
       <header className={`rounded-lg border p-4 ${r.is_overdue ? "border-red-400 bg-red-50 dark:bg-red-950/40" : "bg-card"}`}>
         <div className="flex flex-wrap items-start gap-4">
           <h1 className="min-w-0 flex-1 text-xl font-bold leading-tight">
-            Заявка №{r.number} · {r.type_name}
+            <span className="font-medium text-muted-foreground">№{r.number}</span> {r.type_name}
           </h1>
           {r.is_new && <span className="rounded bg-red-600 px-3 py-1 text-sm font-bold text-white">Новая</span>}
           <RequestStatusBadge status={r.status} />

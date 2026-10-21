@@ -48,13 +48,15 @@ export function RequestProgress({
     onError: showError,
   });
 
-  const when = (v: string): string => {
-    if (v === "new") return `${formatDateTime(r.created_at)} · ${r.initiator_name ?? ""}`;
-    if (v === "ready") return r.office_name ? `обработал: ${r.office_name}` : "";
-    if (v === "sent") return formatDateTime(r.sent_at);
-    if (v === "accepted") return formatDateTime(r.accepted_at);
-    if (v === "done") return [formatDateTime(r.done_at), doneByName].filter(Boolean).join(" · ");
-    return "";
+  /** Строки под шагом: когда и кто. Каждая — отдельной строкой, без разделителей. */
+  const when = (v: string): string[] => {
+    const lines = (...x: (string | null | undefined)[]) => x.filter((y): y is string => !!y);
+    if (v === "new") return lines(formatDateTime(r.created_at), r.initiator_name);
+    if (v === "ready") return lines(r.office_name && `Обработал: ${r.office_name}`);
+    if (v === "sent") return lines(formatDateTime(r.sent_at));
+    if (v === "accepted") return lines(formatDateTime(r.accepted_at));
+    if (v === "done") return lines(formatDateTime(r.done_at), doneByName);
+    return [];
   };
 
   const blockedReady = next?.v === "ready" && missingRequired.length > 0;
@@ -70,29 +72,37 @@ export function RequestProgress({
             <li
               key={s.v}
               className={`rounded-md border p-3 ${
-                current ? "border-primary bg-accent" : done ? "border-green-600/40 bg-green-50 dark:bg-green-950/30" : "border-border bg-card text-muted-foreground"
+                current ? "border-primary bg-accent" : done ? "border-emerald-700/25 bg-emerald-50/70 dark:bg-emerald-950/30" : "border-border bg-card text-muted-foreground"
               }`}
             >
               <div className="flex items-center gap-2 text-sm font-semibold">
                 <span
                   className={`flex size-5 shrink-0 items-center justify-center rounded-full text-xs ${
-                    done ? "bg-green-600 text-white" : "border border-current"
+                    done ? "bg-emerald-700 text-white" : "border border-current"
                   }`}
                 >
                   {done ? <Check className="size-3.5" /> : i + 1}
                 </span>
                 {s.label}
               </div>
-              {done && <div className="mt-1 text-xs text-muted-foreground">{when(s.v)}</div>}
+              {done &&
+                when(s.v).map((line) => (
+                  <div key={line} className="mt-1 text-xs text-muted-foreground">
+                    {line}
+                  </div>
+                ))}
             </li>
           );
         })}
       </ol>
 
       {r.status === "done" ? (
-        <p className="text-sm font-medium text-green-700 dark:text-green-400">
-          ✓ Исполнена{r.result_text ? ` · Результат: ${r.result_text}` : ""}
-        </p>
+        <div className="text-sm">
+          <p className="inline-flex items-center gap-1.5 font-medium text-green-700 dark:text-green-400">
+            <Check className="size-4" /> Исполнена
+          </p>
+          {r.result_text && <p className="mt-1">Результат: {r.result_text}</p>}
+        </div>
       ) : (
         next && (
           <div className="space-y-3">

@@ -183,7 +183,7 @@ function DocForm({
         <Select value={tpl} onValueChange={setTpl}>
           <SelectTrigger className="h-9 text-sm"><SelectValue /></SelectTrigger>
           <SelectContent>
-            <SelectItem value={NONE} className="text-sm">— не выбран —</SelectItem>
+            <SelectItem value={NONE} className="text-sm">Не выбран</SelectItem>
             {templates.map((t) => (
               <SelectItem key={t.id} value={t.id} className="text-sm">{t.number}. {t.name}</SelectItem>
             ))}

@@ -209,7 +209,7 @@ function NewRequestPage() {
             <Select value={stageId || NONE} onValueChange={(v) => setStageId(v === NONE ? "" : v)}>
               <SelectTrigger className="h-9 text-sm"><SelectValue /></SelectTrigger>
               <SelectContent>
-                <SelectItem value={NONE} className="text-sm">— без этапа —</SelectItem>
+                <SelectItem value={NONE} className="text-sm">Без этапа</SelectItem>
                 {openStages.map((s) => (
                   <SelectItem key={s.id} value={s.id} className="text-sm">{s.number}. {s.name}</SelectItem>
                 ))}

@@ -93,8 +93,8 @@ export function StageStepsTab({ steps, disabled, onChanged }: { steps: ObjectSte
                   <div className={`mt-1 text-sm ${s.state === "done" ? "text-muted-foreground" : ""}`}>{s.action}</div>
                   {s.state === "done" && (
                     <div className="mt-1 text-xs text-muted-foreground">
-                      Выполнил: {s.done_by_profile?.full_name ?? "—"} · {formatDateTime(s.done_at)}
-                      {s.comment && <> · «{s.comment}»</>}
+                      Выполнил {s.done_by_profile?.full_name ?? "сотрудник"}, {formatDateTime(s.done_at)}
+                      {s.comment && <div className="mt-0.5 text-foreground/80">Комментарий: {s.comment}</div>}
                     </div>
                   )}
                   {current && !disabled && (

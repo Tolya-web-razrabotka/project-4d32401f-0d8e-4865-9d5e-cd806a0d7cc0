@@ -52,7 +52,8 @@ export function RequestComments({ requestId }: { requestId: string }) {
           {data.map((c) => (
             <li key={c.id} className="rounded-md bg-muted/60 px-4 py-2">
               <div className="text-xs text-muted-foreground">
-                <span className="font-semibold text-foreground">{c.author?.full_name ?? "—"}</span> · {formatDateTime(c.created_at)}
+                <span className="font-semibold text-foreground">{c.author?.full_name ?? "Сотрудник"}</span>
+                <span className="ml-2">{formatDateTime(c.created_at)}</span>
               </div>
               <div className="mt-1 whitespace-pre-line text-sm">{c.text}</div>
             </li>

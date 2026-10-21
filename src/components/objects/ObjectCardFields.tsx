@@ -114,7 +114,7 @@ export function ObjectCardFields({
           <Select value={value.responsible_id || NONE} onValueChange={(v) => set("responsible_id", v === NONE ? "" : v)}>
             <SelectTrigger className="h-9 text-sm"><SelectValue /></SelectTrigger>
             <SelectContent>
-              <SelectItem value={NONE} className="text-sm">— не выбран —</SelectItem>
+              <SelectItem value={NONE} className="text-sm">Не выбран</SelectItem>
               {profiles.map((p) => (
                 <SelectItem key={p.id} value={p.id} className="text-sm">{p.full_name}</SelectItem>
               ))}

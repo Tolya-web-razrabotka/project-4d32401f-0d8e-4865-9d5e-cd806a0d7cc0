@@ -97,7 +97,7 @@ export function StageMainForm({
         <SelectValue />
       </SelectTrigger>
       <SelectContent>
-        <SelectItem value={NONE} className="text-sm">— не указано —</SelectItem>
+        <SelectItem value={NONE} className="text-sm">Не указано</SelectItem>
         {roles.map((r) => (
           <SelectItem key={r.code} value={r.code} className="text-sm">{r.name}</SelectItem>
         ))}

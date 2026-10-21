@@ -92,9 +92,9 @@ export function StageMainTab({ stage, onSaved }: { stage: ObjectStage; onSaved: 
 
       <section className="grid gap-5 sm:grid-cols-3">
         <Field label="Исполнитель">{person("executor_id", "не назначен")}</Field>
-        <Field label="Соисполнитель">{person("coexecutor_id", "— нет —")}</Field>
+        <Field label="Соисполнитель">{person("coexecutor_id", "Нет")}</Field>
         <Field label={`Адресат${stage.confirmer_role_name ? ` (по регламенту: ${stage.confirmer_role_name})` : ""}`}>
-          {person("confirmer_id", "— по роли —")}
+          {person("confirmer_id", "По роли")}
         </Field>
       </section>
 

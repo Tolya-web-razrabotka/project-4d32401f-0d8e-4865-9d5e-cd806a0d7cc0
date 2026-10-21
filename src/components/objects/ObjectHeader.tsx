@@ -23,11 +23,13 @@ export function ObjectHeader({ o, actions }: { o: ObjectRow; actions?: ReactNode
       <div className={`mt-4 inline-flex flex-wrap items-center gap-x-2 rounded-md px-3 py-2 text-sm ${TONE_CLASS[tone] || "bg-muted"}`}>
         <span className="font-medium">Срок по договору:</span>
         <span>
-          {formatDate(o.contract_start) || "—"} — {formatDate(o.contract_end) || "—"}
+          {formatDate(o.contract_start) || "не указан"} – {formatDate(o.contract_end) || "не указан"}
+          {o.status !== "completed" && o.contract_days_left !== null && (
+            <>
+              , <span className="font-semibold">{daysLeftText(o.contract_days_left)}</span>
+            </>
+          )}
         </span>
-        {o.status !== "completed" && o.contract_days_left !== null && (
-          <span className="font-semibold">· {daysLeftText(o.contract_days_left)}</span>
-        )}
       </div>
       {o.notes && <p className="mt-3 whitespace-pre-line text-sm text-muted-foreground">{o.notes}</p>}
     </div>

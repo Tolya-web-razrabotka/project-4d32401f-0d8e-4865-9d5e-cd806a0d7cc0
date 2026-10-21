@@ -88,7 +88,8 @@ export function StagesDirectory() {
               groups.flatMap((g) => [
                 <TableRow key={`g-${g.id}`} className="bg-muted/60 hover:bg-muted/60">
                   <TableCell colSpan={7} className="py-2 text-sm font-semibold">
-                    {g.name} <span className="font-normal text-muted-foreground">· {g.items.length}</span>
+                    {g.name}
+                    <span className="ml-2 font-normal text-muted-foreground">{g.items.length}</span>
                   </TableCell>
                 </TableRow>,
                 ...g.items.map((s) => (

@@ -202,7 +202,7 @@ export function RequestsList({
           onClick={() =>
             printTable(
               typeName ? `Заявки — ${typeName}` : "Заявки",
-              `На ${formatDate(mskToday())} · заявок: ${visible.length}`,
+              `Сформировано ${formatDate(mskToday())}. Заявок в списке: ${visible.length}`,
               columns,
               visible,
             )

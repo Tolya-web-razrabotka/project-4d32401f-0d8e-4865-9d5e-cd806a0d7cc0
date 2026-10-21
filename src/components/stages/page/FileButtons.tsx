@@ -84,9 +84,10 @@ export function FileList({ files, showKind }: { files: FileRow[]; showKind?: boo
             <span className="truncate">{f.file_name}</span>
           </button>
           {showKind && <span className="text-xs font-medium">{FILE_KIND_LABEL[f.kind]}</span>}
-          <span className="text-xs text-muted-foreground">
-            {f.uploader?.full_name ?? ""} · {formatDateTime(f.created_at)}
-            {f.size_bytes ? ` · ${formatSize(f.size_bytes)}` : ""}
+          <span className="flex flex-wrap gap-x-3 text-xs text-muted-foreground">
+            {f.uploader?.full_name && <span>{f.uploader.full_name}</span>}
+            <span>{formatDateTime(f.created_at)}</span>
+            {f.size_bytes ? <span>{formatSize(f.size_bytes)}</span> : null}
           </span>
         </li>
       ))}
