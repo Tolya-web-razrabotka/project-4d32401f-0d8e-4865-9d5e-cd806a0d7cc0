@@ -1,9 +1,9 @@
 import { useMemo, useState } from "react";
 import { useNavigate } from "@tanstack/react-router";
-import { FileSpreadsheet, Plus, X } from "lucide-react";
+import { FileSpreadsheet, Plus, Printer, X } from "lucide-react";
 import { formatDate } from "@/lib/format";
 import { mskToday } from "@/lib/dates";
-import { exportXlsx, type Column } from "@/lib/export";
+import { exportXlsx, printTable, type Column } from "@/lib/export";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Switch } from "@/components/ui/switch";
@@ -194,6 +194,21 @@ export function RequestsList({
           onClick={() => exportXlsx(`Заявки — ${formatDate(mskToday())}`, "Заявки", columns, visible)}
         >
           <FileSpreadsheet className="size-5" /> Выгрузить в Excel
+        </Button>
+        <Button
+          variant="outline"
+          className="h-11 text-base"
+          disabled={visible.length === 0}
+          onClick={() =>
+            printTable(
+              typeName ? `Заявки — ${typeName}` : "Заявки",
+              `На ${formatDate(mskToday())} · заявок: ${visible.length}`,
+              columns,
+              visible,
+            )
+          }
+        >
+          <Printer className="size-5" /> Печать
         </Button>
       </div>
 
