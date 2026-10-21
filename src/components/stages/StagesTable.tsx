@@ -219,7 +219,7 @@ export function StagesTable({
 function StagesHead() {
   const th = "px-3 py-2 text-left font-semibold text-muted-foreground";
   return (
-    <thead className="sticky top-0 z-10 bg-background shadow-[0_1px_0_var(--color-border)]">
+    <thead className="sticky top-0 z-10 bg-card shadow-[0_1px_0_var(--border)]">
       <tr className="border-b">
         <th className={`${th} w-14`}>N</th>
         <th className={`${th} min-w-64`}>Название этапа</th>

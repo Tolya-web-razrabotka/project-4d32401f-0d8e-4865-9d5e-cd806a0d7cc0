@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTitle } from "@/components/ui/sheet";
 import { ProfileContext, type CurrentProfile } from "@/lib/profile";
 import { OverdueDialog, clearOverdueAck } from "@/components/OverdueDialog";
+import { BrandMark } from "@/components/BrandMark";
 
 export const Route = createFileRoute("/_authenticated")({
   ssr: false,
@@ -97,18 +98,6 @@ const items = [
   { to: "/history", label: "История", icon: History },
 ] as const;
 
-/** Знак «Лидер»: янтарная плашка с буквой — единственное место, где янтарь крупным пятном. */
-export function BrandMark({ className = "" }: { className?: string }) {
-  return (
-    <span
-      aria-hidden
-      className={`inline-flex size-7 items-center justify-center rounded-md bg-signal text-[15px] font-bold leading-none text-sidebar ${className}`}
-    >
-      Л
-    </span>
-  );
-}
-
 function Nav({ profile, onSignOut, onNavigate }: { profile: CurrentProfile; onSignOut: () => void; onNavigate?: () => void }) {
   const path = useRouterState({ select: (s) => s.location.pathname });
   const { data: count = 0 } = useAttentionCount();
@@ -183,7 +172,7 @@ function Shell({ profile, onSignOut }: { profile: CurrentProfile; onSignOut: () 
           <span className="text-sm font-semibold">Лидер</span>
         </header>
         <Sheet open={open} onOpenChange={setOpen}>
-          <SheetContent side="left" className="w-64 border-0 bg-sidebar p-0">
+          <SheetContent side="left" className="w-64 border-0 bg-sidebar p-0 text-sidebar-foreground">
             <SheetTitle className="sr-only">Меню</SheetTitle>
             <Nav profile={profile} onSignOut={onSignOut} onNavigate={() => setOpen(false)} />
           </SheetContent>

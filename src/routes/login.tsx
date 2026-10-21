@@ -6,6 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { showError } from "@/lib/format";
 import { clearOverdueAck } from "@/components/OverdueDialog";
+import { BrandMark } from "@/components/BrandMark";
 
 export const Route = createFileRoute("/login")({
   ssr: false,
@@ -45,7 +46,7 @@ function LoginPage() {
     <div className="grid min-h-screen bg-background lg:grid-cols-[minmax(320px,440px)_1fr]">
       <aside className="hidden flex-col justify-between bg-sidebar p-10 text-sidebar-foreground lg:flex">
         <div className="flex items-center gap-3">
-          <span className="inline-flex size-9 items-center justify-center rounded-md bg-signal text-lg font-bold text-sidebar">Л</span>
+          <BrandMark className="size-9 text-lg" />
           <span className="text-lg font-semibold text-sidebar-primary-foreground">Лидер</span>
         </div>
         <div>

@@ -42,7 +42,7 @@ export function StagesPicker({
 
   return (
     <div className="max-w-5xl space-y-4">
-      <div className="sticky top-0 z-10 flex flex-wrap items-center gap-3 rounded-md border bg-background p-3">
+      <div className="sticky top-0 z-10 flex flex-wrap items-center gap-3 rounded-md border bg-card p-3">
         <span className="flex-1 text-sm font-semibold">
           Выбрано этапов: {selected.length} из {templates.length}
         </span>
