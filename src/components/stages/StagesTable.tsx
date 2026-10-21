@@ -161,7 +161,7 @@ export function StagesTable({
       </div>
 
       {/* По эскизу «Рабочий стол прораба»: таблица прокручивается в своей области, шапка колонок закреплена */}
-      <div className="max-h-[70vh] overflow-auto rounded-md border">
+      <div className="max-h-[70vh] overflow-auto rounded-md border bg-card">
         <table className="w-full min-w-[1100px] text-sm">
           <StagesHead />
           <tbody>
@@ -188,7 +188,7 @@ export function StagesTable({
       </div>
 
       {!f.onlyOpen && closed.length > 0 && (
-        <div className="mt-6 rounded-md border">
+        <div className="mt-6 rounded-md border bg-card">
           <button
             type="button"
             onClick={() => setClosedOpen((v) => !v)}
@@ -314,7 +314,7 @@ function StageRow({
           <div className="mt-1 text-xs text-muted-foreground">ответ ждём до {formatDate(s.response_due)}</div>
         )}
         {s.is_no_response && (
-          <div className="mt-1 inline-block rounded border-2 border-red-600 px-1.5 text-xs font-semibold text-red-700 dark:text-red-300">
+          <div className="mt-1 inline-block rounded border border-red-600 px-1.5 text-xs font-semibold text-red-700 dark:text-red-300">
             нет ответа {noResponseDays} дн.
           </div>
         )}

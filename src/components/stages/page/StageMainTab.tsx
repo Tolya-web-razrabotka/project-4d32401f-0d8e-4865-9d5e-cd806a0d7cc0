@@ -85,7 +85,7 @@ export function StageMainTab({ stage, onSaved }: { stage: ObjectStage; onSaved: 
     <div className="max-w-4xl space-y-6">
       {stage.description && <p className="whitespace-pre-line text-sm text-muted-foreground">{stage.description}</p>}
       {stage.return_reason && stage.status_code !== "closed" && (
-        <div className="rounded-md border-2 border-orange-400 bg-orange-50 p-4 text-sm dark:bg-orange-950/40">
+        <div className="rounded-md border border-orange-400 bg-orange-50 p-4 text-sm dark:bg-orange-950/40">
           <span className="font-semibold">Возвращён на доработку:</span> {stage.return_reason}
         </div>
       )}
@@ -106,7 +106,7 @@ export function StageMainTab({ stage, onSaved }: { stage: ObjectStage; onSaved: 
         </Field>
       </section>
 
-      <section className="rounded-md border p-4">
+      <section className="rounded-md border bg-card p-4">
         <div className="mb-4 text-sm font-semibold">
           Документ{stage.outgoing_doc ? ` «${stage.outgoing_doc}»` : ""}
           {stage.expected_doc ? ` → ждём «${stage.expected_doc}»` : ""}
@@ -155,7 +155,7 @@ function Predecessors({ stage }: { stage: ObjectStage }) {
   return (
     <section>
       <h3 className="mb-3 text-base font-semibold">Предшествующие этапы</h3>
-      <div className="divide-y rounded-md border">
+      <div className="divide-y rounded-md border bg-card">
         {preds.map((p) => (
           <Link
             key={p.id}
@@ -190,7 +190,7 @@ function LinkedRequests({ stage }: { stage: ObjectStage }) {
   return (
     <section>
       <h3 className="mb-3 text-base font-semibold">Связанные заявки</h3>
-      <div className="divide-y rounded-md border">
+      <div className="divide-y rounded-md border bg-card">
         {data.map((r) => (
           <Link
             key={r.id}

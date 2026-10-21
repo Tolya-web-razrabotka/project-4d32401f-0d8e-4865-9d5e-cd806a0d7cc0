@@ -70,7 +70,7 @@ function ObjectPage() {
         }
       />
 
-      <div className="grid gap-6 xl:grid-cols-[240px_minmax(0,1fr)]">
+      <div className="grid gap-6 xl:grid-cols-[200px_minmax(0,1fr)]">
         <RequestTypeButtons
           objectId={id}
           activeType={tab === "requests" ? type : undefined}
@@ -150,7 +150,7 @@ function RequestTypeButtons({
               key={t.id}
               type="button"
               onClick={() => onPick(t.id)}
-              className={`flex min-h-9 items-center gap-2 rounded-md border-2 px-4 py-2 text-left text-sm font-medium transition-colors ${
+              className={`flex min-h-9 items-center gap-2 rounded-md border px-4 py-2 text-left text-sm font-medium transition-colors ${
                 active ? "border-primary bg-primary text-primary-foreground" : "bg-card hover:bg-accent"
               }`}
             >
@@ -193,7 +193,7 @@ function MembersList({ objectId }: { objectId: string }) {
   if (isLoading) return null;
   if (data.length === 0) return <p className="py-4 text-sm text-muted-foreground">Участники не назначены</p>;
   return (
-    <div className="divide-y rounded-md border">
+    <div className="divide-y rounded-md border bg-card">
       {data.map((m) => (
         <div key={m.profile_id} className="flex flex-wrap gap-x-6 gap-y-1 px-4 py-2 text-sm">
           <span className="w-48 text-muted-foreground">{m.profile?.role?.name}</span>

@@ -56,7 +56,7 @@ export function HistoryFeed({ filter, showObject }: { filter: HistoryFilter; sho
   if (error) return <p className="py-4 text-sm text-destructive">Не удалось загрузить историю</p>;
   if (data.length === 0) return <p className="py-4 text-sm text-muted-foreground">Записей пока нет</p>;
   return (
-    <ol className="divide-y rounded-md border">
+    <ol className="divide-y rounded-md border bg-card">
       {data.map((h) => (
         <li key={h.id} className="flex flex-wrap gap-x-6 gap-y-1 px-4 py-2">
           <span className="w-40 shrink-0 text-sm text-muted-foreground">{formatDateTime(h.created_at)}</span>

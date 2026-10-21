@@ -34,7 +34,7 @@ export function CustomersDirectory() {
   return (
     <div>
       <Toolbar search={search} onSearch={setSearch} onAdd={is_admin ? () => setCreating(true) : undefined} />
-      <div className="rounded-md border">
+      <div className="rounded-md border bg-card">
         <Table className="text-sm">
           <TableHeader>
             <TableRow>
@@ -153,7 +153,7 @@ function Contacts({ customerId }: { customerId: string }) {
         editing !== null && editing !== "new" && editing.id === c.id ? (
           <ContactForm key={c.id} customerId={customerId} contact={c} invalidate={key} onClose={() => setEditing(null)} />
         ) : (
-          <div key={c.id} className="rounded-md border p-4 text-sm">
+          <div key={c.id} className="rounded-md border bg-card p-4 text-sm">
             <div className="text-sm font-semibold">{c.full_name}</div>
             {c.position && <div className="text-muted-foreground">{c.position}</div>}
             {c.phone && <div>{c.phone}</div>}

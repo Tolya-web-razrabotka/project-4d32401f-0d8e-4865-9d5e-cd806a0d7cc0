@@ -102,7 +102,7 @@ function ObjectsPage() {
               key={p.key}
               type="button"
               onClick={() => setProblem(active ? null : p.key)}
-              className={`rounded-lg border-2 p-4 text-left transition-shadow ${
+              className={`rounded-lg border p-4 text-left transition-shadow ${
                 n > 0 ? TILE_TONE[p.tone] : "border-border bg-card text-muted-foreground"
               } ${active ? "ring-4 ring-primary/40" : "hover:shadow-md"}`}
             >
@@ -154,7 +154,7 @@ function ObjectsPage() {
         </div>
       )}
 
-      <div className="overflow-x-auto rounded-md border">
+      <div className="overflow-x-auto rounded-md border bg-card">
         <Table className="text-sm">
           <TableHeader>
             <TableRow>

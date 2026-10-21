@@ -80,7 +80,7 @@ export function DocumentsDirectory() {
           </SelectContent>
         </Select>
       </Toolbar>
-      <div className="rounded-md border">
+      <div className="rounded-md border bg-card">
         <Table className="text-sm">
           <TableHeader>
             <TableRow>

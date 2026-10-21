@@ -44,7 +44,7 @@ export function StatusesDirectory() {
   return (
     <div>
       <Toolbar search={search} onSearch={setSearch} />
-      <div className="rounded-md border">
+      <div className="rounded-md border bg-card">
         <Table className="text-sm">
           <TableHeader>
             <TableRow>

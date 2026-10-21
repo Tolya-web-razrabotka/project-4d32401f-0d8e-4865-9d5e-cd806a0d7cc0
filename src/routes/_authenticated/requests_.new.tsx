@@ -189,7 +189,7 @@ function NewRequestPage() {
             />
             <div className="space-y-2">
               {files.map((file, i) => (
-                <div key={`${file.name}-${i}`} className="flex items-center gap-3 rounded-md border px-3 py-2 text-sm">
+                <div key={`${file.name}-${i}`} className="flex items-center gap-3 rounded-md border bg-card px-3 py-2 text-sm">
                   <Paperclip className="size-3.5 shrink-0" />
                   <span className="flex-1 truncate">{file.name}</span>
                   <Button type="button" variant="ghost" size="icon" onClick={() => setFiles((x) => x.filter((_, j) => j !== i))} aria-label="Убрать">

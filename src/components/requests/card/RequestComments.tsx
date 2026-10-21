@@ -43,7 +43,7 @@ export function RequestComments({ requestId }: { requestId: string }) {
   });
 
   return (
-    <section className="rounded-lg border p-4">
+    <section className="rounded-lg border bg-card p-4">
       <h2 className="mb-4 text-lg font-semibold">Переписка</h2>
       {data.length === 0 ? (
         <p className="mb-4 text-sm text-muted-foreground">Сообщений пока нет</p>

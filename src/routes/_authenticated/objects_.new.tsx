@@ -132,7 +132,7 @@ function NewObjectPage() {
         <StagesPicker templates={templates} selected={stageIds ?? []} onChange={setStageIds} />
       )}
 
-      <div className="fixed inset-x-0 bottom-0 z-20 border-t bg-background/95 px-4 py-2.5 backdrop-blur lg:left-60">
+      <div className="fixed inset-x-0 bottom-0 z-20 border-t bg-background/95 px-4 py-2.5 backdrop-blur lg:left-56">
         <div className="flex max-w-5xl flex-wrap gap-3">
           {step > 0 && (
             <Button variant="outline" onClick={() => setStep((s) => s - 1)} className="h-9 px-4 text-sm">

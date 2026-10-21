@@ -62,7 +62,7 @@ function AuthLayout() {
   if (error || !profile) {
     return (
       <div className="flex min-h-screen flex-col items-center justify-center gap-6 p-4 text-center">
-        <p className="text-lg font-semibold">Нет доступа. Обратитесь к администратору</p>
+        <p className="text-base font-semibold">Нет доступа. Обратитесь к администратору</p>
         <Button onClick={signOut} className="h-10 px-4 text-sm">Выйти</Button>
       </div>
     );
@@ -97,13 +97,31 @@ const items = [
   { to: "/history", label: "История", icon: History },
 ] as const;
 
+/** Знак «Лидер»: янтарная плашка с буквой — единственное место, где янтарь крупным пятном. */
+export function BrandMark({ className = "" }: { className?: string }) {
+  return (
+    <span
+      aria-hidden
+      className={`inline-flex size-7 items-center justify-center rounded-md bg-signal text-[15px] font-bold leading-none text-sidebar ${className}`}
+    >
+      Л
+    </span>
+  );
+}
+
 function Nav({ profile, onSignOut, onNavigate }: { profile: CurrentProfile; onSignOut: () => void; onNavigate?: () => void }) {
   const path = useRouterState({ select: (s) => s.location.pathname });
   const { data: count = 0 } = useAttentionCount();
   return (
     <div className="flex h-full flex-col bg-sidebar text-sidebar-foreground">
-      <div className="px-4 py-4 text-xl font-bold">Лидер</div>
-      <nav className="flex-1 space-y-2 px-3">
+      <div className="flex items-center gap-2.5 px-4 pb-5 pt-5">
+        <BrandMark />
+        <div className="leading-tight">
+          <div className="text-[15px] font-semibold text-sidebar-primary-foreground">Лидер</div>
+          <div className="text-[11px] text-sidebar-foreground/60">Контроль этапов работ</div>
+        </div>
+      </div>
+      <nav className="flex-1 space-y-0.5 px-2">
         {items.map((it) => {
           const active = path === it.to || path.startsWith(it.to + "/");
           return (
@@ -111,14 +129,17 @@ function Nav({ profile, onSignOut, onNavigate }: { profile: CurrentProfile; onSi
               key={it.to}
               to={it.to}
               onClick={onNavigate}
-              className={`flex items-center gap-4 rounded-md px-4 py-2.5 text-base font-medium transition-colors ${
-                active ? "bg-sidebar-primary text-sidebar-primary-foreground" : "hover:bg-sidebar-accent"
+              className={`relative flex h-9 items-center gap-3 rounded-md px-3 text-sm transition-colors ${
+                active
+                  ? "bg-sidebar-primary font-medium text-sidebar-primary-foreground"
+                  : "text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground"
               }`}
             >
-              <it.icon className="size-5 shrink-0" />
+              {active && <span aria-hidden className="absolute inset-y-2 left-0 w-0.5 rounded-full bg-signal" />}
+              <it.icon className="size-4 shrink-0 opacity-80" />
               <span className="flex-1">{it.label}</span>
               {"badge" in it && count > 0 && (
-                <span className="min-w-8 rounded-full bg-destructive px-2.5 py-0.5 text-center text-sm font-bold text-destructive-foreground">
+                <span className="min-w-5 rounded-full bg-destructive px-1.5 text-center text-[11px] font-semibold leading-5 text-destructive-foreground">
                   {count}
                 </span>
               )}
@@ -126,14 +147,16 @@ function Nav({ profile, onSignOut, onNavigate }: { profile: CurrentProfile; onSi
           );
         })}
       </nav>
-      <div className="space-y-3 border-t border-sidebar-border p-4">
-        <div>
-          <div className="text-sm font-semibold leading-tight">{profile.full_name}</div>
-          {profile.role_name && <div className="text-sm text-muted-foreground">{profile.role_name}</div>}
-        </div>
-        <Button variant="outline" onClick={onSignOut} className="h-9 w-full text-sm">
-          <LogOut className="size-4" /> Выйти
-        </Button>
+      <div className="border-t border-sidebar-border px-4 py-3">
+        <div className="truncate text-sm font-medium text-sidebar-primary-foreground">{profile.full_name}</div>
+        {profile.role_name && <div className="text-xs text-sidebar-foreground/60">{profile.role_name}</div>}
+        <button
+          type="button"
+          onClick={onSignOut}
+          className="mt-2 inline-flex items-center gap-2 rounded-md py-1 text-xs text-sidebar-foreground/70 transition-colors hover:text-sidebar-primary-foreground"
+        >
+          <LogOut className="size-3.5" /> Выйти
+        </button>
       </div>
     </div>
   );
@@ -143,23 +166,29 @@ function Shell({ profile, onSignOut }: { profile: CurrentProfile; onSignOut: () 
   const [open, setOpen] = useState(false);
   return (
     <div className="flex min-h-screen w-full">
-      <aside className="sticky top-0 hidden h-screen w-60 shrink-0 border-r border-sidebar-border lg:block">
+      <aside className="sticky top-0 hidden h-screen w-56 shrink-0 lg:block">
         <Nav profile={profile} onSignOut={onSignOut} />
       </aside>
       <div className="flex min-w-0 flex-1 flex-col">
-        <header className="flex items-center gap-3 border-b px-4 py-2 lg:hidden">
-          <Button variant="outline" onClick={() => setOpen(true)} className="h-9 px-4 text-sm" aria-label="Меню">
-            <Menu className="size-4" /> Меню
-          </Button>
-          <span className="text-lg font-bold">Лидер</span>
+        <header className="sticky top-0 z-30 flex h-12 items-center gap-3 bg-sidebar px-3 text-sidebar-primary-foreground lg:hidden">
+          <button
+            type="button"
+            onClick={() => setOpen(true)}
+            className="inline-flex size-9 items-center justify-center rounded-md hover:bg-sidebar-accent"
+            aria-label="Меню"
+          >
+            <Menu className="size-5" />
+          </button>
+          <BrandMark className="size-6 text-[13px]" />
+          <span className="text-sm font-semibold">Лидер</span>
         </header>
         <Sheet open={open} onOpenChange={setOpen}>
-          <SheetContent side="left" className="w-80 p-0">
+          <SheetContent side="left" className="w-64 border-0 bg-sidebar p-0">
             <SheetTitle className="sr-only">Меню</SheetTitle>
             <Nav profile={profile} onSignOut={onSignOut} onNavigate={() => setOpen(false)} />
           </SheetContent>
         </Sheet>
-        <main className="flex-1 p-4 lg:p-6">
+        <main className="mx-auto w-full max-w-[1600px] flex-1 px-4 py-5 lg:px-8 lg:py-6">
           <Outlet />
         </main>
         <OverdueDialog />

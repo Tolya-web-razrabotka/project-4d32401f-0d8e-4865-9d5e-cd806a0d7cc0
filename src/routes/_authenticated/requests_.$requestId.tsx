@@ -145,7 +145,7 @@ function RequestCard() {
 
       <RequestComments requestId={r.id} />
 
-      <section className="rounded-lg border p-4">
+      <section className="rounded-lg border bg-card p-4">
         <div className="mb-4 flex flex-wrap items-center gap-3">
           <h2 className="flex-1 text-lg font-semibold">Файлы</h2>
           <UploadButton

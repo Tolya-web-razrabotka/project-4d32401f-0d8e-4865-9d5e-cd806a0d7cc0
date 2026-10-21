@@ -237,7 +237,7 @@ function StagesTab({ id }: { id: string }) {
           <Plus className="size-4" /> Добавить этапы из справочника
         </Button>
       </div>
-      <div className="divide-y rounded-md border">
+      <div className="divide-y rounded-md border bg-card">
         {stages.length === 0 && <p className="p-4 text-sm text-muted-foreground">Этапов нет</p>}
         {stages.map((s) => (
           <div key={s.id} className={`flex flex-wrap items-center gap-4 px-4 py-2 text-sm ${s.is_excluded ? "bg-muted/50" : ""}`}>

@@ -17,7 +17,7 @@ export function MembersPicker({
   const others = profiles.filter((p) => !known.has(p.role_code));
 
   const group = (title: string, people: typeof profiles) => (
-    <div key={title} className="rounded-md border p-4">
+    <div key={title} className="rounded-md border bg-card p-4">
       <div className="mb-3 text-sm font-semibold">{title}</div>
       {people.length === 0 ? (
         <p className="text-sm text-muted-foreground">Нет сотрудников с этой ролью — добавьте в «Справочники → Сотрудники»</p>

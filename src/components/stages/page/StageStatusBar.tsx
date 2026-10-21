@@ -160,5 +160,5 @@ export function StageStatusBar({
 }
 
 function Bar({ children }: { children: ReactNode }) {
-  return <div className="mt-6 rounded-lg border-2 bg-card p-4">{children}</div>;
+  return <div className="mt-6 rounded-lg border bg-card p-4">{children}</div>;
 }

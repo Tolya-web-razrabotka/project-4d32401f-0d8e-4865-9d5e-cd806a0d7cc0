@@ -60,7 +60,7 @@ export function RequestProgress({
   const blockedReady = next?.v === "ready" && missingRequired.length > 0;
 
   return (
-    <section className="rounded-lg border-2 p-4">
+    <section className="rounded-lg border bg-card p-4">
       <h2 className="mb-4 text-lg font-semibold">Ход заявки</h2>
       <ol className="mb-4 grid gap-3 sm:grid-cols-5">
         {REQUEST_STATUSES.map((s, i) => {
@@ -69,14 +69,14 @@ export function RequestProgress({
           return (
             <li
               key={s.v}
-              className={`rounded-md border-2 p-3 ${
-                current ? "border-primary bg-accent" : done ? "border-green-600/40 bg-green-50 dark:bg-green-950/30" : "border-border text-muted-foreground"
+              className={`rounded-md border p-3 ${
+                current ? "border-primary bg-accent" : done ? "border-green-600/40 bg-green-50 dark:bg-green-950/30" : "border-border bg-card text-muted-foreground"
               }`}
             >
               <div className="flex items-center gap-2 text-sm font-semibold">
                 <span
                   className={`flex size-5 shrink-0 items-center justify-center rounded-full text-xs ${
-                    done ? "bg-green-600 text-white" : "border-2 border-current"
+                    done ? "bg-green-600 text-white" : "border border-current"
                   }`}
                 >
                   {done ? <Check className="size-3.5" /> : i + 1}

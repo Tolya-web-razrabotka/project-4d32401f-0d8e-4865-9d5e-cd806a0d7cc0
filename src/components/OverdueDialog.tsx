@@ -102,7 +102,7 @@ export function OverdueDialog() {
           </DialogTitle>
           <DialogDescription className="text-sm">Эти заявки и этапы требуют внимания.</DialogDescription>
         </DialogHeader>
-        <div className="min-h-0 flex-1 overflow-y-auto rounded-md border">
+        <div className="min-h-0 flex-1 overflow-y-auto rounded-md border bg-card">
           <table className="w-full text-sm">
             <thead className="sticky top-0 bg-background">
               <tr className="border-b text-left text-muted-foreground">

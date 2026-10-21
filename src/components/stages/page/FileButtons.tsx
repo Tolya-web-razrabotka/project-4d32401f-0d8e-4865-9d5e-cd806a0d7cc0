@@ -72,7 +72,7 @@ export function UploadButton({
 export function FileList({ files, showKind }: { files: FileRow[]; showKind?: boolean }) {
   if (files.length === 0) return null;
   return (
-    <ul className="divide-y rounded-md border">
+    <ul className="divide-y rounded-md border bg-card">
       {files.map((f) => (
         <li key={f.id} className="flex flex-wrap items-center gap-x-4 gap-y-1 px-3 py-2">
           <button

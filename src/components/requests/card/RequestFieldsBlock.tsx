@@ -56,7 +56,7 @@ export function RequestFieldsBlock({
   if (editable.length === 0 && orphanValues.length === 0) return null;
 
   return (
-    <section className="rounded-lg border p-4">
+    <section className="rounded-lg border bg-card p-4">
       <h2 className="text-lg font-semibold">{title}</h2>
       {hint && <p className="mt-1 text-sm text-muted-foreground">{hint}</p>}
       <div className="mt-4 grid gap-5 sm:grid-cols-2">

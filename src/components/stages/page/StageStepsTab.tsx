@@ -72,8 +72,8 @@ export function StageStepsTab({ steps, disabled, onChanged }: { steps: ObjectSte
           return (
             <li
               key={s.id}
-              className={`rounded-md border-2 p-4 ${
-                current ? "border-primary bg-accent" : s.state === "done" ? "border-transparent bg-muted/50" : "border-border"
+              className={`rounded-md border p-4 ${
+                current ? "border-primary bg-accent" : s.state === "done" ? "border-transparent bg-card/60" : "border-border bg-card"
               }`}
             >
               <div className="flex items-start gap-4">

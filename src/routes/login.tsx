@@ -42,23 +42,45 @@ function LoginPage() {
   }
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-muted p-4">
-      <form onSubmit={onSubmit} className="w-full max-w-md space-y-5 rounded-lg border bg-card p-6 shadow-sm">
-        <h1 className="text-center text-xl font-bold">Лидер</h1>
-        <div className="space-y-2">
-          <Label htmlFor="email" className="text-sm">Email</Label>
-          <Input id="email" type="email" required autoComplete="username" value={email}
-            onChange={(e) => setEmail(e.target.value)} className="h-10 text-sm" />
+    <div className="grid min-h-screen bg-background lg:grid-cols-[minmax(320px,440px)_1fr]">
+      <aside className="hidden flex-col justify-between bg-sidebar p-10 text-sidebar-foreground lg:flex">
+        <div className="flex items-center gap-3">
+          <span className="inline-flex size-9 items-center justify-center rounded-md bg-signal text-lg font-bold text-sidebar">Л</span>
+          <span className="text-lg font-semibold text-sidebar-primary-foreground">Лидер</span>
         </div>
-        <div className="space-y-2">
-          <Label htmlFor="password" className="text-sm">Пароль</Label>
-          <Input id="password" type="password" required autoComplete="current-password" value={password}
-            onChange={(e) => setPassword(e.target.value)} className="h-10 text-sm" />
+        <div>
+          <p className="text-2xl font-semibold leading-snug text-sidebar-primary-foreground">
+            Этапы, заявки и сроки
+            <br />
+            по каждому объекту
+          </p>
+          <p className="mt-3 max-w-xs text-sm text-sidebar-foreground/70">
+            Видно, у кого сейчас задача, что просрочено и что ждёт ответа.
+          </p>
         </div>
-        <Button type="submit" disabled={busy} className="h-10 w-full text-sm">
-          {busy ? "Входим…" : "Войти"}
-        </Button>
-      </form>
+        <p className="text-xs text-sidebar-foreground/50">ООО «Лидер»</p>
+      </aside>
+      <main className="flex items-center justify-center p-4">
+        <form onSubmit={onSubmit} className="w-full max-w-sm space-y-5">
+          <div>
+            <h1 className="text-xl font-semibold">Вход в систему</h1>
+            <p className="mt-1 text-sm text-muted-foreground">Логин и пароль выдаёт администратор</p>
+          </div>
+          <div className="space-y-1.5">
+            <Label htmlFor="email" className="text-sm">Email</Label>
+            <Input id="email" type="email" required autoComplete="username" value={email}
+              onChange={(e) => setEmail(e.target.value)} className="h-10 bg-card text-sm" />
+          </div>
+          <div className="space-y-1.5">
+            <Label htmlFor="password" className="text-sm">Пароль</Label>
+            <Input id="password" type="password" required autoComplete="current-password" value={password}
+              onChange={(e) => setPassword(e.target.value)} className="h-10 bg-card text-sm" />
+          </div>
+          <Button type="submit" disabled={busy} className="h-10 w-full text-sm">
+            {busy ? "Входим…" : "Войти"}
+          </Button>
+        </form>
+      </main>
     </div>
   );
 }

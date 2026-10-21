@@ -68,7 +68,7 @@ export function StagesDirectory() {
       <p className="mb-4 text-sm text-muted-foreground">
         Всего этапов: {stages.filter((s) => showInactive || s.is_active).length}. Нажмите на строку, чтобы открыть карточку этапа.
       </p>
-      <div className="overflow-x-auto rounded-md border">
+      <div className="overflow-x-auto rounded-md border bg-card">
         <Table className="text-sm">
           <TableHeader>
             <TableRow>

@@ -33,7 +33,7 @@ export function RepresentativesDirectory() {
   return (
     <div>
       <Toolbar search={search} onSearch={setSearch} onAdd={is_admin ? () => setEditing("new") : undefined} />
-      <div className="rounded-md border">
+      <div className="rounded-md border bg-card">
         <Table className="text-sm">
           <TableHeader>
             <TableRow>

@@ -61,7 +61,7 @@ export function StagesPicker({
         const count = ids.filter((id) => sel.has(id)).length;
         const all = count === ids.length;
         return (
-          <div key={g.id} className="rounded-md border">
+          <div key={g.id} className="rounded-md border bg-card">
             <div className="flex flex-wrap items-center gap-3 border-b bg-muted/60 px-4 py-2">
               <span className="flex-1 text-sm font-semibold">
                 {g.name} <span className="font-normal text-muted-foreground">· {count} из {ids.length}</span>

@@ -212,7 +212,7 @@ export function RequestsList({
         </Button>
       </div>
 
-      <div className="overflow-x-auto rounded-md border">
+      <div className="overflow-x-auto rounded-md border bg-card">
         <table className="w-full min-w-[1000px] text-sm">
           <thead>
             <tr className="border-b text-left text-muted-foreground">
