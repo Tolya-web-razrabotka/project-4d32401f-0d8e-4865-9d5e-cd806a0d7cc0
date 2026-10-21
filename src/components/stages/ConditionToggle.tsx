@@ -43,7 +43,7 @@ export function ConditionToggle({
     onError: showError,
   });
 
-  const box = size === "sm" ? "size-4" : "size-4";
+  const box = size === "sm" ? "size-3.5" : "size-4";
 
   return (
     <>
