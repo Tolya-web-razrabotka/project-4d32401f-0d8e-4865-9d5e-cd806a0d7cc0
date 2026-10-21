@@ -17,16 +17,16 @@ export function MembersPicker({
   const others = profiles.filter((p) => !known.has(p.role_code));
 
   const group = (title: string, people: typeof profiles) => (
-    <div key={title} className="rounded-lg border p-4">
-      <div className="mb-3 text-lg font-semibold">{title}</div>
+    <div key={title} className="rounded-md border p-4">
+      <div className="mb-3 text-sm font-semibold">{title}</div>
       {people.length === 0 ? (
-        <p className="text-base text-muted-foreground">Нет сотрудников с этой ролью — добавьте в «Справочники → Сотрудники»</p>
+        <p className="text-sm text-muted-foreground">Нет сотрудников с этой ролью — добавьте в «Справочники → Сотрудники»</p>
       ) : (
         <div className="space-y-3">
           {people.map((p) => (
-            <label key={p.id} className="flex items-center gap-3 text-lg">
+            <label key={p.id} className="flex items-center gap-3 text-sm">
               <Checkbox
-                className="size-6"
+                className="size-4"
                 checked={value.includes(p.id)}
                 disabled={disabled}
                 onCheckedChange={(c) => onToggle(p.id, c === true)}

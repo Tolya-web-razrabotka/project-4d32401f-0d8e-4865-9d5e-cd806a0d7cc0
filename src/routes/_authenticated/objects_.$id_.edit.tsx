@@ -7,6 +7,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useProfile } from "@/lib/profile";
 import { showError } from "@/lib/format";
 import { Button } from "@/components/ui/button";
+import { tabsListClass, tabTriggerClass } from "@/lib/ui";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { OBJECTS_KEY } from "@/components/objects/data";
@@ -20,8 +21,6 @@ export const Route = createFileRoute("/_authenticated/objects_/$id_/edit")({
   head: () => ({ meta: [{ title: "Редактирование объекта — Лидер" }] }),
 });
 
-const TAB_CLASS =
-  "h-12 border px-5 text-lg data-[state=active]:bg-primary data-[state=active]:text-primary-foreground";
 
 function EditObjectPage() {
   const { id } = Route.useParams();
@@ -41,17 +40,17 @@ function EditObjectPage() {
   });
 
   const back = (
-    <Link to="/objects/$id" params={{ id }} className="mb-4 inline-flex items-center gap-2 text-lg text-primary hover:underline">
-      <ArrowLeft className="size-5" /> К объекту
+    <Link to="/objects/$id" params={{ id }} className="mb-4 inline-flex items-center gap-2 text-sm text-primary hover:underline">
+      <ArrowLeft className="size-4" /> К объекту
     </Link>
   );
 
-  if (isLoading) return <div className="text-xl text-muted-foreground">Загрузка…</div>;
+  if (isLoading) return <div className="text-base text-muted-foreground">Загрузка…</div>;
   if (!obj || !is_admin) {
     return (
       <div>
         {back}
-        <p className="py-10 text-xl text-muted-foreground">
+        <p className="py-10 text-base text-muted-foreground">
           {obj ? "Редактировать объект может только администратор или руководитель" : "Объект не найден"}
         </p>
       </div>
@@ -73,12 +72,12 @@ function EditObjectPage() {
   return (
     <div>
       {back}
-      <h1 className="mb-6 text-3xl font-bold">{obj.name}</h1>
+      <h1 className="mb-4 text-xl font-bold">{obj.name}</h1>
       <Tabs defaultValue="card">
-        <TabsList className="mb-6 flex h-auto flex-wrap justify-start gap-2 bg-transparent p-0">
-          <TabsTrigger value="card" className={TAB_CLASS}>Карточка</TabsTrigger>
-          <TabsTrigger value="members" className={TAB_CLASS}>Участники</TabsTrigger>
-          <TabsTrigger value="stages" className={TAB_CLASS}>Этапы</TabsTrigger>
+        <TabsList className={tabsListClass}>
+          <TabsTrigger value="card" className={tabTriggerClass}>Карточка</TabsTrigger>
+          <TabsTrigger value="members" className={tabTriggerClass}>Участники</TabsTrigger>
+          <TabsTrigger value="stages" className={tabTriggerClass}>Этапы</TabsTrigger>
         </TabsList>
         <TabsContent value="card">
           <CardTab id={id} initial={draft} />
@@ -135,19 +134,19 @@ function CardTab({ id, initial }: { id: string; initial: ObjectDraft }) {
   const archived = draft.status === "completed";
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-5">
       <ObjectCardFields value={draft} onChange={setDraft} showStatus />
       <div className="flex flex-wrap gap-3">
-        <Button onClick={() => save.mutate(undefined)} disabled={save.isPending} className="h-12 px-10 text-lg">
+        <Button onClick={() => save.mutate(undefined)} disabled={save.isPending} className="h-9 px-5 text-sm">
           {save.isPending ? "Сохранение…" : "Сохранить"}
         </Button>
         {archived ? (
-          <Button variant="outline" onClick={() => save.mutate({ status: "in_work" })} disabled={save.isPending} className="h-12 text-lg">
-            <ArchiveRestore className="size-5" /> Вернуть из архива
+          <Button variant="outline" onClick={() => save.mutate({ status: "in_work" })} disabled={save.isPending} className="h-9 text-sm">
+            <ArchiveRestore className="size-4" /> Вернуть из архива
           </Button>
         ) : (
-          <Button variant="outline" onClick={() => save.mutate({ status: "completed" })} disabled={save.isPending} className="h-12 text-lg">
-            <Archive className="size-5" /> Завершить и перенести в архив
+          <Button variant="outline" onClick={() => save.mutate({ status: "completed" })} disabled={save.isPending} className="h-9 text-sm">
+            <Archive className="size-4" /> Завершить и перенести в архив
           </Button>
         )}
       </div>
@@ -178,7 +177,7 @@ function MembersTab({ id }: { id: string }) {
   if (isLoading) return null;
   return (
     <div className="space-y-4">
-      <p className="text-base text-muted-foreground">
+      <p className="text-sm text-muted-foreground">
         Изменения сохраняются сразу. Участник видит объект, его этапы и заявки.
       </p>
       <MembersPicker
@@ -231,22 +230,22 @@ function StagesTab({ id }: { id: string }) {
   return (
     <div className="max-w-5xl space-y-4">
       <div className="flex flex-wrap items-center gap-3">
-        <p className="flex-1 text-base text-muted-foreground">
+        <p className="flex-1 text-sm text-muted-foreground">
           Исключённый этап не учитывается в готовности и не подсвечивается. Его можно вернуть в любой момент.
         </p>
-        <Button onClick={() => setAdding(true)} className="h-12 px-6 text-lg">
-          <Plus className="size-5" /> Добавить этапы из справочника
+        <Button onClick={() => setAdding(true)} className="h-9 px-4 text-sm">
+          <Plus className="size-4" /> Добавить этапы из справочника
         </Button>
       </div>
-      <div className="divide-y rounded-lg border">
-        {stages.length === 0 && <p className="p-6 text-lg text-muted-foreground">Этапов нет</p>}
+      <div className="divide-y rounded-md border">
+        {stages.length === 0 && <p className="p-4 text-sm text-muted-foreground">Этапов нет</p>}
         {stages.map((s) => (
-          <div key={s.id} className={`flex flex-wrap items-center gap-4 px-4 py-3 text-lg ${s.is_excluded ? "bg-muted/50" : ""}`}>
+          <div key={s.id} className={`flex flex-wrap items-center gap-4 px-4 py-2 text-sm ${s.is_excluded ? "bg-muted/50" : ""}`}>
             <span className="w-8 font-semibold">{s.number}</span>
             <span className={`flex-1 ${s.is_excluded ? "text-muted-foreground line-through" : ""}`}>{s.name}</span>
             {!s.is_excluded && (
               <span
-                className="rounded-full px-3 py-0.5 text-base font-medium text-white"
+                className="rounded-full px-3 py-0.5 text-sm font-medium text-white"
                 style={{ backgroundColor: s.status_color ?? "#9CA3AF" }}
               >
                 {s.status_name}
@@ -254,7 +253,7 @@ function StagesTab({ id }: { id: string }) {
             )}
             <Button
               variant="outline"
-              className="h-10 text-base"
+              className="h-8 text-sm"
               disabled={exclude.isPending}
               onClick={() => exclude.mutate({ stageId: s.id, excluded: !s.is_excluded })}
             >
@@ -267,14 +266,14 @@ function StagesTab({ id }: { id: string }) {
       <Dialog open={adding} onOpenChange={setAdding}>
         <DialogContent className="max-h-[90vh] overflow-y-auto sm:max-w-4xl">
           <DialogHeader>
-            <DialogTitle className="text-2xl">Добавить этапы из справочника</DialogTitle>
+            <DialogTitle className="text-lg">Добавить этапы из справочника</DialogTitle>
           </DialogHeader>
           <StagesPicker templates={templates} selected={picked} onChange={setPicked} />
           <div className="flex gap-3 pt-2">
-            <Button onClick={() => add.mutate()} disabled={add.isPending || picked.length === 0} className="h-12 px-8 text-lg">
+            <Button onClick={() => add.mutate()} disabled={add.isPending || picked.length === 0} className="h-9 px-4 text-sm">
               {add.isPending ? "Добавление…" : `Добавить (${picked.length})`}
             </Button>
-            <Button variant="outline" onClick={() => setAdding(false)} className="h-12 text-lg">
+            <Button variant="outline" onClick={() => setAdding(false)} className="h-9 text-sm">
               Отмена
             </Button>
           </div>

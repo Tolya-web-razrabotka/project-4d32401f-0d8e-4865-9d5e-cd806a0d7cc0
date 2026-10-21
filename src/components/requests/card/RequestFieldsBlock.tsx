@@ -56,9 +56,9 @@ export function RequestFieldsBlock({
   if (editable.length === 0 && orphanValues.length === 0) return null;
 
   return (
-    <section className="rounded-xl border p-5">
-      <h2 className="text-2xl font-semibold">{title}</h2>
-      {hint && <p className="mt-1 text-base text-muted-foreground">{hint}</p>}
+    <section className="rounded-lg border p-4">
+      <h2 className="text-lg font-semibold">{title}</h2>
+      {hint && <p className="mt-1 text-sm text-muted-foreground">{hint}</p>}
       <div className="mt-4 grid gap-5 sm:grid-cols-2">
         {editable.map((f) => (
           // Подпись — из снимка в заявке, если значение уже сохранено: переименование поля в справочнике её не меняет
@@ -73,13 +73,13 @@ export function RequestFieldsBlock({
         ))}
         {orphanValues.map((v) => (
           <div key={v.field_id} className="space-y-2">
-            <div className="text-base text-muted-foreground">{v.label}</div>
-            <div className="flex h-12 items-center rounded-md border bg-muted px-3 text-lg">{formatValue(v.field_type, v.value)}</div>
+            <div className="text-sm text-muted-foreground">{v.label}</div>
+            <div className="flex h-9 items-center rounded-md border bg-muted px-3 text-sm">{formatValue(v.field_type, v.value)}</div>
           </div>
         ))}
       </div>
       {!readOnly && editable.length > 0 && (
-        <Button onClick={() => save.mutate()} disabled={!dirty || save.isPending} className="mt-5 h-12 px-8 text-lg">
+        <Button onClick={() => save.mutate()} disabled={!dirty || save.isPending} className="mt-5 h-9 px-4 text-sm">
           {save.isPending ? "Сохранение…" : "Сохранить"}
         </Button>
       )}

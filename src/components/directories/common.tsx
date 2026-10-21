@@ -33,18 +33,18 @@ export function Toolbar({
   return (
     <div className="mb-4 flex flex-wrap items-center gap-3">
       <div className="relative min-w-60 flex-1">
-        <Search className="absolute left-3 top-1/2 size-5 -translate-y-1/2 text-muted-foreground" />
+        <Search className="absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
         <Input
           value={search}
           onChange={(e) => onSearch(e.target.value)}
           placeholder="Поиск"
-          className="h-12 pl-11 text-lg"
+          className="h-9 pl-11 text-sm"
         />
       </div>
       {children}
       {onAdd && (
-        <Button onClick={onAdd} className="h-12 px-6 text-lg">
-          <Plus className="size-5" /> Добавить
+        <Button onClick={onAdd} className="h-9 px-4 text-sm">
+          <Plus className="size-4" /> Добавить
         </Button>
       )}
     </div>
@@ -54,7 +54,7 @@ export function Toolbar({
 export function Field({ label, required, children }: { label: string; required?: boolean; children: ReactNode }) {
   return (
     <div className="space-y-2">
-      <Label className="text-base">
+      <Label className="text-sm">
         {label}
         {required && <span className="text-destructive"> *</span>}
       </Label>
@@ -78,7 +78,7 @@ export function EditSheet({
     <Sheet open={open} onOpenChange={onOpenChange}>
       <SheetContent className="w-full overflow-y-auto sm:max-w-xl">
         <SheetHeader>
-          <SheetTitle className="text-2xl">{title}</SheetTitle>
+          <SheetTitle className="text-lg">{title}</SheetTitle>
         </SheetHeader>
         <div className="px-4 pb-6">{children}</div>
       </SheetContent>
@@ -130,19 +130,19 @@ export function DeleteButton({
   });
   return (
     <>
-      <Button variant="outline" onClick={() => setOpen(true)} className="h-11 text-base text-destructive">
-        <Trash2 className="size-5" /> Удалить
+      <Button variant="outline" onClick={() => setOpen(true)} className="h-9 text-sm text-destructive">
+        <Trash2 className="size-4" /> Удалить
       </Button>
       <AlertDialog open={open} onOpenChange={setOpen}>
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle className="text-xl">Удалить запись?</AlertDialogTitle>
-            <AlertDialogDescription className="text-base">«{name}» будет удалена.</AlertDialogDescription>
+            <AlertDialogTitle className="text-base">Удалить запись?</AlertDialogTitle>
+            <AlertDialogDescription className="text-sm">«{name}» будет удалена.</AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel className="h-11 text-base">Отмена</AlertDialogCancel>
+            <AlertDialogCancel className="h-9 text-sm">Отмена</AlertDialogCancel>
             <AlertDialogAction
-              className="h-11 bg-destructive text-base text-destructive-foreground hover:bg-destructive/90"
+              className="h-9 bg-destructive text-sm text-destructive-foreground hover:bg-destructive/90"
               onClick={(e) => {
                 e.preventDefault();
                 m.mutate();
@@ -161,10 +161,10 @@ export function DeleteButton({
 export function FormActions({ pending, onCancel }: { pending: boolean; onCancel: () => void }) {
   return (
     <div className="flex gap-3 pt-2">
-      <Button type="submit" disabled={pending} className="h-12 flex-1 text-lg">
+      <Button type="submit" disabled={pending} className="h-9 flex-1 text-sm">
         {pending ? "Сохранение…" : "Сохранить"}
       </Button>
-      <Button type="button" variant="outline" onClick={onCancel} className="h-12 flex-1 text-lg">
+      <Button type="button" variant="outline" onClick={onCancel} className="h-9 flex-1 text-sm">
         Отмена
       </Button>
     </div>
@@ -174,7 +174,7 @@ export function FormActions({ pending, onCancel }: { pending: boolean; onCancel:
 export function EmptyRow({ cols }: { cols: number }) {
   return (
     <tr>
-      <td colSpan={cols} className="py-8 text-center text-lg text-muted-foreground">
+      <td colSpan={cols} className="py-8 text-center text-sm text-muted-foreground">
         Ничего не найдено
       </td>
     </tr>

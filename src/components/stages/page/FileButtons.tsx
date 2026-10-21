@@ -17,7 +17,7 @@ export function UploadButton({
   label,
   onUploaded,
   variant = "outline",
-  className = "h-12 text-lg",
+  className = "h-9 text-sm",
 }: {
   objectId: string;
   entityType: FileEntity;
@@ -63,7 +63,7 @@ export function UploadButton({
         }}
       />
       <Button type="button" variant={variant} disabled={busy} onClick={() => input.current?.click()} className={className}>
-        {busy ? <Loader2 className="size-5 animate-spin" /> : <Upload className="size-5" />} {label}
+        {busy ? <Loader2 className="size-4 animate-spin" /> : <Upload className="size-4" />} {label}
       </Button>
     </>
   );
@@ -72,19 +72,19 @@ export function UploadButton({
 export function FileList({ files, showKind }: { files: FileRow[]; showKind?: boolean }) {
   if (files.length === 0) return null;
   return (
-    <ul className="divide-y rounded-lg border">
+    <ul className="divide-y rounded-md border">
       {files.map((f) => (
         <li key={f.id} className="flex flex-wrap items-center gap-x-4 gap-y-1 px-3 py-2">
           <button
             type="button"
             onClick={() => openFile(f.storage_path).catch(showError)}
-            className="inline-flex min-w-0 flex-1 items-center gap-2 text-left text-base font-medium text-primary hover:underline"
+            className="inline-flex min-w-0 flex-1 items-center gap-2 text-left text-sm font-medium text-primary hover:underline"
           >
-            <FileText className="size-5 shrink-0" />
+            <FileText className="size-4 shrink-0" />
             <span className="truncate">{f.file_name}</span>
           </button>
-          {showKind && <span className="text-sm font-medium">{FILE_KIND_LABEL[f.kind]}</span>}
-          <span className="text-sm text-muted-foreground">
+          {showKind && <span className="text-xs font-medium">{FILE_KIND_LABEL[f.kind]}</span>}
+          <span className="text-xs text-muted-foreground">
             {f.uploader?.full_name ?? ""} · {formatDateTime(f.created_at)}
             {f.size_bytes ? ` · ${formatSize(f.size_bytes)}` : ""}
           </span>

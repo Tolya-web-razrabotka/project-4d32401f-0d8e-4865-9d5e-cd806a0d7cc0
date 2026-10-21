@@ -42,8 +42,8 @@ export function EmployeesDirectory() {
   return (
     <div>
       <Toolbar search={search} onSearch={setSearch} onAdd={is_admin ? () => setEditing("new") : undefined} />
-      <div className="rounded-lg border">
-        <Table className="text-base">
+      <div className="rounded-md border">
+        <Table className="text-sm">
           <TableHeader>
             <TableRow>
               <TableHead>ФИО</TableHead>
@@ -112,21 +112,21 @@ function EmpForm({ emp, roles, onClose }: { emp: Emp | null; roles: { code: stri
         m.mutate();
       }}
     >
-      <Field label="ФИО" required><Input value={name} onChange={(e) => setName(e.target.value)} className="h-12 text-lg" /></Field>
+      <Field label="ФИО" required><Input value={name} onChange={(e) => setName(e.target.value)} className="h-9 text-sm" /></Field>
       <Field label="Роль" required>
         <Select value={role} onValueChange={setRole}>
-          <SelectTrigger className="h-12 text-lg"><SelectValue placeholder="Выберите роль" /></SelectTrigger>
+          <SelectTrigger className="h-9 text-sm"><SelectValue placeholder="Выберите роль" /></SelectTrigger>
           <SelectContent>
             {roles.map((r) => (
-              <SelectItem key={r.code} value={r.code} className="text-base">{r.name}</SelectItem>
+              <SelectItem key={r.code} value={r.code} className="text-sm">{r.name}</SelectItem>
             ))}
           </SelectContent>
         </Select>
       </Field>
-      <Field label="Телефон"><Input value={phone} onChange={(e) => setPhone(e.target.value)} className="h-12 text-lg" /></Field>
-      <Field label="Email"><Input type="email" value={email} onChange={(e) => setEmail(e.target.value)} className="h-12 text-lg" /></Field>
-      <label className="flex items-center gap-3 text-lg"><Switch checked={active} onCheckedChange={setActive} /> Активен</label>
-      {emp && <p className="text-lg text-muted-foreground">Логин: {emp.user_id ? "есть" : "нет"}</p>}
+      <Field label="Телефон"><Input value={phone} onChange={(e) => setPhone(e.target.value)} className="h-9 text-sm" /></Field>
+      <Field label="Email"><Input type="email" value={email} onChange={(e) => setEmail(e.target.value)} className="h-9 text-sm" /></Field>
+      <label className="flex items-center gap-3 text-sm"><Switch checked={active} onCheckedChange={setActive} /> Активен</label>
+      {emp && <p className="text-sm text-muted-foreground">Логин: {emp.user_id ? "есть" : "нет"}</p>}
       <FormActions pending={m.isPending} onCancel={onClose} />
       {emp && (
         <div className="border-t pt-4">

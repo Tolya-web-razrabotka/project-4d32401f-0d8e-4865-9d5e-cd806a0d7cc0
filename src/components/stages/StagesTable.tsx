@@ -120,7 +120,7 @@ export function StagesTable({
       .filter((g) => g.rows.length > 0);
   }, [stages, open]);
 
-  if (isLoading) return <p className="py-6 text-lg text-muted-foreground">Загрузка…</p>;
+  if (isLoading) return <p className="py-4 text-sm text-muted-foreground">Загрузка…</p>;
 
   const set = <K extends keyof StagesTableFilters>(k: K, v: StagesTableFilters[K]) => setF((x) => ({ ...x, [k]: v }));
   const onChanged = () => refresh(objectId);
@@ -130,51 +130,51 @@ export function StagesTable({
     <div>
       <div className="mb-4 flex flex-wrap items-center gap-3">
         <Select value={f.workType} onValueChange={(v) => set("workType", v)}>
-          <SelectTrigger className="h-11 w-60 text-base"><SelectValue /></SelectTrigger>
+          <SelectTrigger className="h-9 w-60 text-sm"><SelectValue /></SelectTrigger>
           <SelectContent>
-            <SelectItem value={ALL} className="text-base">Все виды работ</SelectItem>
+            <SelectItem value={ALL} className="text-sm">Все виды работ</SelectItem>
             {workTypes.map(([id, name]) => (
-              <SelectItem key={id} value={id} className="text-base">{name}</SelectItem>
+              <SelectItem key={id} value={id} className="text-sm">{name}</SelectItem>
             ))}
           </SelectContent>
         </Select>
         <Select value={f.executor} onValueChange={(v) => set("executor", v)}>
-          <SelectTrigger className="h-11 w-56 text-base"><SelectValue /></SelectTrigger>
+          <SelectTrigger className="h-9 w-56 text-sm"><SelectValue /></SelectTrigger>
           <SelectContent>
-            <SelectItem value={ALL} className="text-base">Все исполнители</SelectItem>
-            <SelectItem value={NOBODY} className="text-base">Не назначен</SelectItem>
+            <SelectItem value={ALL} className="text-sm">Все исполнители</SelectItem>
+            <SelectItem value={NOBODY} className="text-sm">Не назначен</SelectItem>
             {executors.map(([id, name]) => (
-              <SelectItem key={id} value={id} className="text-base">{name}</SelectItem>
+              <SelectItem key={id} value={id} className="text-sm">{name}</SelectItem>
             ))}
           </SelectContent>
         </Select>
-        <label className="flex items-center gap-2 text-base">
+        <label className="flex items-center gap-2 text-sm">
           <Switch checked={f.onlyOverdue} onCheckedChange={(v) => set("onlyOverdue", v)} /> Только просроченные
         </label>
-        <label className="flex items-center gap-2 text-base">
+        <label className="flex items-center gap-2 text-sm">
           <Switch checked={f.onlyOpen} onCheckedChange={(v) => set("onlyOpen", v)} /> Только незакрытые
         </label>
-        <label className="flex items-center gap-2 text-base">
+        <label className="flex items-center gap-2 text-sm">
           <Switch checked={f.showExcluded} onCheckedChange={(v) => set("showExcluded", v)} /> Показать исключённые
         </label>
         {toolbar && <div className="ml-auto flex gap-2">{toolbar(visible)}</div>}
       </div>
 
       {/* По эскизу «Рабочий стол прораба»: таблица прокручивается в своей области, шапка колонок закреплена */}
-      <div className="max-h-[70vh] overflow-auto rounded-lg border">
-        <table className="w-full min-w-[1100px] text-base">
+      <div className="max-h-[70vh] overflow-auto rounded-md border">
+        <table className="w-full min-w-[1100px] text-sm">
           <StagesHead />
           <tbody>
             {groups.length === 0 && (
               <tr>
-                <td colSpan={8} className="py-8 text-center text-lg text-muted-foreground">
+                <td colSpan={8} className="py-8 text-center text-sm text-muted-foreground">
                   {stages.length === 0 ? "На объекте нет этапов" : "Нет этапов по выбранным условиям"}
                 </td>
               </tr>
             )}
             {groups.map((g) => [
               <tr key={`g-${g.id}`} className="border-t bg-muted/70">
-                <td colSpan={8} className="px-3 py-2 text-lg font-semibold">
+                <td colSpan={8} className="px-3 py-2 text-sm font-semibold">
                   {g.name}{" "}
                   <span className="font-normal text-muted-foreground">
                     · закрыто {g.closed} из {g.total}
@@ -188,18 +188,18 @@ export function StagesTable({
       </div>
 
       {!f.onlyOpen && closed.length > 0 && (
-        <div className="mt-6 rounded-lg border">
+        <div className="mt-6 rounded-md border">
           <button
             type="button"
             onClick={() => setClosedOpen((v) => !v)}
-            className="flex w-full items-center gap-3 px-4 py-3 text-left text-lg font-semibold hover:bg-muted/50"
+            className="flex w-full items-center gap-3 px-4 py-2 text-left text-sm font-semibold hover:bg-muted/50"
           >
-            {closedOpen ? <ChevronDown className="size-5" /> : <ChevronRight className="size-5" />}
+            {closedOpen ? <ChevronDown className="size-4" /> : <ChevronRight className="size-4" />}
             Закрытые (выполненные) · {closed.length}
           </button>
           {closedOpen && (
             <div className="overflow-x-auto border-t">
-              <table className="w-full min-w-[1100px] text-base">
+              <table className="w-full min-w-[1100px] text-sm">
                 <StagesHead />
                 <tbody>
                   {closed.map((s) => (
@@ -216,7 +216,7 @@ export function StagesTable({
 }
 
 function StagesHead() {
-  const th = "px-3 py-3 text-left font-semibold text-muted-foreground";
+  const th = "px-3 py-2 text-left font-semibold text-muted-foreground";
   return (
     <thead className="sticky top-0 z-10 bg-background shadow-[0_1px_0_var(--color-border)]">
       <tr className="border-b">
@@ -252,14 +252,14 @@ function StageRow({
   const predNumbers = (preds[s.id] ?? []).map((id) => numberById[id]).filter((x) => x !== undefined).sort((a, b) => a - b);
   const noResponseDays = s.is_no_response && s.response_due ? daysBetween(s.response_due, mskToday()) : 0;
   const link = { to: "/objects/$id/stages/$stageId" as const, params: { id: objectId, stageId: s.id } };
-  const td = "px-3 py-3 align-top";
+  const td = "px-3 py-2 align-top";
 
   return (
     <tr className={`border-t ${rowTone(s)}`}>
       <td className={`${td} ${s.is_no_response ? "border-l-4 border-l-red-600" : ""}`}>
         <Link {...link} className="inline-flex items-center gap-1 font-semibold text-primary hover:underline">
           {s.number}
-          {s.is_critical && <Flag className="size-4 fill-destructive text-destructive" aria-label="Критичный" />}
+          {s.is_critical && <Flag className="size-3.5 fill-destructive text-destructive" aria-label="Критичный" />}
         </Link>
       </td>
       <td className={td}>
@@ -269,31 +269,31 @@ function StageRow({
         {s.out_of_order && (
           <span
             title={`Взят вне очереди: по регламенту после этапов ${predNumbers.join(", ") || "—"}`}
-            className="ml-2 inline-flex items-center gap-1 rounded bg-amber-100 px-1.5 py-0.5 align-middle text-sm text-amber-900 dark:bg-amber-900/50 dark:text-amber-100"
+            className="ml-2 inline-flex items-center gap-1 rounded bg-amber-100 px-1.5 py-0.5 align-middle text-xs text-amber-900 dark:bg-amber-900/50 dark:text-amber-100"
           >
             <AlertTriangle className="size-3.5" /> вне очереди
           </span>
         )}
         {(s.outgoing_doc || s.expected_doc) && (
-          <div className="mt-1 text-sm text-muted-foreground">
+          <div className="mt-1 text-xs text-muted-foreground">
             {s.outgoing_doc && <>от нас: {s.outgoing_doc}</>}
             {s.outgoing_doc && s.expected_doc && " · "}
             {s.expected_doc && <>ждём: {s.expected_doc}</>}
           </div>
         )}
-        {s.is_excluded && <div className="mt-1 text-sm">исключён из работы</div>}
+        {s.is_excluded && <div className="mt-1 text-xs">исключён из работы</div>}
       </td>
       <td className={td}>
         {conds.length === 0 ? (
           <span className="text-muted-foreground">—</span>
         ) : (
           <>
-            <div className={`mb-1 text-sm font-semibold ${s.conditions_done === s.conditions_total ? "text-green-700 dark:text-green-400" : ""}`}>
+            <div className={`mb-1 text-xs font-semibold ${s.conditions_done === s.conditions_total ? "text-green-700 dark:text-green-400" : ""}`}>
               {s.conditions_done} из {s.conditions_total}
             </div>
             <ul className="space-y-1.5">
               {conds.map((c) => (
-                <li key={c.id} className="flex items-start gap-2 text-sm leading-tight">
+                <li key={c.id} className="flex items-start gap-2 text-xs leading-tight">
                   <ConditionToggle cond={c} size="sm" disabled={s.is_excluded} onDone={onChanged} />
                   <span className={c.is_done ? "text-muted-foreground line-through" : ""}>
                     {c.title}
@@ -311,10 +311,10 @@ function StageRow({
           {formatDate(s.due_date) || <span className="text-muted-foreground">—</span>}
         </div>
         {s.doc_sent_at && s.response_due && !s.response_received_at && (
-          <div className="mt-1 text-sm text-muted-foreground">ответ ждём до {formatDate(s.response_due)}</div>
+          <div className="mt-1 text-xs text-muted-foreground">ответ ждём до {formatDate(s.response_due)}</div>
         )}
         {s.is_no_response && (
-          <div className="mt-1 inline-block rounded border-2 border-red-600 px-1.5 text-sm font-semibold text-red-700 dark:text-red-300">
+          <div className="mt-1 inline-block rounded border-2 border-red-600 px-1.5 text-xs font-semibold text-red-700 dark:text-red-300">
             нет ответа {noResponseDays} дн.
           </div>
         )}
@@ -328,7 +328,7 @@ function StageRow({
             не назначен
           </span>
         )}
-        {s.coexecutor_name && <div className="text-sm text-muted-foreground">+ {s.coexecutor_name}</div>}
+        {s.coexecutor_name && <div className="text-xs text-muted-foreground">+ {s.coexecutor_name}</div>}
       </td>
       <td className={td}>{s.confirmer_name ?? s.confirmer_role_name ?? <span className="text-muted-foreground">—</span>}</td>
       <td className={td}>
@@ -362,7 +362,7 @@ function NoteCell({ stage, onSaved }: { stage: ObjectStage; onSaved: () => void 
           setText(stage.note ?? "");
           setEditing(true);
         }}
-        className="w-full rounded px-1 py-0.5 text-left text-sm hover:bg-muted"
+        className="w-full rounded px-1 py-0.5 text-left text-xs hover:bg-muted"
         title="Нажмите, чтобы изменить"
       >
         {stage.note ? <span className="whitespace-pre-line">{stage.note}</span> : <span className="text-muted-foreground">+ добавить</span>}
@@ -371,7 +371,7 @@ function NoteCell({ stage, onSaved }: { stage: ObjectStage; onSaved: () => void 
   }
   return (
     <div className="space-y-2">
-      <Textarea autoFocus value={text} onChange={(e) => setText(e.target.value)} rows={3} className="text-sm" />
+      <Textarea autoFocus value={text} onChange={(e) => setText(e.target.value)} rows={3} className="text-xs" />
       <div className="flex gap-2">
         <Button size="sm" onClick={() => m.mutate()} disabled={m.isPending}>Сохранить</Button>
         <Button size="sm" variant="outline" onClick={() => setEditing(false)}>Отмена</Button>

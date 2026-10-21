@@ -69,19 +69,19 @@ export function DocumentsDirectory() {
     <div>
       <Toolbar search={search} onSearch={setSearch} onAdd={is_admin ? () => setEditing("new") : undefined}>
         <Select value={section} onValueChange={setSection}>
-          <SelectTrigger className="h-12 w-60 text-lg">
+          <SelectTrigger className="h-9 w-60 text-sm">
             <SelectValue />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="all" className="text-base">Все разделы</SelectItem>
+            <SelectItem value="all" className="text-sm">Все разделы</SelectItem>
             {DOC_SECTIONS.map((s) => (
-              <SelectItem key={s} value={s} className="text-base">{s}</SelectItem>
+              <SelectItem key={s} value={s} className="text-sm">{s}</SelectItem>
             ))}
           </SelectContent>
         </Select>
       </Toolbar>
-      <div className="rounded-lg border">
-        <Table className="text-base">
+      <div className="rounded-md border">
+        <Table className="text-sm">
           <TableHeader>
             <TableRow>
               <TableHead>Название</TableHead>
@@ -167,34 +167,34 @@ function DocForm({
       }}
     >
       <Field label="Название" required>
-        <Input value={name} onChange={(e) => setName(e.target.value)} className="h-12 text-lg" />
+        <Input value={name} onChange={(e) => setName(e.target.value)} className="h-9 text-sm" />
       </Field>
       <Field label="Раздел" required>
         <Select value={section} onValueChange={setSection}>
-          <SelectTrigger className="h-12 text-lg"><SelectValue placeholder="Выберите раздел" /></SelectTrigger>
+          <SelectTrigger className="h-9 text-sm"><SelectValue placeholder="Выберите раздел" /></SelectTrigger>
           <SelectContent>
             {DOC_SECTIONS.map((s) => (
-              <SelectItem key={s} value={s} className="text-base">{s}</SelectItem>
+              <SelectItem key={s} value={s} className="text-sm">{s}</SelectItem>
             ))}
           </SelectContent>
         </Select>
       </Field>
       <Field label="Этап">
         <Select value={tpl} onValueChange={setTpl}>
-          <SelectTrigger className="h-12 text-lg"><SelectValue /></SelectTrigger>
+          <SelectTrigger className="h-9 text-sm"><SelectValue /></SelectTrigger>
           <SelectContent>
-            <SelectItem value={NONE} className="text-base">— не выбран —</SelectItem>
+            <SelectItem value={NONE} className="text-sm">— не выбран —</SelectItem>
             {templates.map((t) => (
-              <SelectItem key={t.id} value={t.id} className="text-base">{t.number}. {t.name}</SelectItem>
+              <SelectItem key={t.id} value={t.id} className="text-sm">{t.number}. {t.name}</SelectItem>
             ))}
           </SelectContent>
         </Select>
       </Field>
-      <label className="flex items-center gap-3 text-lg">
+      <label className="flex items-center gap-3 text-sm">
         <Switch checked={toId} onCheckedChange={setToId} /> В папку ИД
       </label>
       <Field label="Комментарий">
-        <Textarea value={comment} onChange={(e) => setComment(e.target.value)} className="text-lg" />
+        <Textarea value={comment} onChange={(e) => setComment(e.target.value)} className="text-sm" />
       </Field>
       <FormActions pending={m.isPending} onCancel={onClose} />
       {doc && (

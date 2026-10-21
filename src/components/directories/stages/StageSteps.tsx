@@ -133,10 +133,10 @@ export function StageSteps({ templateId, readOnly }: { templateId: string; readO
 
   return (
     <div className="max-w-5xl space-y-4">
-      <p className="text-base text-muted-foreground">
+      <p className="text-sm text-muted-foreground">
         Сценарий копируется на объект при добавлении этапа. Изменения не затрагивают уже созданные объекты.
       </p>
-      {steps.length === 0 && <p className="py-6 text-center text-lg text-muted-foreground">Шагов пока нет</p>}
+      {steps.length === 0 && <p className="py-4 text-center text-sm text-muted-foreground">Шагов пока нет</p>}
       <Reorderable
         items={steps}
         disabled={readOnly}
@@ -154,20 +154,20 @@ export function StageSteps({ templateId, readOnly }: { templateId: string; readO
       />
       {!readOnly && (
         <form
-          className="space-y-4 rounded-lg border border-dashed p-4"
+          className="space-y-4 rounded-md border border-dashed p-4"
           onSubmit={(e) => {
             e.preventDefault();
             add.mutate();
           }}
         >
-          <div className="text-lg font-semibold">Новый шаг</div>
+          <div className="text-sm font-semibold">Новый шаг</div>
           <div className="grid gap-4 sm:grid-cols-[200px_1fr]">
             <Field label="Роль" required>
               <Select value={role} onValueChange={setRole}>
-                <SelectTrigger className="h-12 text-lg"><SelectValue placeholder="Кто делает" /></SelectTrigger>
+                <SelectTrigger className="h-9 text-sm"><SelectValue placeholder="Кто делает" /></SelectTrigger>
                 <SelectContent>
                   {roles.map((r) => (
-                    <SelectItem key={r.code} value={r.code} className="text-base">{r.name}</SelectItem>
+                    <SelectItem key={r.code} value={r.code} className="text-sm">{r.name}</SelectItem>
                   ))}
                 </SelectContent>
               </Select>
@@ -177,26 +177,26 @@ export function StageSteps({ templateId, readOnly }: { templateId: string; readO
                 value={action}
                 onChange={(e) => setAction(e.target.value)}
                 placeholder="Например: прикрепить схему"
-                className="h-12 text-lg"
+                className="h-9 text-sm"
               />
             </Field>
           </div>
           <div className="flex flex-wrap items-end gap-4">
             <Field label="Тип действия">
               <Select value={kind} onValueChange={(v) => setKind(v as Step["action_kind"])}>
-                <SelectTrigger className="h-12 w-48 text-lg"><SelectValue /></SelectTrigger>
+                <SelectTrigger className="h-9 w-48 text-sm"><SelectValue /></SelectTrigger>
                 <SelectContent>
                   {ACTION_KINDS.map((k) => (
-                    <SelectItem key={k.v} value={k.v} className="text-base">{k.label}</SelectItem>
+                    <SelectItem key={k.v} value={k.v} className="text-sm">{k.label}</SelectItem>
                   ))}
                 </SelectContent>
               </Select>
             </Field>
             <Field label="Срок, дней">
-              <Input value={days} onChange={(e) => setDays(e.target.value)} inputMode="numeric" className="h-12 w-32 text-lg" />
+              <Input value={days} onChange={(e) => setDays(e.target.value)} inputMode="numeric" className="h-9 w-32 text-sm" />
             </Field>
-            <Button type="submit" disabled={add.isPending} className="h-12 px-6 text-lg">
-              <Plus className="size-5" /> Добавить шаг
+            <Button type="submit" disabled={add.isPending} className="h-9 px-4 text-sm">
+              <Plus className="size-4" /> Добавить шаг
             </Button>
           </div>
         </form>
@@ -224,14 +224,14 @@ function StepRow({
   return (
     <div className="space-y-3">
       <div className="flex items-center gap-3">
-        <span className="shrink-0 rounded-full bg-primary px-3 py-1 text-base font-bold text-primary-foreground">
+        <span className="shrink-0 rounded-full bg-primary px-3 py-1 text-sm font-bold text-primary-foreground">
           Шаг {step.step_no}
         </span>
         <Select value={step.role_code} onValueChange={(v) => onPatch({ role_code: v })} disabled={readOnly}>
-          <SelectTrigger className="h-11 w-48 text-base"><SelectValue /></SelectTrigger>
+          <SelectTrigger className="h-9 w-48 text-sm"><SelectValue /></SelectTrigger>
           <SelectContent>
             {roles.map((r) => (
-              <SelectItem key={r.code} value={r.code} className="text-base">{r.name}</SelectItem>
+              <SelectItem key={r.code} value={r.code} className="text-sm">{r.name}</SelectItem>
             ))}
           </SelectContent>
         </Select>
@@ -239,10 +239,10 @@ function StepRow({
         {!readOnly &&
           (confirmDelete ? (
             <div className="flex shrink-0 gap-2">
-              <Button type="button" variant="destructive" className="h-11 text-base" onClick={onDelete}>
+              <Button type="button" variant="destructive" className="h-9 text-sm" onClick={onDelete}>
                 Удалить
               </Button>
-              <Button type="button" variant="outline" className="h-11 text-base" onClick={() => setConfirmDelete(false)}>
+              <Button type="button" variant="outline" className="h-9 text-sm" onClick={() => setConfirmDelete(false)}>
                 Отмена
               </Button>
             </div>
@@ -255,7 +255,7 @@ function StepRow({
               onClick={() => setConfirmDelete(true)}
               aria-label="Удалить шаг"
             >
-              <Trash2 className="size-5" />
+              <Trash2 className="size-4" />
             </Button>
           ))}
       </div>
@@ -272,7 +272,7 @@ function StepRow({
           }
           if (t !== step.action) onPatch({ action: t });
         }}
-        className="h-11 text-lg"
+        className="h-9 text-sm"
       />
       <div className="flex flex-wrap items-center gap-4">
         <Select
@@ -280,14 +280,14 @@ function StepRow({
           onValueChange={(v) => onPatch({ action_kind: v as Step["action_kind"] })}
           disabled={readOnly}
         >
-          <SelectTrigger className="h-10 w-44 text-base"><SelectValue /></SelectTrigger>
+          <SelectTrigger className="h-8 w-44 text-sm"><SelectValue /></SelectTrigger>
           <SelectContent>
             {ACTION_KINDS.map((k) => (
-              <SelectItem key={k.v} value={k.v} className="text-base">{k.label}</SelectItem>
+              <SelectItem key={k.v} value={k.v} className="text-sm">{k.label}</SelectItem>
             ))}
           </SelectContent>
         </Select>
-        <label className="flex items-center gap-2 text-base">
+        <label className="flex items-center gap-2 text-sm">
           Срок, дней:
           <Input
             value={days}
@@ -303,7 +303,7 @@ function StepRow({
               }
               if (d !== step.duration_days) onPatch({ duration_days: d });
             }}
-            className="h-10 w-24 text-base"
+            className="h-8 w-24 text-sm"
           />
         </label>
       </div>

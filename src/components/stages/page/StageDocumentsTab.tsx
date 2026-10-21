@@ -37,11 +37,11 @@ export function StageDocumentsTab({ stage }: { stage: ObjectStage }) {
           onUploaded={refresh}
         />
       </div>
-      <p className="text-base text-muted-foreground">
+      <p className="text-sm text-muted-foreground">
         Фото с телефона или планшета загружаются так же — кнопка предложит камеру или галерею.
       </p>
       {isLoading ? null : files.length === 0 ? (
-        <p className="py-6 text-lg text-muted-foreground">Документов пока нет</p>
+        <p className="py-4 text-sm text-muted-foreground">Документов пока нет</p>
       ) : (
         <FileList files={files} showKind />
       )}

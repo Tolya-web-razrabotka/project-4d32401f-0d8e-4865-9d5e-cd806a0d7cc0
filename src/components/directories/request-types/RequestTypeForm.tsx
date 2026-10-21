@@ -68,7 +68,7 @@ export function RequestTypeForm({
       }}
     >
       <Field label="Название (надпись на кнопке)" required>
-        <Input value={name} onChange={(e) => setName(e.target.value)} disabled={readOnly} className="h-12 text-lg" />
+        <Input value={name} onChange={(e) => setName(e.target.value)} disabled={readOnly} className="h-9 text-sm" />
       </Field>
       <Field label="Адрес отправки (email)">
         <Input
@@ -77,23 +77,23 @@ export function RequestTypeForm({
           disabled={readOnly}
           type="email"
           placeholder="Куда офис-менеджер отправляет заявку"
-          className="h-12 text-lg"
+          className="h-9 text-sm"
         />
       </Field>
-      <label className="flex items-center gap-3 text-lg">
+      <label className="flex items-center gap-3 text-sm">
         <Switch checked={usesReps} onCheckedChange={setUsesReps} disabled={readOnly} />
         Выбор «кого вызываем» из справочника представителей
       </label>
-      <label className="flex items-center gap-3 text-lg">
+      <label className="flex items-center gap-3 text-sm">
         <Switch checked={active} onCheckedChange={setActive} disabled={readOnly} /> Активен
       </label>
       {!active && (
-        <p className="text-base text-muted-foreground">
+        <p className="text-sm text-muted-foreground">
           Неактивный вид не показывается кнопкой на объекте. Созданные заявки этого вида сохраняются.
         </p>
       )}
       {!readOnly && (
-        <Button type="submit" disabled={m.isPending} className="h-12 px-10 text-lg">
+        <Button type="submit" disabled={m.isPending} className="h-9 px-5 text-sm">
           {m.isPending ? "Сохранение…" : "Сохранить"}
         </Button>
       )}

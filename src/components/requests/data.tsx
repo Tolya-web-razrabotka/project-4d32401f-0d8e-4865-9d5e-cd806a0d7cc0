@@ -111,7 +111,7 @@ export function RequestStatusBadge({ status }: { status: string }) {
   const s = statusInfo(status);
   return (
     <span
-      className="inline-block whitespace-nowrap rounded-full px-3 py-0.5 text-base font-medium text-white"
+      className="inline-block whitespace-nowrap rounded-full px-3 py-0.5 text-sm font-medium text-white"
       style={{ backgroundColor: s.color }}
     >
       {s.v === "done" ? "✓ " : ""}

@@ -68,24 +68,24 @@ export function StageMainTab({ stage, onSaved }: { stage: ObjectStage; onSaved: 
 
   const person = (k: "executor_id" | "coexecutor_id" | "confirmer_id", placeholder: string) => (
     <Select value={v[k] || NONE} onValueChange={(x) => set(k, x === NONE ? "" : x)}>
-      <SelectTrigger className="h-12 text-lg"><SelectValue /></SelectTrigger>
+      <SelectTrigger className="h-9 text-sm"><SelectValue /></SelectTrigger>
       <SelectContent>
-        <SelectItem value={NONE} className="text-base">{placeholder}</SelectItem>
+        <SelectItem value={NONE} className="text-sm">{placeholder}</SelectItem>
         {profiles.map((p) => (
-          <SelectItem key={p.id} value={p.id} className="text-base">{p.full_name}</SelectItem>
+          <SelectItem key={p.id} value={p.id} className="text-sm">{p.full_name}</SelectItem>
         ))}
       </SelectContent>
     </Select>
   );
   const date = (k: keyof typeof v) => (
-    <Input type="date" value={v[k]} onChange={(e) => set(k, e.target.value)} className="h-12 text-lg" />
+    <Input type="date" value={v[k]} onChange={(e) => set(k, e.target.value)} className="h-9 text-sm" />
   );
 
   return (
-    <div className="max-w-4xl space-y-8">
-      {stage.description && <p className="whitespace-pre-line text-lg text-muted-foreground">{stage.description}</p>}
+    <div className="max-w-4xl space-y-6">
+      {stage.description && <p className="whitespace-pre-line text-sm text-muted-foreground">{stage.description}</p>}
       {stage.return_reason && stage.status_code !== "closed" && (
-        <div className="rounded-lg border-2 border-orange-400 bg-orange-50 p-4 text-lg dark:bg-orange-950/40">
+        <div className="rounded-md border-2 border-orange-400 bg-orange-50 p-4 text-sm dark:bg-orange-950/40">
           <span className="font-semibold">Возвращён на доработку:</span> {stage.return_reason}
         </div>
       )}
@@ -102,32 +102,32 @@ export function StageMainTab({ stage, onSaved }: { stage: ObjectStage; onSaved: 
         <Field label="Дата начала">{date("start_date")}</Field>
         <Field label="Срок окончания">{date("due_date")}</Field>
         <Field label="Напомнить за, дней">
-          <Input value={v.remind_days} onChange={(e) => set("remind_days", e.target.value)} inputMode="numeric" className="h-12 text-lg" />
+          <Input value={v.remind_days} onChange={(e) => set("remind_days", e.target.value)} inputMode="numeric" className="h-9 text-sm" />
         </Field>
       </section>
 
-      <section className="rounded-lg border p-4">
-        <div className="mb-4 text-lg font-semibold">
+      <section className="rounded-md border p-4">
+        <div className="mb-4 text-sm font-semibold">
           Документ{stage.outgoing_doc ? ` «${stage.outgoing_doc}»` : ""}
           {stage.expected_doc ? ` → ждём «${stage.expected_doc}»` : ""}
         </div>
         <div className="grid gap-5 sm:grid-cols-4">
           <Field label="Отправлен">{date("doc_sent_at")}</Field>
           <Field label="Дней на ответ">
-            <Input value={v.response_days} onChange={(e) => set("response_days", e.target.value)} inputMode="numeric" className="h-12 text-lg" />
+            <Input value={v.response_days} onChange={(e) => set("response_days", e.target.value)} inputMode="numeric" className="h-9 text-sm" />
           </Field>
           <Field label="Ответ ждём до">
-            <div className="flex h-12 items-center rounded-md border bg-muted px-3 text-lg">{formatDate(responseDue) || "—"}</div>
+            <div className="flex h-9 items-center rounded-md border bg-muted px-3 text-sm">{formatDate(responseDue) || "—"}</div>
           </Field>
           <Field label="Ответ получен">{date("response_received_at")}</Field>
         </div>
       </section>
 
       <Field label="Примечание — что мешает, когда обещали">
-        <Textarea value={v.note} onChange={(e) => set("note", e.target.value)} rows={3} className="text-lg" />
+        <Textarea value={v.note} onChange={(e) => set("note", e.target.value)} rows={3} className="text-sm" />
       </Field>
 
-      <Button onClick={() => save.mutate()} disabled={save.isPending} className="h-12 px-10 text-lg">
+      <Button onClick={() => save.mutate()} disabled={save.isPending} className="h-9 px-5 text-sm">
         {save.isPending ? "Сохранение…" : "Сохранить"}
       </Button>
 
@@ -154,14 +154,14 @@ function Predecessors({ stage }: { stage: ObjectStage }) {
   if (preds.length === 0) return null;
   return (
     <section>
-      <h3 className="mb-3 text-xl font-semibold">Предшествующие этапы</h3>
-      <div className="divide-y rounded-lg border">
+      <h3 className="mb-3 text-base font-semibold">Предшествующие этапы</h3>
+      <div className="divide-y rounded-md border">
         {preds.map((p) => (
           <Link
             key={p.id}
             to="/objects/$id/stages/$stageId"
             params={{ id: stage.object_id, stageId: p.id }}
-            className="flex items-center gap-4 px-4 py-3 text-lg hover:bg-muted/50"
+            className="flex items-center gap-4 px-4 py-2 text-sm hover:bg-muted/50"
           >
             <span className="w-8 font-semibold">{p.number}</span>
             <span className="flex-1">{p.name}</span>
@@ -189,14 +189,14 @@ function LinkedRequests({ stage }: { stage: ObjectStage }) {
   if (data.length === 0) return null;
   return (
     <section>
-      <h3 className="mb-3 text-xl font-semibold">Связанные заявки</h3>
-      <div className="divide-y rounded-lg border">
+      <h3 className="mb-3 text-base font-semibold">Связанные заявки</h3>
+      <div className="divide-y rounded-md border">
         {data.map((r) => (
           <Link
             key={r.id}
             to="/requests/$requestId"
             params={{ requestId: r.id! }}
-            className="flex flex-wrap items-center gap-4 px-4 py-3 text-lg hover:bg-muted/50"
+            className="flex flex-wrap items-center gap-4 px-4 py-2 text-sm hover:bg-muted/50"
           >
             <span className="font-semibold">№{r.number}</span>
             <span className="flex-1">{r.type_name}</span>

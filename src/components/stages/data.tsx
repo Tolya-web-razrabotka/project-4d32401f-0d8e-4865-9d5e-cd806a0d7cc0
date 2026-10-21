@@ -164,7 +164,7 @@ export function useRefreshStages() {
 export function StatusBadge({ name, color }: { name: string; color: string }) {
   return (
     <span
-      className="inline-block whitespace-nowrap rounded-full px-3 py-0.5 text-base font-medium text-white"
+      className="inline-block whitespace-nowrap rounded-full px-3 py-0.5 text-sm font-medium text-white"
       style={{ backgroundColor: color || "#9CA3AF" }}
     >
       {name}

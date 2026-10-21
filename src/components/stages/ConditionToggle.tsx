@@ -43,7 +43,7 @@ export function ConditionToggle({
     onError: showError,
   });
 
-  const box = size === "sm" ? "size-5" : "size-6";
+  const box = size === "sm" ? "size-4" : "size-4";
 
   return (
     <>
@@ -66,7 +66,7 @@ export function ConditionToggle({
       <Dialog open={ask} onOpenChange={setAsk}>
         <DialogContent onClick={(e) => e.stopPropagation()}>
           <DialogHeader>
-            <DialogTitle className="text-xl">{cond.title}</DialogTitle>
+            <DialogTitle className="text-base">{cond.title}</DialogTitle>
           </DialogHeader>
           <form
             className="space-y-4"
@@ -80,13 +80,13 @@ export function ConditionToggle({
               value={value}
               onChange={(e) => setValue(e.target.value)}
               placeholder="Значение"
-              className="h-12 text-lg"
+              className="h-9 text-sm"
             />
             <div className="flex gap-3">
-              <Button type="submit" disabled={m.isPending} className="h-12 flex-1 text-lg">
+              <Button type="submit" disabled={m.isPending} className="h-9 flex-1 text-sm">
                 Отметить выполненным
               </Button>
-              <Button type="button" variant="outline" onClick={() => setAsk(false)} className="h-12 flex-1 text-lg">
+              <Button type="button" variant="outline" onClick={() => setAsk(false)} className="h-9 flex-1 text-sm">
                 Отмена
               </Button>
             </div>

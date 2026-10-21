@@ -93,13 +93,13 @@ export function StageMainForm({
 
   const roleSelect = (value: string, onChange: (v: string) => void) => (
     <Select value={value} onValueChange={onChange} disabled={readOnly}>
-      <SelectTrigger className="h-12 text-lg">
+      <SelectTrigger className="h-9 text-sm">
         <SelectValue />
       </SelectTrigger>
       <SelectContent>
-        <SelectItem value={NONE} className="text-base">— не указано —</SelectItem>
+        <SelectItem value={NONE} className="text-sm">— не указано —</SelectItem>
         {roles.map((r) => (
-          <SelectItem key={r.code} value={r.code} className="text-base">{r.name}</SelectItem>
+          <SelectItem key={r.code} value={r.code} className="text-sm">{r.name}</SelectItem>
         ))}
       </SelectContent>
     </Select>
@@ -111,7 +111,7 @@ export function StageMainForm({
       onChange={(e) => onChange(e.target.value)}
       inputMode="numeric"
       disabled={readOnly}
-      className="h-12 text-lg"
+      className="h-9 text-sm"
     />
   );
 
@@ -126,30 +126,30 @@ export function StageMainForm({
       <div className="grid gap-5 sm:grid-cols-[140px_1fr]">
         <Field label="Номер" required>{num(number, setNumber)}</Field>
         <Field label="Название" required>
-          <Input value={name} onChange={(e) => setName(e.target.value)} disabled={readOnly} className="h-12 text-lg" />
+          <Input value={name} onChange={(e) => setName(e.target.value)} disabled={readOnly} className="h-9 text-sm" />
         </Field>
       </div>
       <Field label="Вид работ" required>
         <Select value={workType} onValueChange={setWorkType} disabled={readOnly}>
-          <SelectTrigger className="h-12 text-lg"><SelectValue placeholder="Выберите вид работ" /></SelectTrigger>
+          <SelectTrigger className="h-9 text-sm"><SelectValue placeholder="Выберите вид работ" /></SelectTrigger>
           <SelectContent>
             {workTypes.map((w) => (
-              <SelectItem key={w.id} value={w.id} className="text-base">{w.name}</SelectItem>
+              <SelectItem key={w.id} value={w.id} className="text-sm">{w.name}</SelectItem>
             ))}
           </SelectContent>
         </Select>
       </Field>
       <Field label="Описание">
-        <Textarea value={description} onChange={(e) => setDescription(e.target.value)} disabled={readOnly} className="text-lg" />
+        <Textarea value={description} onChange={(e) => setDescription(e.target.value)} disabled={readOnly} className="text-sm" />
       </Field>
       <div className="grid gap-5 sm:grid-cols-2">
         <Field label="Роль исполнителя">{roleSelect(executor, setExecutor)}</Field>
         <Field label="Адресат — кто подтверждает">{roleSelect(confirmer, setConfirmer)}</Field>
         <Field label="«От нас» — исходящий документ">
-          <Input value={outgoing} onChange={(e) => setOutgoing(e.target.value)} disabled={readOnly} className="h-12 text-lg" />
+          <Input value={outgoing} onChange={(e) => setOutgoing(e.target.value)} disabled={readOnly} className="h-9 text-sm" />
         </Field>
         <Field label="«Ждём» — ответный документ">
-          <Input value={expected} onChange={(e) => setExpected(e.target.value)} disabled={readOnly} className="h-12 text-lg" />
+          <Input value={expected} onChange={(e) => setExpected(e.target.value)} disabled={readOnly} className="h-9 text-sm" />
         </Field>
       </div>
       <div className="grid gap-5 sm:grid-cols-3">
@@ -158,20 +158,20 @@ export function StageMainForm({
         <Field label="Напомнить за, дней">{num(remindDays, setRemindDays)}</Field>
       </div>
       <div className="flex flex-wrap gap-8">
-        <label className="flex items-center gap-3 text-lg">
+        <label className="flex items-center gap-3 text-sm">
           <Switch checked={critical} onCheckedChange={setCritical} disabled={readOnly} /> Критичный
         </label>
-        <label className="flex items-center gap-3 text-lg">
+        <label className="flex items-center gap-3 text-sm">
           <Switch checked={active} onCheckedChange={setActive} disabled={readOnly} /> Активен
         </label>
       </div>
       {!active && (
-        <p className="text-base text-muted-foreground">
+        <p className="text-sm text-muted-foreground">
           Неактивный этап не предлагается при создании новых объектов. На уже созданных объектах он остаётся.
         </p>
       )}
       {!readOnly && (
-        <Button type="submit" disabled={m.isPending} className="h-12 px-10 text-lg">
+        <Button type="submit" disabled={m.isPending} className="h-9 px-5 text-sm">
           {m.isPending ? "Сохранение…" : "Сохранить"}
         </Button>
       )}

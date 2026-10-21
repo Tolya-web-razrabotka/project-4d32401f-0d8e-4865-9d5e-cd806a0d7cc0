@@ -77,46 +77,46 @@ export function ObjectCardFields({
   return (
     <div className="max-w-3xl space-y-5">
       <Field label="Название договора объекта" required>
-        <Input value={value.name} onChange={(e) => set("name", e.target.value)} className="h-12 text-lg" />
+        <Input value={value.name} onChange={(e) => set("name", e.target.value)} className="h-9 text-sm" />
       </Field>
       <Field label="Адрес">
-        <Input value={value.address} onChange={(e) => set("address", e.target.value)} className="h-12 text-lg" />
+        <Input value={value.address} onChange={(e) => set("address", e.target.value)} className="h-9 text-sm" />
       </Field>
       <Field label="Заказчик" required>
         <div className="flex flex-wrap gap-3">
           <Select value={value.customer_id} onValueChange={(v) => set("customer_id", v)}>
-            <SelectTrigger className="h-12 min-w-64 flex-1 text-lg">
+            <SelectTrigger className="h-9 min-w-64 flex-1 text-sm">
               <SelectValue placeholder="Выберите заказчика" />
             </SelectTrigger>
             <SelectContent>
               {customers.map((c) => (
-                <SelectItem key={c.id} value={c.id} className="text-base">{c.name}</SelectItem>
+                <SelectItem key={c.id} value={c.id} className="text-sm">{c.name}</SelectItem>
               ))}
             </SelectContent>
           </Select>
-          <Button type="button" variant="outline" onClick={() => setAddCustomer(true)} className="h-12 text-lg">
-            <Plus className="size-5" /> Добавить заказчика
+          <Button type="button" variant="outline" onClick={() => setAddCustomer(true)} className="h-9 text-sm">
+            <Plus className="size-4" /> Добавить заказчика
           </Button>
         </div>
       </Field>
       <div className="grid gap-5 sm:grid-cols-2">
         <Field label="Тип объекта">
           <Select value={value.object_type} onValueChange={(v) => set("object_type", v as ObjectDraft["object_type"])}>
-            <SelectTrigger className="h-12 text-lg"><SelectValue /></SelectTrigger>
+            <SelectTrigger className="h-9 text-sm"><SelectValue /></SelectTrigger>
             <SelectContent>
               {OBJECT_TYPES.map((t) => (
-                <SelectItem key={t.v} value={t.v} className="text-base">{t.label}</SelectItem>
+                <SelectItem key={t.v} value={t.v} className="text-sm">{t.label}</SelectItem>
               ))}
             </SelectContent>
           </Select>
         </Field>
         <Field label="Ответственный">
           <Select value={value.responsible_id || NONE} onValueChange={(v) => set("responsible_id", v === NONE ? "" : v)}>
-            <SelectTrigger className="h-12 text-lg"><SelectValue /></SelectTrigger>
+            <SelectTrigger className="h-9 text-sm"><SelectValue /></SelectTrigger>
             <SelectContent>
-              <SelectItem value={NONE} className="text-base">— не выбран —</SelectItem>
+              <SelectItem value={NONE} className="text-sm">— не выбран —</SelectItem>
               {profiles.map((p) => (
-                <SelectItem key={p.id} value={p.id} className="text-base">{p.full_name}</SelectItem>
+                <SelectItem key={p.id} value={p.id} className="text-sm">{p.full_name}</SelectItem>
               ))}
             </SelectContent>
           </Select>
@@ -126,7 +126,7 @@ export function ObjectCardFields({
             type="date"
             value={value.contract_start}
             onChange={(e) => set("contract_start", e.target.value)}
-            className="h-12 text-lg"
+            className="h-9 text-sm"
           />
         </Field>
         <Field label="Дата окончания по договору" required>
@@ -135,16 +135,16 @@ export function ObjectCardFields({
             value={value.contract_end}
             min={value.contract_start || undefined}
             onChange={(e) => set("contract_end", e.target.value)}
-            className="h-12 text-lg"
+            className="h-9 text-sm"
           />
         </Field>
         {showStatus && (
           <Field label="Статус объекта">
             <Select value={value.status} onValueChange={(v) => set("status", v as ObjectDraft["status"])}>
-              <SelectTrigger className="h-12 text-lg"><SelectValue /></SelectTrigger>
+              <SelectTrigger className="h-9 text-sm"><SelectValue /></SelectTrigger>
               <SelectContent>
                 {OBJECT_STATUSES.map((t) => (
-                  <SelectItem key={t.v} value={t.v} className="text-base">{t.label}</SelectItem>
+                  <SelectItem key={t.v} value={t.v} className="text-sm">{t.label}</SelectItem>
                 ))}
               </SelectContent>
             </Select>
@@ -152,13 +152,13 @@ export function ObjectCardFields({
         )}
       </div>
       <Field label="Примечание">
-        <Textarea value={value.notes} onChange={(e) => set("notes", e.target.value)} className="text-lg" />
+        <Textarea value={value.notes} onChange={(e) => set("notes", e.target.value)} className="text-sm" />
       </Field>
 
       <Dialog open={addCustomer} onOpenChange={setAddCustomer}>
         <DialogContent className="max-h-[90vh] overflow-y-auto sm:max-w-2xl">
           <DialogHeader>
-            <DialogTitle className="text-2xl">Новый заказчик</DialogTitle>
+            <DialogTitle className="text-lg">Новый заказчик</DialogTitle>
           </DialogHeader>
           <CustomerForm
             onSaved={(c) => {

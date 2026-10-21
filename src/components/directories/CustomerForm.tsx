@@ -63,7 +63,7 @@ export function CustomerForm({
     },
     onError: showError,
   });
-  const cls = "h-12 text-lg";
+  const cls = "h-9 text-sm";
   return (
     <form
       className="space-y-5"
@@ -80,7 +80,7 @@ export function CustomerForm({
         <Field label="ОГРН"><Input value={v.ogrn} onChange={set("ogrn")} className={cls} /></Field>
       </div>
       <Field label="Адрес"><Input value={v.legal_address} onChange={set("legal_address")} className={cls} /></Field>
-      <Field label="Комментарий"><Textarea value={v.comment} onChange={set("comment")} className="text-lg" /></Field>
+      <Field label="Комментарий"><Textarea value={v.comment} onChange={set("comment")} className="text-sm" /></Field>
       <FormActions pending={m.isPending} onCancel={onCancel} />
     </form>
   );

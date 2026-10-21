@@ -62,7 +62,7 @@ export function StageStepsTab({ steps, disabled, onChanged }: { steps: ObjectSte
   return (
     <div className="max-w-4xl space-y-3">
       {allDone && (
-        <p className="rounded-lg bg-green-50 p-4 text-lg text-green-800 dark:bg-green-950/40 dark:text-green-200">
+        <p className="rounded-md bg-green-50 p-4 text-sm text-green-800 dark:bg-green-950/40 dark:text-green-200">
           Все шаги сценария выполнены.
         </p>
       )}
@@ -72,27 +72,27 @@ export function StageStepsTab({ steps, disabled, onChanged }: { steps: ObjectSte
           return (
             <li
               key={s.id}
-              className={`rounded-lg border-2 p-4 ${
+              className={`rounded-md border-2 p-4 ${
                 current ? "border-primary bg-accent" : s.state === "done" ? "border-transparent bg-muted/50" : "border-border"
               }`}
             >
               <div className="flex items-start gap-4">
                 {s.state === "done" ? (
-                  <CheckCircle2 className="mt-0.5 size-7 shrink-0 text-green-600" />
+                  <CheckCircle2 className="mt-0.5 size-5 shrink-0 text-green-600" />
                 ) : current ? (
-                  <CircleDot className="mt-0.5 size-7 shrink-0 text-primary" />
+                  <CircleDot className="mt-0.5 size-5 shrink-0 text-primary" />
                 ) : (
-                  <Circle className="mt-0.5 size-7 shrink-0 text-muted-foreground" />
+                  <Circle className="mt-0.5 size-5 shrink-0 text-muted-foreground" />
                 )}
                 <div className="min-w-0 flex-1">
                   <div className="flex flex-wrap items-baseline gap-x-3">
-                    <span className="text-base font-semibold text-muted-foreground">Шаг {s.step_no}</span>
-                    <span className="text-lg font-semibold">{roleName(s.role_code)}</span>
-                    {s.duration_days !== null && <span className="text-base text-muted-foreground">срок {s.duration_days} дн.</span>}
+                    <span className="text-sm font-semibold text-muted-foreground">Шаг {s.step_no}</span>
+                    <span className="text-sm font-semibold">{roleName(s.role_code)}</span>
+                    {s.duration_days !== null && <span className="text-sm text-muted-foreground">срок {s.duration_days} дн.</span>}
                   </div>
-                  <div className={`mt-1 text-lg ${s.state === "done" ? "text-muted-foreground" : ""}`}>{s.action}</div>
+                  <div className={`mt-1 text-sm ${s.state === "done" ? "text-muted-foreground" : ""}`}>{s.action}</div>
                   {s.state === "done" && (
-                    <div className="mt-1 text-sm text-muted-foreground">
+                    <div className="mt-1 text-xs text-muted-foreground">
                       Выполнил: {s.done_by_profile?.full_name ?? "—"} · {formatDateTime(s.done_at)}
                       {s.comment && <> · «{s.comment}»</>}
                     </div>
@@ -103,9 +103,9 @@ export function StageStepsTab({ steps, disabled, onChanged }: { steps: ObjectSte
                         value={comment}
                         onChange={(e) => setComment(e.target.value)}
                         placeholder="Комментарий (необязательно)"
-                        className="h-12 min-w-56 flex-1 text-lg"
+                        className="h-9 min-w-56 flex-1 text-sm"
                       />
-                      <Button onClick={() => complete.mutate(s.id)} disabled={complete.isPending} className="h-12 px-6 text-lg">
+                      <Button onClick={() => complete.mutate(s.id)} disabled={complete.isPending} className="h-9 px-4 text-sm">
                         Выполнено — передать дальше
                       </Button>
                     </div>

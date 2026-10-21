@@ -66,12 +66,12 @@ function RequestCard() {
     qc.invalidateQueries({ queryKey: ["request-comments", requestId] });
   };
 
-  if (isLoading) return <div className="text-xl text-muted-foreground">Загрузка…</div>;
+  if (isLoading) return <div className="text-base text-muted-foreground">Загрузка…</div>;
   if (!r) {
     return (
       <div>
         <BackLink />
-        <p className="py-10 text-xl text-muted-foreground">Заявка не найдена или у вас нет к ней доступа</p>
+        <p className="py-10 text-base text-muted-foreground">Заявка не найдена или у вас нет к ней доступа</p>
       </div>
     );
   }
@@ -89,18 +89,18 @@ function RequestCard() {
   const blockKey = JSON.stringify(values);
 
   return (
-    <div className="max-w-5xl space-y-6 pb-10">
+    <div className="max-w-5xl space-y-5 pb-10">
       <BackLink objectId={r.object_id} />
 
-      <header className={`rounded-xl border p-5 ${r.is_overdue ? "border-red-400 bg-red-50 dark:bg-red-950/40" : "bg-card"}`}>
+      <header className={`rounded-lg border p-4 ${r.is_overdue ? "border-red-400 bg-red-50 dark:bg-red-950/40" : "bg-card"}`}>
         <div className="flex flex-wrap items-start gap-4">
-          <h1 className="min-w-0 flex-1 text-3xl font-bold leading-tight">
+          <h1 className="min-w-0 flex-1 text-xl font-bold leading-tight">
             Заявка №{r.number} · {r.type_name}
           </h1>
-          {r.is_new && <span className="rounded bg-red-600 px-3 py-1 text-lg font-bold text-white">Новая</span>}
+          {r.is_new && <span className="rounded bg-red-600 px-3 py-1 text-sm font-bold text-white">Новая</span>}
           <RequestStatusBadge status={r.status} />
         </div>
-        <div className="mt-3 flex flex-wrap gap-x-6 gap-y-2 text-lg">
+        <div className="mt-3 flex flex-wrap gap-x-6 gap-y-2 text-sm">
           <Link to="/objects/$id" params={{ id: r.object_id }} className="text-primary hover:underline">
             {r.object_name}
           </Link>
@@ -108,7 +108,7 @@ function RequestCard() {
           <span className="text-muted-foreground">Сформирована: {formatDate(r.created_at)}</span>
         </div>
         <div className="mt-4 flex flex-wrap items-center gap-4">
-          <span className="text-xl">
+          <span className="text-base">
             Дата вызова: <span className="font-semibold">{formatDate(r.call_date)}</span>
           </span>
           {r.is_overdue && (
@@ -145,9 +145,9 @@ function RequestCard() {
 
       <RequestComments requestId={r.id} />
 
-      <section className="rounded-xl border p-5">
+      <section className="rounded-lg border p-4">
         <div className="mb-4 flex flex-wrap items-center gap-3">
-          <h2 className="flex-1 text-2xl font-semibold">Файлы</h2>
+          <h2 className="flex-1 text-lg font-semibold">Файлы</h2>
           <UploadButton
             objectId={r.object_id}
             entityType="request_field"
@@ -160,11 +160,11 @@ function RequestCard() {
             }}
           />
         </div>
-        {files.length === 0 ? <p className="text-lg text-muted-foreground">Файлов нет</p> : <FileList files={files} />}
+        {files.length === 0 ? <p className="text-sm text-muted-foreground">Файлов нет</p> : <FileList files={files} />}
       </section>
 
       <section>
-        <h2 className="mb-3 text-2xl font-semibold">История</h2>
+        <h2 className="mb-3 text-lg font-semibold">История</h2>
         <HistoryFeed filter={{ entityType: "request", entityId: r.id }} />
       </section>
     </div>
@@ -177,13 +177,13 @@ function BackLink({ objectId }: { objectId?: string }) {
       to="/objects/$id"
       params={{ id: objectId }}
       search={{ tab: "requests" }}
-      className="inline-flex items-center gap-2 text-lg text-primary hover:underline"
+      className="inline-flex items-center gap-2 text-sm text-primary hover:underline"
     >
-      <ArrowLeft className="size-5" /> К заявкам объекта
+      <ArrowLeft className="size-4" /> К заявкам объекта
     </Link>
   ) : (
-    <Link to="/requests" className="inline-flex items-center gap-2 text-lg text-primary hover:underline">
-      <ArrowLeft className="size-5" /> К заявкам
+    <Link to="/requests" className="inline-flex items-center gap-2 text-sm text-primary hover:underline">
+      <ArrowLeft className="size-4" /> К заявкам
     </Link>
   );
 }
@@ -199,7 +199,7 @@ function StageLink({ objectId, stageId }: { objectId: string; stageId: string })
   });
   if (!data) return null;
   return (
-    <div className="mt-3 text-lg">
+    <div className="mt-3 text-sm">
       Этап:{" "}
       <Link to="/objects/$id/stages/$stageId" params={{ id: objectId, stageId }} className="text-primary hover:underline">
         {data.number}. {data.name}
@@ -235,13 +235,13 @@ function MoveDate({ requestId, current, onDone }: { requestId: string; current: 
   });
   return (
     <>
-      <Button variant="outline" onClick={() => { setDate(current); setOpen(true); }} className="h-11 text-base">
-        <CalendarClock className="size-5" /> Перенести
+      <Button variant="outline" onClick={() => { setDate(current); setOpen(true); }} className="h-9 text-sm">
+        <CalendarClock className="size-4" /> Перенести
       </Button>
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle className="text-xl">Перенести дату вызова</DialogTitle>
+            <DialogTitle className="text-base">Перенести дату вызова</DialogTitle>
           </DialogHeader>
           <form
             className="space-y-4"
@@ -251,14 +251,14 @@ function MoveDate({ requestId, current, onDone }: { requestId: string; current: 
             }}
           >
             <Field label="Новая дата" required>
-              <Input type="date" value={date} onChange={(e) => setDate(e.target.value)} className="h-12 text-lg" />
+              <Input type="date" value={date} onChange={(e) => setDate(e.target.value)} className="h-9 text-sm" />
             </Field>
             <Field label="Причина" required>
-              <Textarea value={reason} onChange={(e) => setReason(e.target.value)} rows={3} className="text-lg" />
+              <Textarea value={reason} onChange={(e) => setReason(e.target.value)} rows={3} className="text-sm" />
             </Field>
             <div className="flex gap-3">
-              <Button type="submit" disabled={m.isPending} className="h-12 flex-1 text-lg">Перенести</Button>
-              <Button type="button" variant="outline" onClick={() => setOpen(false)} className="h-12 flex-1 text-lg">Отмена</Button>
+              <Button type="submit" disabled={m.isPending} className="h-9 flex-1 text-sm">Перенести</Button>
+              <Button type="button" variant="outline" onClick={() => setOpen(false)} className="h-9 flex-1 text-sm">Отмена</Button>
             </div>
           </form>
         </DialogContent>

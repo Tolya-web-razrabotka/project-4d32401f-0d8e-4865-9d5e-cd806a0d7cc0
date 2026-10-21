@@ -14,8 +14,8 @@ export const Route = createFileRoute("/_authenticated/requests")({
 function RequestsPage() {
   return (
     <div>
-      <h1 className="mb-2 text-3xl font-bold">Заявки</h1>
-      <p className="mb-6 text-lg text-muted-foreground">
+      <h1 className="mb-2 text-xl font-bold">Заявки</h1>
+      <p className="mb-4 text-sm text-muted-foreground">
         По всем объектам. Сверху новые, затем просроченные. Поиск — по номеру заявки и значениям полей, включая номер протокола.
       </p>
       <RequestsList />

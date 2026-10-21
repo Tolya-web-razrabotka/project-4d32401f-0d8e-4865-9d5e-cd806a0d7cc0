@@ -59,12 +59,12 @@ export function StageStatusBar({
   });
 
   if (stage.is_excluded) {
-    return <Bar><p className="text-lg text-muted-foreground">Этап исключён из работы на этом объекте.</p></Bar>;
+    return <Bar><p className="text-sm text-muted-foreground">Этап исключён из работы на этом объекте.</p></Bar>;
   }
   if (stage.status_code === "closed") {
     return (
       <Bar>
-        <p className="text-lg font-medium text-green-700 dark:text-green-400">
+        <p className="text-sm font-medium text-green-700 dark:text-green-400">
           Этап закрыт {stage.closed_at ? formatDateTime(stage.closed_at) : ""}
         </p>
       </Bar>
@@ -89,7 +89,7 @@ export function StageStatusBar({
               disabled={blocked || setStatus.isPending}
               title={blocked ? missingText : undefined}
               onClick={() => setStatus.mutate({ to: a.to })}
-              className="h-14 px-6 text-lg"
+              className="h-10 px-4 text-sm"
             >
               {a.label}
             </Button>
@@ -101,11 +101,11 @@ export function StageStatusBar({
               disabled={!canClose || setStatus.isPending}
               title={canClose ? undefined : "Закрыть этап может только адресат или руководитель"}
               onClick={() => setStatus.mutate({ to: "closed" })}
-              className="h-14 bg-green-600 px-6 text-lg text-white hover:bg-green-700"
+              className="h-10 bg-green-600 px-4 text-sm text-white hover:bg-green-700"
             >
               Принять и закрыть
             </Button>
-            <Button variant="outline" onClick={() => setReturning(true)} className="h-14 border-orange-500 px-6 text-lg text-orange-700 dark:text-orange-300">
+            <Button variant="outline" onClick={() => setReturning(true)} className="h-10 border-orange-500 px-4 text-sm text-orange-700 dark:text-orange-300">
               Вернуть на доработку
             </Button>
           </>
@@ -113,19 +113,19 @@ export function StageStatusBar({
       </div>
       {/* На планшете нет наведения — подсказку показываем текстом */}
       {WORKING.includes(stage.status_code) && missing.length > 0 && (
-        <p className="mt-2 text-base text-muted-foreground">«Готово — на проверку» станет доступно после выполнения условий. {missingText}.</p>
+        <p className="mt-2 text-sm text-muted-foreground">«Готово — на проверку» станет доступно после выполнения условий. {missingText}.</p>
       )}
       {stage.status_code === "on_review" && !canClose && (
-        <p className="mt-2 text-base text-muted-foreground">Закрыть этап может только адресат или руководитель.</p>
+        <p className="mt-2 text-sm text-muted-foreground">Закрыть этап может только адресат или руководитель.</p>
       )}
       {stage.due_date && (
-        <p className="mt-2 text-base text-muted-foreground">Срок окончания: {formatDate(stage.due_date)}</p>
+        <p className="mt-2 text-sm text-muted-foreground">Срок окончания: {formatDate(stage.due_date)}</p>
       )}
 
       <Dialog open={returning} onOpenChange={setReturning}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle className="text-xl">Вернуть на доработку</DialogTitle>
+            <DialogTitle className="text-base">Вернуть на доработку</DialogTitle>
           </DialogHeader>
           <form
             className="space-y-4"
@@ -144,11 +144,11 @@ export function StageStatusBar({
               onChange={(e) => setReason(e.target.value)}
               placeholder="Что нужно исправить — обязательно"
               rows={4}
-              className="text-lg"
+              className="text-sm"
             />
             <div className="flex gap-3">
-              <Button type="submit" disabled={setStatus.isPending} className="h-12 flex-1 text-lg">Вернуть</Button>
-              <Button type="button" variant="outline" onClick={() => setReturning(false)} className="h-12 flex-1 text-lg">
+              <Button type="submit" disabled={setStatus.isPending} className="h-9 flex-1 text-sm">Вернуть</Button>
+              <Button type="button" variant="outline" onClick={() => setReturning(false)} className="h-9 flex-1 text-sm">
                 Отмена
               </Button>
             </div>
@@ -160,5 +160,5 @@ export function StageStatusBar({
 }
 
 function Bar({ children }: { children: ReactNode }) {
-  return <div className="mt-8 rounded-xl border-2 bg-card p-4">{children}</div>;
+  return <div className="mt-6 rounded-lg border-2 bg-card p-4">{children}</div>;
 }

@@ -57,13 +57,13 @@ function AuthLayout() {
   });
 
   if (isLoading) {
-    return <div className="flex min-h-screen items-center justify-center text-xl text-muted-foreground">Загрузка…</div>;
+    return <div className="flex min-h-screen items-center justify-center text-base text-muted-foreground">Загрузка…</div>;
   }
   if (error || !profile) {
     return (
       <div className="flex min-h-screen flex-col items-center justify-center gap-6 p-4 text-center">
-        <p className="text-2xl font-semibold">Нет доступа. Обратитесь к администратору</p>
-        <Button onClick={signOut} className="h-14 px-8 text-lg">Выйти</Button>
+        <p className="text-lg font-semibold">Нет доступа. Обратитесь к администратору</p>
+        <Button onClick={signOut} className="h-10 px-4 text-sm">Выйти</Button>
       </div>
     );
   }
@@ -102,7 +102,7 @@ function Nav({ profile, onSignOut, onNavigate }: { profile: CurrentProfile; onSi
   const { data: count = 0 } = useAttentionCount();
   return (
     <div className="flex h-full flex-col bg-sidebar text-sidebar-foreground">
-      <div className="px-6 py-6 text-3xl font-bold">Лидер</div>
+      <div className="px-4 py-4 text-xl font-bold">Лидер</div>
       <nav className="flex-1 space-y-2 px-3">
         {items.map((it) => {
           const active = path === it.to || path.startsWith(it.to + "/");
@@ -111,14 +111,14 @@ function Nav({ profile, onSignOut, onNavigate }: { profile: CurrentProfile; onSi
               key={it.to}
               to={it.to}
               onClick={onNavigate}
-              className={`flex items-center gap-4 rounded-lg px-4 py-4 text-xl font-medium transition-colors ${
+              className={`flex items-center gap-4 rounded-md px-4 py-2.5 text-base font-medium transition-colors ${
                 active ? "bg-sidebar-primary text-sidebar-primary-foreground" : "hover:bg-sidebar-accent"
               }`}
             >
-              <it.icon className="size-7 shrink-0" />
+              <it.icon className="size-5 shrink-0" />
               <span className="flex-1">{it.label}</span>
               {"badge" in it && count > 0 && (
-                <span className="min-w-8 rounded-full bg-destructive px-2.5 py-0.5 text-center text-base font-bold text-destructive-foreground">
+                <span className="min-w-8 rounded-full bg-destructive px-2.5 py-0.5 text-center text-sm font-bold text-destructive-foreground">
                   {count}
                 </span>
               )}
@@ -128,11 +128,11 @@ function Nav({ profile, onSignOut, onNavigate }: { profile: CurrentProfile; onSi
       </nav>
       <div className="space-y-3 border-t border-sidebar-border p-4">
         <div>
-          <div className="text-lg font-semibold leading-tight">{profile.full_name}</div>
-          {profile.role_name && <div className="text-base text-muted-foreground">{profile.role_name}</div>}
+          <div className="text-sm font-semibold leading-tight">{profile.full_name}</div>
+          {profile.role_name && <div className="text-sm text-muted-foreground">{profile.role_name}</div>}
         </div>
-        <Button variant="outline" onClick={onSignOut} className="h-12 w-full text-lg">
-          <LogOut className="size-5" /> Выйти
+        <Button variant="outline" onClick={onSignOut} className="h-9 w-full text-sm">
+          <LogOut className="size-4" /> Выйти
         </Button>
       </div>
     </div>
@@ -143,15 +143,15 @@ function Shell({ profile, onSignOut }: { profile: CurrentProfile; onSignOut: () 
   const [open, setOpen] = useState(false);
   return (
     <div className="flex min-h-screen w-full">
-      <aside className="sticky top-0 hidden h-screen w-72 shrink-0 border-r border-sidebar-border lg:block">
+      <aside className="sticky top-0 hidden h-screen w-60 shrink-0 border-r border-sidebar-border lg:block">
         <Nav profile={profile} onSignOut={onSignOut} />
       </aside>
       <div className="flex min-w-0 flex-1 flex-col">
-        <header className="flex items-center gap-3 border-b px-4 py-3 lg:hidden">
-          <Button variant="outline" onClick={() => setOpen(true)} className="h-12 px-4 text-lg" aria-label="Меню">
-            <Menu className="size-6" /> Меню
+        <header className="flex items-center gap-3 border-b px-4 py-2 lg:hidden">
+          <Button variant="outline" onClick={() => setOpen(true)} className="h-9 px-4 text-sm" aria-label="Меню">
+            <Menu className="size-4" /> Меню
           </Button>
-          <span className="text-2xl font-bold">Лидер</span>
+          <span className="text-lg font-bold">Лидер</span>
         </header>
         <Sheet open={open} onOpenChange={setOpen}>
           <SheetContent side="left" className="w-80 p-0">
@@ -159,7 +159,7 @@ function Shell({ profile, onSignOut }: { profile: CurrentProfile; onSignOut: () 
             <Nav profile={profile} onSignOut={onSignOut} onNavigate={() => setOpen(false)} />
           </SheetContent>
         </Sheet>
-        <main className="flex-1 p-6 lg:p-8">
+        <main className="flex-1 p-4 lg:p-6">
           <Outlet />
         </main>
         <OverdueDialog />

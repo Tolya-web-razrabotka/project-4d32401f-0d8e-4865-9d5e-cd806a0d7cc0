@@ -84,16 +84,16 @@ function ObjectsPage() {
 
   return (
     <div>
-      <div className="mb-6 flex flex-wrap items-center gap-4">
-        <h1 className="flex-1 text-3xl font-bold">{archive ? "Архив объектов" : "Объекты"}</h1>
+      <div className="mb-4 flex flex-wrap items-center gap-4">
+        <h1 className="flex-1 text-xl font-bold">{archive ? "Архив объектов" : "Объекты"}</h1>
         {is_admin && (
-          <Button onClick={() => navigate({ to: "/objects/new" })} className="h-12 px-6 text-lg">
-            <Plus className="size-5" /> Создать объект
+          <Button onClick={() => navigate({ to: "/objects/new" })} className="h-9 px-4 text-sm">
+            <Plus className="size-4" /> Создать объект
           </Button>
         )}
       </div>
 
-      <div className="mb-6 grid grid-cols-2 gap-3 md:grid-cols-3 xl:grid-cols-6">
+      <div className="mb-4 grid grid-cols-2 gap-3 md:grid-cols-3 xl:grid-cols-6">
         {PROBLEMS.map((p) => {
           const n = totals[p.key] ?? 0;
           const active = problem === p.key;
@@ -102,12 +102,12 @@ function ObjectsPage() {
               key={p.key}
               type="button"
               onClick={() => setProblem(active ? null : p.key)}
-              className={`rounded-xl border-2 p-4 text-left transition-shadow ${
+              className={`rounded-lg border-2 p-4 text-left transition-shadow ${
                 n > 0 ? TILE_TONE[p.tone] : "border-border bg-card text-muted-foreground"
               } ${active ? "ring-4 ring-primary/40" : "hover:shadow-md"}`}
             >
-              <div className="text-4xl font-bold leading-none">{n}</div>
-              <div className="mt-2 text-base font-medium leading-tight">{p.label}</div>
+              <div className="text-2xl font-bold leading-none">{n}</div>
+              <div className="mt-2 text-sm font-medium leading-tight">{p.label}</div>
             </button>
           );
         })}
@@ -115,24 +115,24 @@ function ObjectsPage() {
 
       <Toolbar search={search} onSearch={setSearch}>
         <Select value={status} onValueChange={setStatus}>
-          <SelectTrigger className="h-12 w-52 text-lg"><SelectValue /></SelectTrigger>
+          <SelectTrigger className="h-9 w-52 text-sm"><SelectValue /></SelectTrigger>
           <SelectContent>
-            <SelectItem value="all" className="text-base">Все статусы</SelectItem>
+            <SelectItem value="all" className="text-sm">Все статусы</SelectItem>
             {OBJECT_STATUSES.filter((s) => (archive ? s.v === "completed" : s.v !== "completed")).map((s) => (
-              <SelectItem key={s.v} value={s.v} className="text-base">{s.label}</SelectItem>
+              <SelectItem key={s.v} value={s.v} className="text-sm">{s.label}</SelectItem>
             ))}
           </SelectContent>
         </Select>
         <Select value={type} onValueChange={setType}>
-          <SelectTrigger className="h-12 w-40 text-lg"><SelectValue /></SelectTrigger>
+          <SelectTrigger className="h-9 w-40 text-sm"><SelectValue /></SelectTrigger>
           <SelectContent>
-            <SelectItem value="all" className="text-base">Все типы</SelectItem>
+            <SelectItem value="all" className="text-sm">Все типы</SelectItem>
             {OBJECT_TYPES.map((t) => (
-              <SelectItem key={t.v} value={t.v} className="text-base">{t.label}</SelectItem>
+              <SelectItem key={t.v} value={t.v} className="text-sm">{t.label}</SelectItem>
             ))}
           </SelectContent>
         </Select>
-        <label className="flex items-center gap-3 text-lg">
+        <label className="flex items-center gap-3 text-sm">
           <Switch
             checked={archive}
             onCheckedChange={(v) => {
@@ -146,16 +146,16 @@ function ObjectsPage() {
       </Toolbar>
 
       {problem && (
-        <div className="mb-4 flex items-center gap-3 rounded-lg bg-accent px-4 py-3 text-lg">
+        <div className="mb-4 flex items-center gap-3 rounded-md bg-accent px-4 py-2 text-sm">
           Показаны объекты: «{PROBLEMS.find((p) => p.key === problem)?.label}»
-          <Button variant="ghost" size="sm" onClick={() => setProblem(null)} className="ml-auto text-base">
-            <X className="size-4" /> Сбросить
+          <Button variant="ghost" size="sm" onClick={() => setProblem(null)} className="ml-auto text-sm">
+            <X className="size-3.5" /> Сбросить
           </Button>
         </div>
       )}
 
-      <div className="overflow-x-auto rounded-lg border">
-        <Table className="text-base">
+      <div className="overflow-x-auto rounded-md border">
+        <Table className="text-sm">
           <TableHeader>
             <TableRow>
               <TableHead className="min-w-56">Наименование</TableHead>
@@ -172,7 +172,7 @@ function ObjectsPage() {
           <TableBody>
             {isLoading ? null : rows.length === 0 ? (
               <tr>
-                <td colSpan={9} className="py-10 text-center text-lg text-muted-foreground">
+                <td colSpan={9} className="py-10 text-center text-sm text-muted-foreground">
                   {objects.length === 0
                     ? is_admin
                       ? "Объектов пока нет. Нажмите «Создать объект»."
@@ -205,7 +205,7 @@ function ObjectTableRow({ o, onOpen }: { o: ObjectRow; onOpen: () => void }) {
     <TableRow className="cursor-pointer" onClick={onOpen}>
       <TableCell>
         <div className="font-semibold">{o.name}</div>
-        {o.status !== "in_work" && <div className="text-sm text-muted-foreground">{statusLabel(o.status)}</div>}
+        {o.status !== "in_work" && <div className="text-xs text-muted-foreground">{statusLabel(o.status)}</div>}
       </TableCell>
       <TableCell className="text-muted-foreground">{o.address}</TableCell>
       <TableCell>{o.customer_name}</TableCell>
@@ -229,7 +229,7 @@ function ObjectTableRow({ o, onOpen }: { o: ObjectRow; onOpen: () => void }) {
           </div>
           <span className="w-11 text-right font-semibold">{o.progress_pct}%</span>
         </div>
-        <div className="text-sm text-muted-foreground">
+        <div className="text-xs text-muted-foreground">
           {o.stages_closed} из {o.stages_total}
         </div>
       </TableCell>
@@ -238,7 +238,7 @@ function ObjectTableRow({ o, onOpen }: { o: ObjectRow; onOpen: () => void }) {
           {formatDate(o.contract_start)} — {formatDate(o.contract_end)}
         </div>
         {o.status !== "completed" && o.contract_days_left !== null && (
-          <span className={`mt-1 inline-block rounded px-2 py-0.5 text-sm font-medium ${TONE_CLASS[tone]}`}>
+          <span className={`mt-1 inline-block rounded px-2 py-0.5 text-xs font-medium ${TONE_CLASS[tone]}`}>
             {daysLeftText(o.contract_days_left)}
           </span>
         )}
@@ -246,7 +246,7 @@ function ObjectTableRow({ o, onOpen }: { o: ObjectRow; onOpen: () => void }) {
       <TableCell>
         <div className="flex max-w-56 flex-wrap gap-1.5">
           {chips.map((c) => (
-            <span key={c.text} className={`whitespace-nowrap rounded px-2 py-0.5 text-sm font-semibold ${c.cls}`}>
+            <span key={c.text} className={`whitespace-nowrap rounded px-2 py-0.5 text-xs font-semibold ${c.cls}`}>
               {c.n} {c.text}
             </span>
           ))}

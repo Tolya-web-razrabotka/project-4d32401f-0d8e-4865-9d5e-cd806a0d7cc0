@@ -108,11 +108,11 @@ export function RequestTypeFields({ typeId, readOnly }: { typeId: string; readOn
 
   return (
     <div className="max-w-5xl space-y-4">
-      <p className="text-base text-muted-foreground">
+      <p className="text-sm text-muted-foreground">
         Поля, которые заполняет прораб, показываются в форме новой заявки. Поля офис-менеджера дозаполняются в карточке
         заявки. Переименование поля не меняет уже созданные заявки.
       </p>
-      {fields.length === 0 && <p className="py-6 text-center text-lg text-muted-foreground">Полей пока нет</p>}
+      {fields.length === 0 && <p className="py-4 text-center text-sm text-muted-foreground">Полей пока нет</p>}
       <Reorderable
         items={fields}
         disabled={readOnly}
@@ -129,48 +129,48 @@ export function RequestTypeFields({ typeId, readOnly }: { typeId: string; readOn
       />
       {!readOnly && (
         <form
-          className="space-y-4 rounded-lg border border-dashed p-4"
+          className="space-y-4 rounded-md border border-dashed p-4"
           onSubmit={(e) => {
             e.preventDefault();
             add.mutate();
           }}
         >
-          <div className="text-lg font-semibold">Новое поле</div>
+          <div className="text-sm font-semibold">Новое поле</div>
           <div className="grid gap-4 sm:grid-cols-2">
             <Field label="Подпись" required>
-              <Input value={label} onChange={(e) => setLabel(e.target.value)} placeholder="Например: Пикеты" className="h-12 text-lg" />
+              <Input value={label} onChange={(e) => setLabel(e.target.value)} placeholder="Например: Пикеты" className="h-9 text-sm" />
             </Field>
             <Field label="Тип">
               <Select value={type} onValueChange={(v) => setType(v as FieldType)}>
-                <SelectTrigger className="h-12 text-lg"><SelectValue /></SelectTrigger>
+                <SelectTrigger className="h-9 text-sm"><SelectValue /></SelectTrigger>
                 <SelectContent>
                   {FIELD_TYPES.map((t) => (
-                    <SelectItem key={t.v} value={t.v} className="text-base">{t.label}</SelectItem>
+                    <SelectItem key={t.v} value={t.v} className="text-sm">{t.label}</SelectItem>
                   ))}
                 </SelectContent>
               </Select>
             </Field>
             <Field label="Кто заполняет">
               <Select value={filledBy} onValueChange={(v) => setFilledBy(v as RequestField["filled_by"])}>
-                <SelectTrigger className="h-12 text-lg"><SelectValue /></SelectTrigger>
+                <SelectTrigger className="h-9 text-sm"><SelectValue /></SelectTrigger>
                 <SelectContent>
                   {FILLED_BY.map((t) => (
-                    <SelectItem key={t.v} value={t.v} className="text-base">{t.label}</SelectItem>
+                    <SelectItem key={t.v} value={t.v} className="text-sm">{t.label}</SelectItem>
                   ))}
                 </SelectContent>
               </Select>
             </Field>
-            <label className="flex items-center gap-3 self-end pb-3 text-lg">
+            <label className="flex items-center gap-3 self-end pb-3 text-sm">
               <Switch checked={required} onCheckedChange={setRequired} /> Обязательное
             </label>
           </div>
           {type === "select" && (
             <Field label="Варианты — по одному в строке" required>
-              <Textarea value={options} onChange={(e) => setOptions(e.target.value)} rows={4} className="text-lg" />
+              <Textarea value={options} onChange={(e) => setOptions(e.target.value)} rows={4} className="text-sm" />
             </Field>
           )}
-          <Button type="submit" disabled={add.isPending} className="h-12 px-6 text-lg">
-            <Plus className="size-5" /> Добавить поле
+          <Button type="submit" disabled={add.isPending} className="h-9 px-4 text-sm">
+            <Plus className="size-4" /> Добавить поле
           </Button>
         </form>
       )}
@@ -209,15 +209,15 @@ function FieldRow({
             }
             if (t !== field.label) onPatch({ label: t });
           }}
-          className="h-11 flex-1 text-lg font-medium"
+          className="h-9 flex-1 text-sm font-medium"
         />
         {!readOnly &&
           (confirmDelete ? (
             <div className="flex shrink-0 gap-2">
-              <Button type="button" variant="destructive" className="h-11 text-base" onClick={onDelete}>
+              <Button type="button" variant="destructive" className="h-9 text-sm" onClick={onDelete}>
                 Удалить
               </Button>
-              <Button type="button" variant="outline" className="h-11 text-base" onClick={() => setConfirmDelete(false)}>
+              <Button type="button" variant="outline" className="h-9 text-sm" onClick={() => setConfirmDelete(false)}>
                 Отмена
               </Button>
             </div>
@@ -230,7 +230,7 @@ function FieldRow({
               onClick={() => setConfirmDelete(true)}
               aria-label="Удалить поле"
             >
-              <Trash2 className="size-5" />
+              <Trash2 className="size-4" />
             </Button>
           ))}
       </div>
@@ -240,10 +240,10 @@ function FieldRow({
           onValueChange={(v) => onPatch({ field_type: v as FieldType })}
           disabled={readOnly}
         >
-          <SelectTrigger className="h-10 w-56 text-base"><SelectValue /></SelectTrigger>
+          <SelectTrigger className="h-8 w-56 text-sm"><SelectValue /></SelectTrigger>
           <SelectContent>
             {FIELD_TYPES.map((t) => (
-              <SelectItem key={t.v} value={t.v} className="text-base">{t.label}</SelectItem>
+              <SelectItem key={t.v} value={t.v} className="text-sm">{t.label}</SelectItem>
             ))}
           </SelectContent>
         </Select>
@@ -252,25 +252,25 @@ function FieldRow({
           onValueChange={(v) => onPatch({ filled_by: v as RequestField["filled_by"] })}
           disabled={readOnly}
         >
-          <SelectTrigger className="h-10 w-56 text-base"><SelectValue /></SelectTrigger>
+          <SelectTrigger className="h-8 w-56 text-sm"><SelectValue /></SelectTrigger>
           <SelectContent>
             {FILLED_BY.map((t) => (
-              <SelectItem key={t.v} value={t.v} className="text-base">{t.label}</SelectItem>
+              <SelectItem key={t.v} value={t.v} className="text-sm">{t.label}</SelectItem>
             ))}
           </SelectContent>
         </Select>
-        <label className="flex items-center gap-2 text-base">
+        <label className="flex items-center gap-2 text-sm">
           <Switch checked={field.is_required} onCheckedChange={(v) => onPatch({ is_required: v })} disabled={readOnly} />
           Обязательное
         </label>
-        <label className="flex items-center gap-2 text-base">
+        <label className="flex items-center gap-2 text-sm">
           <Switch checked={field.is_active} onCheckedChange={(v) => onPatch({ is_active: v })} disabled={readOnly} />
           Активно
         </label>
       </div>
       {field.field_type === "select" && (
         <div className="space-y-1">
-          <div className="text-base text-muted-foreground">Варианты — по одному в строке</div>
+          <div className="text-sm text-muted-foreground">Варианты — по одному в строке</div>
           <Textarea
             value={options}
             disabled={readOnly}
@@ -280,10 +280,10 @@ function FieldRow({
               const opts = parseOptions(options);
               if (opts.join("\n") !== field.options.join("\n")) onPatch({ options: opts });
             }}
-            className="text-base"
+            className="text-sm"
           />
           {field.options.length === 0 && (
-            <p className="text-base text-destructive">Добавьте хотя бы один вариант, иначе выбрать будет нечего</p>
+            <p className="text-sm text-destructive">Добавьте хотя бы один вариант, иначе выбрать будет нечего</p>
           )}
         </div>
       )}

@@ -34,8 +34,8 @@ export function CustomersDirectory() {
   return (
     <div>
       <Toolbar search={search} onSearch={setSearch} onAdd={is_admin ? () => setCreating(true) : undefined} />
-      <div className="rounded-lg border">
-        <Table className="text-base">
+      <div className="rounded-md border">
+        <Table className="text-sm">
           <TableHeader>
             <TableRow>
               <TableHead>Название</TableHead>
@@ -89,13 +89,13 @@ function CustomerCard({ customer, onClose }: { customer: Customer; onClose: () =
     ["Комментарий", customer.comment],
   ];
   return (
-    <div className="space-y-6">
+    <div className="space-y-5">
       {edit ? (
         <CustomerForm customer={customer} onSaved={() => setEdit(false)} onCancel={() => setEdit(false)} />
       ) : (
         <div className="space-y-3">
-          <div className="text-2xl font-semibold">{customer.name}</div>
-          <dl className="space-y-2 text-lg">
+          <div className="text-lg font-semibold">{customer.name}</div>
+          <dl className="space-y-2 text-sm">
             {info.map(([k, val]) => (
               <div key={k} className="flex gap-3">
                 <dt className="w-36 shrink-0 text-muted-foreground">{k}</dt>
@@ -105,8 +105,8 @@ function CustomerCard({ customer, onClose }: { customer: Customer; onClose: () =
           </dl>
           {is_admin && (
             <div className="flex flex-wrap gap-3">
-              <Button variant="outline" onClick={() => setEdit(true)} className="h-11 text-base">
-                <Pencil className="size-5" /> Изменить
+              <Button variant="outline" onClick={() => setEdit(true)} className="h-9 text-sm">
+                <Pencil className="size-4" /> Изменить
               </Button>
               <DeleteButton table="customers" id={customer.id} name={customer.name} invalidate={CUSTOMERS_KEY} onDone={onClose} />
             </div>
@@ -140,29 +140,29 @@ function Contacts({ customerId }: { customerId: string }) {
   return (
     <div className="space-y-3 border-t pt-5">
       <div className="flex items-center justify-between">
-        <h3 className="text-xl font-semibold">Контактные лица</h3>
+        <h3 className="text-base font-semibold">Контактные лица</h3>
         {is_admin && editing === null && (
-          <Button onClick={() => setEditing("new")} className="h-11 text-base">
-            <Plus className="size-5" /> Добавить
+          <Button onClick={() => setEditing("new")} className="h-9 text-sm">
+            <Plus className="size-4" /> Добавить
           </Button>
         )}
       </div>
       {editing === "new" && <ContactForm customerId={customerId} contact={null} invalidate={key} onClose={() => setEditing(null)} />}
-      {data.length === 0 && editing !== "new" && <p className="text-lg text-muted-foreground">Контактов нет</p>}
+      {data.length === 0 && editing !== "new" && <p className="text-sm text-muted-foreground">Контактов нет</p>}
       {data.map((c) =>
         editing !== null && editing !== "new" && editing.id === c.id ? (
           <ContactForm key={c.id} customerId={customerId} contact={c} invalidate={key} onClose={() => setEditing(null)} />
         ) : (
-          <div key={c.id} className="rounded-lg border p-4 text-base">
-            <div className="text-lg font-semibold">{c.full_name}</div>
+          <div key={c.id} className="rounded-md border p-4 text-sm">
+            <div className="text-sm font-semibold">{c.full_name}</div>
             {c.position && <div className="text-muted-foreground">{c.position}</div>}
             {c.phone && <div>{c.phone}</div>}
             {c.email && <div>{c.email}</div>}
             {c.comment && <div className="text-muted-foreground">{c.comment}</div>}
             {is_admin && (
               <div className="mt-3 flex flex-wrap gap-3">
-                <Button variant="outline" onClick={() => setEditing(c)} className="h-11 text-base">
-                  <Pencil className="size-5" /> Изменить
+                <Button variant="outline" onClick={() => setEditing(c)} className="h-9 text-sm">
+                  <Pencil className="size-4" /> Изменить
                 </Button>
                 <DeleteButton table="customer_contacts" id={c.id} name={c.full_name} invalidate={key} />
               </div>
@@ -215,10 +215,10 @@ function ContactForm({
     },
     onError: showError,
   });
-  const cls = "h-12 text-lg";
+  const cls = "h-9 text-sm";
   return (
     <form
-      className="space-y-4 rounded-lg border bg-muted/40 p-4"
+      className="space-y-4 rounded-md border bg-muted/40 p-4"
       onSubmit={(e) => {
         e.preventDefault();
         if (!v.full_name.trim()) { toast.error("Заполните ФИО"); return; }
@@ -231,7 +231,7 @@ function ContactForm({
         <Field label="Телефон"><Input value={v.phone} onChange={set("phone")} className={cls} /></Field>
         <Field label="Email"><Input type="email" value={v.email} onChange={set("email")} className={cls} /></Field>
       </div>
-      <Field label="Комментарий"><Textarea value={v.comment} onChange={set("comment")} className="text-lg" /></Field>
+      <Field label="Комментарий"><Textarea value={v.comment} onChange={set("comment")} className="text-sm" /></Field>
       <FormActions pending={m.isPending} onCancel={onClose} />
     </form>
   );

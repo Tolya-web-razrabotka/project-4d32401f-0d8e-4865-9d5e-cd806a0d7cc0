@@ -61,15 +61,15 @@ export function StagesDirectory() {
         onSearch={setSearch}
         onAdd={is_admin ? () => open("new") : undefined}
       >
-        <label className="flex items-center gap-3 text-lg">
+        <label className="flex items-center gap-3 text-sm">
           <Switch checked={showInactive} onCheckedChange={setShowInactive} /> Показать неактивные
         </label>
       </Toolbar>
-      <p className="mb-4 text-base text-muted-foreground">
+      <p className="mb-4 text-sm text-muted-foreground">
         Всего этапов: {stages.filter((s) => showInactive || s.is_active).length}. Нажмите на строку, чтобы открыть карточку этапа.
       </p>
-      <div className="overflow-x-auto rounded-lg border">
-        <Table className="text-base">
+      <div className="overflow-x-auto rounded-md border">
+        <Table className="text-sm">
           <TableHeader>
             <TableRow>
               <TableHead className="w-14">№</TableHead>
@@ -87,7 +87,7 @@ export function StagesDirectory() {
             ) : (
               groups.flatMap((g) => [
                 <TableRow key={`g-${g.id}`} className="bg-muted/60 hover:bg-muted/60">
-                  <TableCell colSpan={7} className="py-3 text-lg font-semibold">
+                  <TableCell colSpan={7} className="py-2 text-sm font-semibold">
                     {g.name} <span className="font-normal text-muted-foreground">· {g.items.length}</span>
                   </TableCell>
                 </TableRow>,
@@ -101,7 +101,7 @@ export function StagesDirectory() {
                     <TableCell className="font-medium">
                       <span className="inline-flex items-center gap-2">
                         {s.is_critical && (
-                          <Flag className="size-4 shrink-0 fill-destructive text-destructive" aria-label="Критичный" />
+                          <Flag className="size-3.5 shrink-0 fill-destructive text-destructive" aria-label="Критичный" />
                         )}
                         {s.name}
                       </span>

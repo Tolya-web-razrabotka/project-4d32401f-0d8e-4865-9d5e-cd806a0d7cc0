@@ -14,7 +14,7 @@ type St = { code: string; name: string; color: string; sort: number };
 export function StatusBadge({ name, color }: { name: string; color: string }) {
   // Цвет статуса хранится в базе, поэтому задаётся inline.
   return (
-    <span className="inline-block rounded-full px-3 py-1 text-base font-medium" style={{ backgroundColor: color, color: textOn(color) }}>
+    <span className="inline-block rounded-full px-3 py-1 text-sm font-medium" style={{ backgroundColor: color, color: textOn(color) }}>
       {name}
     </span>
   );
@@ -44,8 +44,8 @@ export function StatusesDirectory() {
   return (
     <div>
       <Toolbar search={search} onSearch={setSearch} />
-      <div className="rounded-lg border">
-        <Table className="text-base">
+      <div className="rounded-md border">
+        <Table className="text-sm">
           <TableHeader>
             <TableRow>
               <TableHead>Название</TableHead>
@@ -107,20 +107,20 @@ function StForm({ st, onClose }: { st: St; onClose: () => void }) {
         m.mutate();
       }}
     >
-      <Field label="Название" required><Input value={name} onChange={(e) => setName(e.target.value)} className="h-12 text-lg" /></Field>
+      <Field label="Название" required><Input value={name} onChange={(e) => setName(e.target.value)} className="h-9 text-sm" /></Field>
       <Field label="Цвет">
         <div className="flex items-center gap-3">
           <input
             type="color"
             value={validHex ? color : "#000000"}
             onChange={(e) => setColor(e.target.value)}
-            className="h-12 w-16 cursor-pointer rounded border"
+            className="h-9 w-16 cursor-pointer rounded border"
             aria-label="Выбор цвета"
           />
-          <Input value={color} onChange={(e) => setColor(e.target.value)} className="h-12 w-40 font-mono text-lg" />
+          <Input value={color} onChange={(e) => setColor(e.target.value)} className="h-9 w-40 font-mono text-sm" />
         </div>
       </Field>
-      <Field label="Порядок"><Input type="number" value={sort} onChange={(e) => setSort(e.target.value)} className="h-12 w-40 text-lg" /></Field>
+      <Field label="Порядок"><Input type="number" value={sort} onChange={(e) => setSort(e.target.value)} className="h-9 w-40 text-sm" /></Field>
       <div>Пример: <StatusBadge name={name || "—"} color={validHex ? color : st.color} /></div>
       <FormActions pending={m.isPending} onCancel={onClose} />
     </form>

@@ -1,4 +1,5 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
+import { tabsListClass, tabTriggerClass } from "@/lib/ui";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { DocumentsDirectory } from "@/components/directories/DocumentsDirectory";
 import { RepresentativesDirectory } from "@/components/directories/RepresentativesDirectory";
@@ -44,14 +45,14 @@ function DirectoriesPage() {
   const navigate = useNavigate({ from: "/directories" });
   return (
     <div>
-      <h1 className="mb-6 text-3xl font-bold">Справочники</h1>
+      <h1 className="mb-4 text-xl font-bold">Справочники</h1>
       <Tabs value={tab} onValueChange={(v) => navigate({ search: { tab: v as TabValue }, replace: true })}>
-        <TabsList className="mb-6 flex h-auto flex-wrap justify-start gap-2 bg-transparent p-0">
+        <TabsList className={tabsListClass}>
           {TABS.map((t) => (
             <TabsTrigger
               key={t.v}
               value={t.v}
-              className="h-12 border px-5 text-lg data-[state=active]:bg-primary data-[state=active]:text-primary-foreground"
+              className={tabTriggerClass}
             >
               {t.label}
             </TabsTrigger>

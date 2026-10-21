@@ -26,19 +26,19 @@ export function StagesExport({ objectName, stages }: { objectName: string; stage
     <>
       <Button
         variant="outline"
-        className="h-11 text-base"
+        className="h-9 text-sm"
         disabled={stages.length === 0}
         onClick={() => exportXlsx(`Этапы — ${objectName} — ${today}`, "Этапы", COLUMNS, stages)}
       >
-        <FileSpreadsheet className="size-5" /> Выгрузить в Excel
+        <FileSpreadsheet className="size-4" /> Выгрузить в Excel
       </Button>
       <Button
         variant="outline"
-        className="h-11 text-base"
+        className="h-9 text-sm"
         disabled={stages.length === 0}
         onClick={() => printTable(`Этапы — ${objectName}`, `На ${today} · этапов: ${stages.length}`, COLUMNS, stages)}
       >
-        <Printer className="size-5" /> Печать
+        <Printer className="size-4" /> Печать
       </Button>
     </>
   );

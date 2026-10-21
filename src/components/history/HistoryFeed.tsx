@@ -52,18 +52,18 @@ export function useHistory(f: HistoryFilter) {
 /** Лента истории: дата, кто, что. */
 export function HistoryFeed({ filter, showObject }: { filter: HistoryFilter; showObject?: boolean }) {
   const { data = [], isLoading, error } = useHistory(filter);
-  if (isLoading) return <p className="py-6 text-lg text-muted-foreground">Загрузка…</p>;
-  if (error) return <p className="py-6 text-lg text-destructive">Не удалось загрузить историю</p>;
-  if (data.length === 0) return <p className="py-6 text-lg text-muted-foreground">Записей пока нет</p>;
+  if (isLoading) return <p className="py-4 text-sm text-muted-foreground">Загрузка…</p>;
+  if (error) return <p className="py-4 text-sm text-destructive">Не удалось загрузить историю</p>;
+  if (data.length === 0) return <p className="py-4 text-sm text-muted-foreground">Записей пока нет</p>;
   return (
-    <ol className="divide-y rounded-lg border">
+    <ol className="divide-y rounded-md border">
       {data.map((h) => (
-        <li key={h.id} className="flex flex-wrap gap-x-6 gap-y-1 px-4 py-3">
-          <span className="w-40 shrink-0 text-base text-muted-foreground">{formatDateTime(h.created_at)}</span>
-          <span className="w-44 shrink-0 text-base font-medium">{h.actor?.full_name ?? "Система"}</span>
-          <span className="min-w-60 flex-1 text-lg">
+        <li key={h.id} className="flex flex-wrap gap-x-6 gap-y-1 px-4 py-2">
+          <span className="w-40 shrink-0 text-sm text-muted-foreground">{formatDateTime(h.created_at)}</span>
+          <span className="w-44 shrink-0 text-sm font-medium">{h.actor?.full_name ?? "Система"}</span>
+          <span className="min-w-60 flex-1 text-sm">
             {h.message}
-            {showObject && h.object?.name && <span className="block text-base text-muted-foreground">{h.object.name}</span>}
+            {showObject && h.object?.name && <span className="block text-sm text-muted-foreground">{h.object.name}</span>}
           </span>
         </li>
       ))}

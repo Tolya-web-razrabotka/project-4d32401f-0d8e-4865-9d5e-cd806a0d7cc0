@@ -100,21 +100,21 @@ function NewRequestPage() {
       to="/objects/$id"
       params={{ id: search.object }}
       search={{ tab: "requests", ...(search.type ? { type: search.type } : {}) }}
-      className="mb-4 inline-flex items-center gap-2 text-lg text-primary hover:underline"
+      className="mb-4 inline-flex items-center gap-2 text-sm text-primary hover:underline"
     >
-      <ArrowLeft className="size-5" /> К объекту
+      <ArrowLeft className="size-4" /> К объекту
     </Link>
   ) : (
-    <Link to="/requests" className="mb-4 inline-flex items-center gap-2 text-lg text-primary hover:underline">
-      <ArrowLeft className="size-5" /> К заявкам
+    <Link to="/requests" className="mb-4 inline-flex items-center gap-2 text-sm text-primary hover:underline">
+      <ArrowLeft className="size-4" /> К заявкам
     </Link>
   );
 
   return (
     <div className="max-w-3xl pb-10">
       {back}
-      <h1 className="mb-2 text-3xl font-bold">Новая заявка{type ? `: ${type.name}` : ""}</h1>
-      <p className="mb-6 text-lg text-muted-foreground">Дата формирования: сегодня, {formatDate(mskToday())}</p>
+      <h1 className="mb-2 text-xl font-bold">Новая заявка{type ? `: ${type.name}` : ""}</h1>
+      <p className="mb-4 text-sm text-muted-foreground">Дата формирования: сегодня, {formatDate(mskToday())}</p>
 
       <form
         className="space-y-5"
@@ -126,20 +126,20 @@ function NewRequestPage() {
         <div className="grid gap-5 sm:grid-cols-2">
           <Field label="Объект" required>
             <Select value={objectId} onValueChange={(v) => { setObjectId(v); setStageId(""); }}>
-              <SelectTrigger className="h-12 text-lg"><SelectValue placeholder="Выберите объект" /></SelectTrigger>
+              <SelectTrigger className="h-9 text-sm"><SelectValue placeholder="Выберите объект" /></SelectTrigger>
               <SelectContent>
                 {activeObjects.map((o) => (
-                  <SelectItem key={o.id} value={o.id} className="text-base">{o.name}</SelectItem>
+                  <SelectItem key={o.id} value={o.id} className="text-sm">{o.name}</SelectItem>
                 ))}
               </SelectContent>
             </Select>
           </Field>
           <Field label="Вид заявки" required>
             <Select value={typeId} onValueChange={(v) => { setTypeId(v); setValues({}); setRepId(""); }}>
-              <SelectTrigger className="h-12 text-lg"><SelectValue placeholder="Выберите вид" /></SelectTrigger>
+              <SelectTrigger className="h-9 text-sm"><SelectValue placeholder="Выберите вид" /></SelectTrigger>
               <SelectContent>
                 {types.filter((t) => t.is_active).map((t) => (
-                  <SelectItem key={t.id} value={t.id} className="text-base">{t.name}</SelectItem>
+                  <SelectItem key={t.id} value={t.id} className="text-sm">{t.name}</SelectItem>
                 ))}
               </SelectContent>
             </Select>
@@ -147,16 +147,16 @@ function NewRequestPage() {
         </div>
 
         <Field label="Дата вызова" required>
-          <Input type="date" value={callDate} onChange={(e) => setCallDate(e.target.value)} className="h-12 w-60 text-lg" />
+          <Input type="date" value={callDate} onChange={(e) => setCallDate(e.target.value)} className="h-9 w-60 text-sm" />
         </Field>
 
         {type?.uses_representatives && (
           <Field label="Кого вызываем" required>
             <Select value={repId} onValueChange={setRepId}>
-              <SelectTrigger className="h-12 text-lg"><SelectValue placeholder="Выберите из справочника" /></SelectTrigger>
+              <SelectTrigger className="h-9 text-sm"><SelectValue placeholder="Выберите из справочника" /></SelectTrigger>
               <SelectContent>
                 {reps.map((r) => (
-                  <SelectItem key={r.id} value={r.id} className="text-base">{r.name}</SelectItem>
+                  <SelectItem key={r.id} value={r.id} className="text-sm">{r.name}</SelectItem>
                 ))}
               </SelectContent>
             </Select>
@@ -189,16 +189,16 @@ function NewRequestPage() {
             />
             <div className="space-y-2">
               {files.map((file, i) => (
-                <div key={`${file.name}-${i}`} className="flex items-center gap-3 rounded-lg border px-3 py-2 text-base">
-                  <Paperclip className="size-4 shrink-0" />
+                <div key={`${file.name}-${i}`} className="flex items-center gap-3 rounded-md border px-3 py-2 text-sm">
+                  <Paperclip className="size-3.5 shrink-0" />
                   <span className="flex-1 truncate">{file.name}</span>
                   <Button type="button" variant="ghost" size="icon" onClick={() => setFiles((x) => x.filter((_, j) => j !== i))} aria-label="Убрать">
-                    <X className="size-4" />
+                    <X className="size-3.5" />
                   </Button>
                 </div>
               ))}
-              <Button type="button" variant="outline" onClick={() => fileInput.current?.click()} className="h-12 text-lg">
-                <Paperclip className="size-5" /> Добавить файлы
+              <Button type="button" variant="outline" onClick={() => fileInput.current?.click()} className="h-9 text-sm">
+                <Paperclip className="size-4" /> Добавить файлы
               </Button>
             </div>
           </Field>
@@ -207,18 +207,18 @@ function NewRequestPage() {
         {objectId && openStages.length > 0 && (
           <Field label="Связать с этапом (необязательно)">
             <Select value={stageId || NONE} onValueChange={(v) => setStageId(v === NONE ? "" : v)}>
-              <SelectTrigger className="h-12 text-lg"><SelectValue /></SelectTrigger>
+              <SelectTrigger className="h-9 text-sm"><SelectValue /></SelectTrigger>
               <SelectContent>
-                <SelectItem value={NONE} className="text-base">— без этапа —</SelectItem>
+                <SelectItem value={NONE} className="text-sm">— без этапа —</SelectItem>
                 {openStages.map((s) => (
-                  <SelectItem key={s.id} value={s.id} className="text-base">{s.number}. {s.name}</SelectItem>
+                  <SelectItem key={s.id} value={s.id} className="text-sm">{s.number}. {s.name}</SelectItem>
                 ))}
               </SelectContent>
             </Select>
           </Field>
         )}
 
-        <Button type="submit" disabled={create.isPending} className="h-14 px-10 text-xl">
+        <Button type="submit" disabled={create.isPending} className="h-10 px-5 text-base">
           {create.isPending ? "Создание…" : "Создать заявку"}
         </Button>
       </form>

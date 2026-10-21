@@ -111,11 +111,11 @@ export function StageConditions({ templateId, readOnly }: { templateId: string; 
 
   return (
     <div className="max-w-5xl space-y-4">
-      <p className="text-base text-muted-foreground">
+      <p className="text-sm text-muted-foreground">
         Этап нельзя отправить на проверку и закрыть, пока не отмечены все обязательные условия. Для типа «Файл» к
         условию нужно прикрепить файл, для типа «Поле» — заполнить значение.
       </p>
-      {rows.length === 0 && <p className="py-6 text-center text-lg text-muted-foreground">Условий пока нет</p>}
+      {rows.length === 0 && <p className="py-4 text-center text-sm text-muted-foreground">Условий пока нет</p>}
       <Reorderable
         items={rows}
         disabled={readOnly}
@@ -144,10 +144,10 @@ export function StageConditions({ templateId, readOnly }: { templateId: string; 
             value={newTitle}
             onChange={(e) => setNewTitle(e.target.value)}
             placeholder="Новое условие, например «Акт получен»"
-            className="h-12 min-w-64 flex-1 text-lg"
+            className="h-9 min-w-64 flex-1 text-sm"
           />
-          <Button type="submit" disabled={add.isPending} className="h-12 px-6 text-lg">
-            <Plus className="size-5" /> Добавить условие
+          <Button type="submit" disabled={add.isPending} className="h-9 px-4 text-sm">
+            <Plus className="size-4" /> Добавить условие
           </Button>
         </form>
       )}
@@ -175,7 +175,7 @@ function ConditionRow({
   return (
     <div className="space-y-3">
       <div className="flex items-center gap-3">
-        <span className="w-6 shrink-0 text-lg font-semibold text-muted-foreground">{index + 1}.</span>
+        <span className="w-6 shrink-0 text-sm font-semibold text-muted-foreground">{index + 1}.</span>
         <Input
           value={title}
           disabled={readOnly}
@@ -189,15 +189,15 @@ function ConditionRow({
             }
             if (t !== cond.title) onPatch({ title: t });
           }}
-          className="h-11 flex-1 text-lg"
+          className="h-9 flex-1 text-sm"
         />
         {!readOnly &&
           (confirmDelete ? (
             <div className="flex shrink-0 gap-2">
-              <Button type="button" variant="destructive" className="h-11 text-base" onClick={onDelete}>
+              <Button type="button" variant="destructive" className="h-9 text-sm" onClick={onDelete}>
                 Удалить
               </Button>
-              <Button type="button" variant="outline" className="h-11 text-base" onClick={() => setConfirmDelete(false)}>
+              <Button type="button" variant="outline" className="h-9 text-sm" onClick={() => setConfirmDelete(false)}>
                 Отмена
               </Button>
             </div>
@@ -210,24 +210,24 @@ function ConditionRow({
               onClick={() => setConfirmDelete(true)}
               aria-label="Удалить условие"
             >
-              <Trash2 className="size-5" />
+              <Trash2 className="size-4" />
             </Button>
           ))}
       </div>
       <div className="flex flex-wrap items-center gap-x-6 gap-y-3 pl-9">
         <Select value={cond.kind} onValueChange={(v) => onPatch({ kind: v as Cond["kind"] })} disabled={readOnly}>
-          <SelectTrigger className="h-10 w-36 text-base"><SelectValue /></SelectTrigger>
+          <SelectTrigger className="h-8 w-36 text-sm"><SelectValue /></SelectTrigger>
           <SelectContent>
             {CONDITION_KINDS.map((k) => (
-              <SelectItem key={k.v} value={k.v} className="text-base">{k.label}</SelectItem>
+              <SelectItem key={k.v} value={k.v} className="text-sm">{k.label}</SelectItem>
             ))}
           </SelectContent>
         </Select>
-        <label className="flex items-center gap-2 text-base">
+        <label className="flex items-center gap-2 text-sm">
           <Switch checked={cond.is_required} onCheckedChange={(v) => onPatch({ is_required: v })} disabled={readOnly} />
           Обязательное
         </label>
-        <label className="flex items-center gap-2 text-base">
+        <label className="flex items-center gap-2 text-sm">
           <Switch checked={cond.to_id_folder} onCheckedChange={(v) => onPatch({ to_id_folder: v })} disabled={readOnly} />
           В папку ИД
         </label>
@@ -236,11 +236,11 @@ function ConditionRow({
           onValueChange={(v) => onPatch({ document_id: v === NONE ? null : v })}
           disabled={readOnly}
         >
-          <SelectTrigger className="h-10 min-w-56 max-w-md flex-1 text-base"><SelectValue /></SelectTrigger>
+          <SelectTrigger className="h-8 min-w-56 max-w-md flex-1 text-sm"><SelectValue /></SelectTrigger>
           <SelectContent>
-            <SelectItem value={NONE} className="text-base">Документ не привязан</SelectItem>
+            <SelectItem value={NONE} className="text-sm">Документ не привязан</SelectItem>
             {docs.map((d) => (
-              <SelectItem key={d.id} value={d.id} className="text-base">{d.section}: {d.name}</SelectItem>
+              <SelectItem key={d.id} value={d.id} className="text-sm">{d.section}: {d.name}</SelectItem>
             ))}
           </SelectContent>
         </Select>

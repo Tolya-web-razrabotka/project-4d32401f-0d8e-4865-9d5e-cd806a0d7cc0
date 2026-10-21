@@ -17,7 +17,7 @@ export function FieldInput({
   onChange: (v: unknown) => void;
   disabled?: boolean;
 }) {
-  const cls = "h-12 text-lg";
+  const cls = "h-9 text-sm";
   switch (field.field_type) {
     case "number":
       return (
@@ -49,17 +49,17 @@ export function FieldInput({
         >
           <SelectTrigger className={cls}><SelectValue /></SelectTrigger>
           <SelectContent>
-            <SelectItem value={EMPTY} className="text-base">— не выбрано —</SelectItem>
+            <SelectItem value={EMPTY} className="text-sm">— не выбрано —</SelectItem>
             {field.options.map((o) => (
-              <SelectItem key={o} value={o} className="text-base">{o}</SelectItem>
+              <SelectItem key={o} value={o} className="text-sm">{o}</SelectItem>
             ))}
           </SelectContent>
         </Select>
       );
     case "checkbox":
       return (
-        <label className="flex h-12 items-center gap-3 text-lg">
-          <Checkbox className="size-6" disabled={disabled} checked={value === true} onCheckedChange={(c) => onChange(c === true)} />
+        <label className="flex h-9 items-center gap-3 text-sm">
+          <Checkbox className="size-4" disabled={disabled} checked={value === true} onCheckedChange={(c) => onChange(c === true)} />
           Да
         </label>
       );

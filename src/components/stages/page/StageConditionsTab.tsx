@@ -40,14 +40,14 @@ export function StageConditionsTab({ stage, onChanged }: { stage: ObjectStage; o
   });
 
   if (isLoading) return null;
-  if (conds.length === 0) return <p className="py-6 text-lg text-muted-foreground">У этапа нет условий закрытия</p>;
+  if (conds.length === 0) return <p className="py-4 text-sm text-muted-foreground">У этапа нет условий закрытия</p>;
 
   const required = conds.filter((c) => c.is_required);
   const doneRequired = required.filter((c) => c.is_done).length;
 
   return (
     <div className="max-w-4xl space-y-4">
-      <p className="text-lg">
+      <p className="text-sm">
         Обязательных выполнено: <span className="font-semibold">{doneRequired} из {required.length}</span>
         {doneRequired === required.length && required.length > 0 && (
           <span className="ml-2 text-green-700 dark:text-green-400">— можно отправлять на проверку</span>
@@ -57,14 +57,14 @@ export function StageConditionsTab({ stage, onChanged }: { stage: ObjectStage; o
         {conds.map((c) => {
           const condFiles = files.filter((f) => f.entity_id === c.id);
           return (
-            <li key={c.id} className={`rounded-lg border p-4 ${c.is_done ? "bg-green-50 dark:bg-green-950/30" : "bg-card"}`}>
+            <li key={c.id} className={`rounded-md border p-4 ${c.is_done ? "bg-green-50 dark:bg-green-950/30" : "bg-card"}`}>
               <div className="flex items-start gap-4">
                 <div className="pt-0.5">
                   <ConditionToggle cond={c} disabled={stage.is_excluded} onDone={onChanged} />
                 </div>
                 <div className="min-w-0 flex-1">
-                  <div className={`text-lg ${c.is_done ? "text-muted-foreground line-through" : "font-medium"}`}>{c.title}</div>
-                  <div className="mt-1 flex flex-wrap gap-2 text-sm">
+                  <div className={`text-sm ${c.is_done ? "text-muted-foreground line-through" : "font-medium"}`}>{c.title}</div>
+                  <div className="mt-1 flex flex-wrap gap-2 text-xs">
                     {!c.is_required && <span className="rounded bg-muted px-2 py-0.5">необязательное</span>}
                     {KIND_HINT[c.kind] && !c.is_done && <span className="rounded bg-muted px-2 py-0.5">{KIND_HINT[c.kind]}</span>}
                     {c.to_id_folder && (
@@ -74,7 +74,7 @@ export function StageConditionsTab({ stage, onChanged }: { stage: ObjectStage; o
                     )}
                   </div>
                   {c.kind === "field" && c.value_text && (
-                    <div className="mt-2 text-lg">
+                    <div className="mt-2 text-sm">
                       Значение: <span className="font-semibold">{c.value_text}</span>
                     </div>
                   )}
@@ -88,7 +88,7 @@ export function StageConditionsTab({ stage, onChanged }: { stage: ObjectStage; o
                           entityId={c.id}
                           kind="photo"
                           label={condFiles.length ? "Добавить ещё файл" : "Прикрепить файл"}
-                          className="h-11 text-base"
+                          className="h-9 text-sm"
                           onUploaded={() => {
                             qc.invalidateQueries({ queryKey: filesKey });
                             qc.invalidateQueries({ queryKey: ["history"] });

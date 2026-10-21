@@ -125,79 +125,79 @@ export function RequestsList({
   return (
     <div>
       {typeName && (
-        <div className="mb-4 flex flex-wrap items-center gap-3 rounded-lg bg-accent px-4 py-3 text-lg">
+        <div className="mb-4 flex flex-wrap items-center gap-3 rounded-md bg-accent px-4 py-2 text-sm">
           <span>
             Вид: <span className="font-semibold">{typeName}</span>
           </span>
           {onClearType && (
-            <Button variant="ghost" size="sm" onClick={onClearType} className="text-base">
-              <X className="size-4" /> Все виды
+            <Button variant="ghost" size="sm" onClick={onClearType} className="text-sm">
+              <X className="size-3.5" /> Все виды
             </Button>
           )}
         </div>
       )}
 
       <Toolbar search={search} onSearch={setSearch}>
-        <Button onClick={newLink} className="h-12 px-6 text-lg">
-          <Plus className="size-5" /> Новая заявка
+        <Button onClick={newLink} className="h-9 px-4 text-sm">
+          <Plus className="size-4" /> Новая заявка
         </Button>
       </Toolbar>
 
       <div className="mb-4 flex flex-wrap items-center gap-3">
         {showObject && (
           <Select value={f.object} onValueChange={(v) => set("object", v)}>
-            <SelectTrigger className="h-11 w-64 text-base"><SelectValue /></SelectTrigger>
+            <SelectTrigger className="h-9 w-64 text-sm"><SelectValue /></SelectTrigger>
             <SelectContent>
-              <SelectItem value={ALL} className="text-base">Все объекты</SelectItem>
+              <SelectItem value={ALL} className="text-sm">Все объекты</SelectItem>
               {objects.map((o) => (
-                <SelectItem key={o.id} value={o.id} className="text-base">{o.name}</SelectItem>
+                <SelectItem key={o.id} value={o.id} className="text-sm">{o.name}</SelectItem>
               ))}
             </SelectContent>
           </Select>
         )}
         {!typeId && (
           <Select value={f.type} onValueChange={(v) => set("type", v)}>
-            <SelectTrigger className="h-11 w-52 text-base"><SelectValue /></SelectTrigger>
+            <SelectTrigger className="h-9 w-52 text-sm"><SelectValue /></SelectTrigger>
             <SelectContent>
-              <SelectItem value={ALL} className="text-base">Все виды</SelectItem>
+              <SelectItem value={ALL} className="text-sm">Все виды</SelectItem>
               {types.map((t) => (
-                <SelectItem key={t.id} value={t.id} className="text-base">{t.name}</SelectItem>
+                <SelectItem key={t.id} value={t.id} className="text-sm">{t.name}</SelectItem>
               ))}
             </SelectContent>
           </Select>
         )}
         <Select value={f.status} onValueChange={(v) => set("status", v)}>
-          <SelectTrigger className="h-11 w-52 text-base"><SelectValue /></SelectTrigger>
+          <SelectTrigger className="h-9 w-52 text-sm"><SelectValue /></SelectTrigger>
           <SelectContent>
-            <SelectItem value={ALL} className="text-base">Все статусы</SelectItem>
+            <SelectItem value={ALL} className="text-sm">Все статусы</SelectItem>
             {REQUEST_STATUSES.map((s) => (
-              <SelectItem key={s.v} value={s.v} className="text-base">{s.label}</SelectItem>
+              <SelectItem key={s.v} value={s.v} className="text-sm">{s.label}</SelectItem>
             ))}
           </SelectContent>
         </Select>
-        <label className="flex items-center gap-2 text-base">
+        <label className="flex items-center gap-2 text-sm">
           Вызов с
-          <Input type="date" value={f.from} onChange={(e) => set("from", e.target.value)} className="h-11 w-40 text-base" />
+          <Input type="date" value={f.from} onChange={(e) => set("from", e.target.value)} className="h-9 w-40 text-sm" />
           по
-          <Input type="date" value={f.to} onChange={(e) => set("to", e.target.value)} className="h-11 w-40 text-base" />
+          <Input type="date" value={f.to} onChange={(e) => set("to", e.target.value)} className="h-9 w-40 text-sm" />
         </label>
-        <label className="flex items-center gap-2 text-base">
+        <label className="flex items-center gap-2 text-sm">
           <Switch checked={f.onlyOpen} onCheckedChange={(v) => set("onlyOpen", v)} /> Только незакрытые
         </label>
-        <label className="flex items-center gap-2 text-base">
+        <label className="flex items-center gap-2 text-sm">
           <Switch checked={f.onlyOverdue} onCheckedChange={(v) => set("onlyOverdue", v)} /> Только просроченные
         </label>
         <Button
           variant="outline"
-          className="ml-auto h-11 text-base"
+          className="ml-auto h-9 text-sm"
           disabled={visible.length === 0}
           onClick={() => exportXlsx(`Заявки — ${formatDate(mskToday())}`, "Заявки", columns, visible)}
         >
-          <FileSpreadsheet className="size-5" /> Выгрузить в Excel
+          <FileSpreadsheet className="size-4" /> Выгрузить в Excel
         </Button>
         <Button
           variant="outline"
-          className="h-11 text-base"
+          className="h-9 text-sm"
           disabled={visible.length === 0}
           onClick={() =>
             printTable(
@@ -208,29 +208,29 @@ export function RequestsList({
             )
           }
         >
-          <Printer className="size-5" /> Печать
+          <Printer className="size-4" /> Печать
         </Button>
       </div>
 
-      <div className="overflow-x-auto rounded-lg border">
-        <table className="w-full min-w-[1000px] text-base">
+      <div className="overflow-x-auto rounded-md border">
+        <table className="w-full min-w-[1000px] text-sm">
           <thead>
             <tr className="border-b text-left text-muted-foreground">
-              <th className="px-3 py-3 font-semibold">№</th>
-              <th className="px-3 py-3 font-semibold">Сформирована</th>
-              <th className="px-3 py-3 font-semibold">Вызов на</th>
-              <th className="px-3 py-3 font-semibold">Вид</th>
-              {showObject && <th className="px-3 py-3 font-semibold">Объект</th>}
-              <th className="px-3 py-3 font-semibold">Данные</th>
-              <th className="px-3 py-3 font-semibold">Статус</th>
-              <th className="px-3 py-3 font-semibold">Инициатор</th>
-              <th className="px-3 py-3 font-semibold">Офис-менеджер</th>
+              <th className="px-3 py-2 font-semibold">№</th>
+              <th className="px-3 py-2 font-semibold">Сформирована</th>
+              <th className="px-3 py-2 font-semibold">Вызов на</th>
+              <th className="px-3 py-2 font-semibold">Вид</th>
+              {showObject && <th className="px-3 py-2 font-semibold">Объект</th>}
+              <th className="px-3 py-2 font-semibold">Данные</th>
+              <th className="px-3 py-2 font-semibold">Статус</th>
+              <th className="px-3 py-2 font-semibold">Инициатор</th>
+              <th className="px-3 py-2 font-semibold">Офис-менеджер</th>
             </tr>
           </thead>
           <tbody>
             {isLoading ? null : visible.length === 0 ? (
               <tr>
-                <td colSpan={9} className="py-10 text-center text-lg text-muted-foreground">
+                <td colSpan={9} className="py-10 text-center text-sm text-muted-foreground">
                   {rows.length === 0 ? "Заявок пока нет" : "Ничего не найдено"}
                 </td>
               </tr>
@@ -247,35 +247,35 @@ export function RequestsList({
                     onClick={() => navigate({ to: "/requests/$requestId", params: { requestId: r.id } })}
                     className={`cursor-pointer border-t align-top hover:bg-muted/40 ${tone}`}
                   >
-                    <td className="px-3 py-3 font-semibold">
+                    <td className="px-3 py-2 font-semibold">
                       {r.number}
                       {r.is_new && (
-                        <span className="ml-2 inline-block rounded bg-red-600 px-1.5 py-0.5 text-sm font-bold text-white">Новая</span>
+                        <span className="ml-2 inline-block rounded bg-red-600 px-1.5 py-0.5 text-xs font-bold text-white">Новая</span>
                       )}
                     </td>
-                    <td className="whitespace-nowrap px-3 py-3">{formatDate(r.created_at)}</td>
-                    <td className="whitespace-nowrap px-3 py-3 font-medium">
+                    <td className="whitespace-nowrap px-3 py-2">{formatDate(r.created_at)}</td>
+                    <td className="whitespace-nowrap px-3 py-2 font-medium">
                       {formatDate(r.call_date)}
                       {r.is_overdue && (
-                        <div className="text-sm font-semibold text-red-700 dark:text-red-300">не исполнена {overdueDays(r)} дн.</div>
+                        <div className="text-xs font-semibold text-red-700 dark:text-red-300">не исполнена {overdueDays(r)} дн.</div>
                       )}
                     </td>
-                    <td className="px-3 py-3">
+                    <td className="px-3 py-2">
                       {r.type_name}
-                      {r.representative_name && <div className="text-sm text-muted-foreground">{r.representative_name}</div>}
+                      {r.representative_name && <div className="text-xs text-muted-foreground">{r.representative_name}</div>}
                     </td>
-                    {showObject && <td className="px-3 py-3">{r.object_name}</td>}
-                    <td className="px-3 py-3 text-sm">
+                    {showObject && <td className="px-3 py-2">{r.object_name}</td>}
+                    <td className="px-3 py-2 text-xs">
                       {keyFields(valuesByRequest[r.id] ?? []).map((t) => (
                         <div key={t}>{t}</div>
                       ))}
                       {r.result_text && <div className="font-semibold">Результат: {r.result_text}</div>}
                     </td>
-                    <td className="px-3 py-3">
+                    <td className="px-3 py-2">
                       <RequestStatusBadge status={r.status} />
                     </td>
-                    <td className="px-3 py-3">{r.initiator_name}</td>
-                    <td className="px-3 py-3">{r.office_name}</td>
+                    <td className="px-3 py-2">{r.initiator_name}</td>
+                    <td className="px-3 py-2">{r.office_name}</td>
                   </tr>
                 );
               })

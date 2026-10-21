@@ -43,18 +43,18 @@ export function RequestComments({ requestId }: { requestId: string }) {
   });
 
   return (
-    <section className="rounded-xl border p-5">
-      <h2 className="mb-4 text-2xl font-semibold">Переписка</h2>
+    <section className="rounded-lg border p-4">
+      <h2 className="mb-4 text-lg font-semibold">Переписка</h2>
       {data.length === 0 ? (
-        <p className="mb-4 text-lg text-muted-foreground">Сообщений пока нет</p>
+        <p className="mb-4 text-sm text-muted-foreground">Сообщений пока нет</p>
       ) : (
         <ul className="mb-4 space-y-3">
           {data.map((c) => (
-            <li key={c.id} className="rounded-lg bg-muted/60 px-4 py-3">
-              <div className="text-sm text-muted-foreground">
+            <li key={c.id} className="rounded-md bg-muted/60 px-4 py-2">
+              <div className="text-xs text-muted-foreground">
                 <span className="font-semibold text-foreground">{c.author?.full_name ?? "—"}</span> · {formatDateTime(c.created_at)}
               </div>
-              <div className="mt-1 whitespace-pre-line text-lg">{c.text}</div>
+              <div className="mt-1 whitespace-pre-line text-sm">{c.text}</div>
             </li>
           ))}
         </ul>
@@ -71,10 +71,10 @@ export function RequestComments({ requestId }: { requestId: string }) {
           onChange={(e) => setText(e.target.value)}
           placeholder="Например: технадзор связался, они на связи"
           rows={2}
-          className="min-w-64 flex-1 text-lg"
+          className="min-w-64 flex-1 text-sm"
         />
-        <Button type="submit" disabled={send.isPending} className="h-auto min-h-12 self-stretch px-6 text-lg">
-          <Send className="size-5" /> Отправить
+        <Button type="submit" disabled={send.isPending} className="h-auto min-h-9 self-stretch px-4 text-sm">
+          <Send className="size-4" /> Отправить
         </Button>
       </form>
     </section>

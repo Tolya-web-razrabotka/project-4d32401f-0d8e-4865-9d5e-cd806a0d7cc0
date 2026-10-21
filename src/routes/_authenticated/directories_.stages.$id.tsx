@@ -7,6 +7,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useProfile } from "@/lib/profile";
 import { showError } from "@/lib/format";
 import { Button } from "@/components/ui/button";
+import { tabsListClass, tabTriggerClass } from "@/lib/ui";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
   AlertDialog,
@@ -29,8 +30,6 @@ export const Route = createFileRoute("/_authenticated/directories_/stages/$id")(
   head: () => ({ meta: [{ title: "Этап — Лидер" }] }),
 });
 
-const TAB_CLASS =
-  "h-12 border px-5 text-lg data-[state=active]:bg-primary data-[state=active]:text-primary-foreground";
 
 function StageCardPage() {
   const { id } = Route.useParams();
@@ -45,18 +44,18 @@ function StageCardPage() {
     <Link
       to="/directories"
       search={{ tab: "stages" }}
-      className="mb-4 inline-flex items-center gap-2 text-lg text-primary hover:underline"
+      className="mb-4 inline-flex items-center gap-2 text-sm text-primary hover:underline"
     >
-      <ArrowLeft className="size-5" /> К справочнику
+      <ArrowLeft className="size-4" /> К справочнику
     </Link>
   );
 
-  if (isLoading) return <div className="text-xl text-muted-foreground">Загрузка…</div>;
+  if (isLoading) return <div className="text-base text-muted-foreground">Загрузка…</div>;
   if (!isNew && !stage) {
     return (
       <div>
         {back}
-        <p className="py-10 text-xl text-muted-foreground">Этап не найден или удалён</p>
+        <p className="py-10 text-base text-muted-foreground">Этап не найден или удалён</p>
       </div>
     );
   }
@@ -64,7 +63,7 @@ function StageCardPage() {
     return (
       <div>
         {back}
-        <p className="py-10 text-xl text-muted-foreground">Добавлять этапы может только администратор</p>
+        <p className="py-10 text-base text-muted-foreground">Добавлять этапы может только администратор</p>
       </div>
     );
   }
@@ -72,13 +71,13 @@ function StageCardPage() {
   return (
     <div>
       {back}
-      <div className="mb-6 flex flex-wrap items-start gap-4">
-        <h1 className="flex-1 text-3xl font-bold">
+      <div className="mb-4 flex flex-wrap items-start gap-4">
+        <h1 className="flex-1 text-xl font-bold">
           {isNew ? (
             "Новый этап"
           ) : (
             <span className="inline-flex items-center gap-3">
-              {stage!.is_critical && <Flag className="size-6 fill-destructive text-destructive" aria-label="Критичный" />}
+              {stage!.is_critical && <Flag className="size-4 fill-destructive text-destructive" aria-label="Критичный" />}
               {stage!.number}. {stage!.name}
             </span>
           )}
@@ -87,14 +86,14 @@ function StageCardPage() {
       </div>
 
       <Tabs key={id} defaultValue="main">
-        <TabsList className="mb-6 flex h-auto flex-wrap justify-start gap-2 bg-transparent p-0">
-          <TabsTrigger value="main" className={TAB_CLASS}>Основное</TabsTrigger>
-          <TabsTrigger value="conditions" className={TAB_CLASS} disabled={isNew}>Условия закрытия</TabsTrigger>
-          <TabsTrigger value="predecessors" className={TAB_CLASS} disabled={isNew}>Предшествующие этапы</TabsTrigger>
-          <TabsTrigger value="steps" className={TAB_CLASS} disabled={isNew}>Сценарий</TabsTrigger>
+        <TabsList className={tabsListClass}>
+          <TabsTrigger value="main" className={tabTriggerClass}>Основное</TabsTrigger>
+          <TabsTrigger value="conditions" className={tabTriggerClass} disabled={isNew}>Условия закрытия</TabsTrigger>
+          <TabsTrigger value="predecessors" className={tabTriggerClass} disabled={isNew}>Предшествующие этапы</TabsTrigger>
+          <TabsTrigger value="steps" className={tabTriggerClass} disabled={isNew}>Сценарий</TabsTrigger>
         </TabsList>
         {isNew && (
-          <p className="mb-4 text-base text-muted-foreground">
+          <p className="mb-4 text-sm text-muted-foreground">
             Сначала сохраните основные данные — после этого откроются условия, предшествующие этапы и сценарий.
           </p>
         )}
@@ -147,22 +146,22 @@ function DeleteStage({ id, name }: { id: string; name: string }) {
   });
   return (
     <>
-      <Button variant="outline" onClick={() => setOpen(true)} className="h-12 text-lg text-destructive">
-        <Trash2 className="size-5" /> Удалить этап
+      <Button variant="outline" onClick={() => setOpen(true)} className="h-9 text-sm text-destructive">
+        <Trash2 className="size-4" /> Удалить этап
       </Button>
       <AlertDialog open={open} onOpenChange={setOpen}>
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle className="text-xl">Удалить этап?</AlertDialogTitle>
-            <AlertDialogDescription className="text-base">
+            <AlertDialogTitle className="text-base">Удалить этап?</AlertDialogTitle>
+            <AlertDialogDescription className="text-sm">
               «{name}» исчезнет из справочника. На уже созданных объектах этап останется. Если этап нужно только
               временно не предлагать — лучше снимите галочку «Активен».
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel className="h-11 text-base">Отмена</AlertDialogCancel>
+            <AlertDialogCancel className="h-9 text-sm">Отмена</AlertDialogCancel>
             <AlertDialogAction
-              className="h-11 bg-destructive text-base text-destructive-foreground hover:bg-destructive/90"
+              className="h-9 bg-destructive text-sm text-destructive-foreground hover:bg-destructive/90"
               onClick={(e) => {
                 e.preventDefault();
                 m.mutate();

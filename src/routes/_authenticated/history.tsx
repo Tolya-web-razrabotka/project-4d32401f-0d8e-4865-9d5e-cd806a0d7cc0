@@ -33,34 +33,34 @@ function HistoryPage() {
 
   return (
     <div>
-      <h1 className="mb-6 text-3xl font-bold">История</h1>
+      <h1 className="mb-4 text-xl font-bold">История</h1>
       <div className="mb-5 flex flex-wrap items-center gap-3">
         <Select value={objectId} onValueChange={setObjectId}>
-          <SelectTrigger className="h-12 w-72 text-lg"><SelectValue /></SelectTrigger>
+          <SelectTrigger className="h-9 w-60 text-sm"><SelectValue /></SelectTrigger>
           <SelectContent>
-            <SelectItem value={ALL} className="text-base">Все объекты</SelectItem>
+            <SelectItem value={ALL} className="text-sm">Все объекты</SelectItem>
             {objects.map((o) => (
-              <SelectItem key={o.id} value={o.id} className="text-base">{o.name}</SelectItem>
+              <SelectItem key={o.id} value={o.id} className="text-sm">{o.name}</SelectItem>
             ))}
           </SelectContent>
         </Select>
         <Select value={type} onValueChange={setType}>
-          <SelectTrigger className="h-12 w-48 text-lg"><SelectValue /></SelectTrigger>
+          <SelectTrigger className="h-9 w-48 text-sm"><SelectValue /></SelectTrigger>
           <SelectContent>
-            <SelectItem value={ALL} className="text-base">Всё</SelectItem>
+            <SelectItem value={ALL} className="text-sm">Всё</SelectItem>
             {TYPES.map((t) => (
-              <SelectItem key={t.v} value={t.v} className="text-base">{t.label}</SelectItem>
+              <SelectItem key={t.v} value={t.v} className="text-sm">{t.label}</SelectItem>
             ))}
           </SelectContent>
         </Select>
-        <label className="flex items-center gap-2 text-lg">
-          с <Input type="date" value={from} onChange={(e) => setFrom(e.target.value)} className="h-12 w-44 text-lg" />
-          по <Input type="date" value={to} onChange={(e) => setTo(e.target.value)} className="h-12 w-44 text-lg" />
+        <label className="flex items-center gap-2 text-sm">
+          с <Input type="date" value={from} onChange={(e) => setFrom(e.target.value)} className="h-9 w-44 text-sm" />
+          по <Input type="date" value={to} onChange={(e) => setTo(e.target.value)} className="h-9 w-44 text-sm" />
         </label>
         {(objectId !== ALL || type !== ALL || from || to) && (
           <Button
             variant="ghost"
-            className="h-12 text-lg"
+            className="h-9 text-sm"
             onClick={() => {
               setObjectId(ALL);
               setType(ALL);

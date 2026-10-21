@@ -19,9 +19,9 @@ function NotFoundComponent() {
   return (
     <div className="flex min-h-screen items-center justify-center bg-background px-4">
       <div className="max-w-md text-center">
-        <h1 className="text-5xl font-bold">404</h1>
-        <p className="mt-4 text-lg">Страница не найдена</p>
-        <Link to="/" className="mt-6 inline-block rounded-lg bg-primary px-6 py-3 text-lg text-primary-foreground">
+        <h1 className="text-3xl font-bold">404</h1>
+        <p className="mt-4 text-sm">Страница не найдена</p>
+        <Link to="/" className="mt-6 inline-block rounded-md bg-primary px-4 py-2 text-sm text-primary-foreground">
           На главную
         </Link>
       </div>
@@ -38,13 +38,13 @@ function ErrorComponent({ error, reset }: ErrorComponentProps) {
   return (
     <div className="flex min-h-screen items-center justify-center bg-background px-4">
       <div className="max-w-md text-center">
-        <h1 className="text-2xl font-semibold">Страница не загрузилась</h1>
+        <h1 className="text-lg font-semibold">Страница не загрузилась</h1>
         <button
           onClick={() => {
             router.invalidate();
             reset();
           }}
-          className="mt-6 rounded-lg bg-primary px-6 py-3 text-lg text-primary-foreground"
+          className="mt-6 rounded-md bg-primary px-4 py-2 text-sm text-primary-foreground"
         >
           Попробовать снова
         </button>

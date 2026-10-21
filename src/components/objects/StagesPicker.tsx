@@ -42,41 +42,41 @@ export function StagesPicker({
 
   return (
     <div className="max-w-5xl space-y-4">
-      <div className="sticky top-0 z-10 flex flex-wrap items-center gap-3 rounded-lg border bg-background p-3">
-        <span className="flex-1 text-lg font-semibold">
+      <div className="sticky top-0 z-10 flex flex-wrap items-center gap-3 rounded-md border bg-background p-3">
+        <span className="flex-1 text-sm font-semibold">
           Выбрано этапов: {selected.length} из {templates.length}
         </span>
-        <Button type="button" variant="outline" className="h-11 text-base" onClick={() => setMany(templates.map((t) => t.id), true)}>
+        <Button type="button" variant="outline" className="h-9 text-sm" onClick={() => setMany(templates.map((t) => t.id), true)}>
           Отметить все
         </Button>
-        <Button type="button" variant="outline" className="h-11 text-base" onClick={() => setMany(templates.map((t) => t.id), false)}>
+        <Button type="button" variant="outline" className="h-9 text-sm" onClick={() => setMany(templates.map((t) => t.id), false)}>
           Снять все
         </Button>
       </div>
       {templates.length === 0 && (
-        <p className="py-6 text-center text-lg text-muted-foreground">Все этапы справочника уже добавлены</p>
+        <p className="py-4 text-center text-sm text-muted-foreground">Все этапы справочника уже добавлены</p>
       )}
       {groups.map((g) => {
         const ids = g.items.map((t) => t.id);
         const count = ids.filter((id) => sel.has(id)).length;
         const all = count === ids.length;
         return (
-          <div key={g.id} className="rounded-lg border">
-            <div className="flex flex-wrap items-center gap-3 border-b bg-muted/60 px-4 py-3">
-              <span className="flex-1 text-lg font-semibold">
+          <div key={g.id} className="rounded-md border">
+            <div className="flex flex-wrap items-center gap-3 border-b bg-muted/60 px-4 py-2">
+              <span className="flex-1 text-sm font-semibold">
                 {g.name} <span className="font-normal text-muted-foreground">· {count} из {ids.length}</span>
               </span>
-              <Button type="button" variant="ghost" className="h-10 text-base" onClick={() => setMany(ids, !all)}>
+              <Button type="button" variant="ghost" className="h-8 text-sm" onClick={() => setMany(ids, !all)}>
                 {all ? "Снять группу" : "Отметить группу"}
               </Button>
             </div>
             <div className="divide-y">
               {g.items.map((t) => (
-                <label key={t.id} className="flex cursor-pointer items-center gap-4 px-4 py-3 text-lg hover:bg-muted/40">
-                  <Checkbox className="size-6" checked={sel.has(t.id)} onCheckedChange={(c) => setMany([t.id], c === true)} />
+                <label key={t.id} className="flex cursor-pointer items-center gap-4 px-4 py-2 text-sm hover:bg-muted/40">
+                  <Checkbox className="size-4" checked={sel.has(t.id)} onCheckedChange={(c) => setMany([t.id], c === true)} />
                   <span className="w-8 shrink-0 font-semibold">{t.number}</span>
                   <span className="flex-1">{t.name}</span>
-                  {t.is_critical && <Flag className="size-4 shrink-0 fill-destructive text-destructive" aria-label="Критичный" />}
+                  {t.is_critical && <Flag className="size-3.5 shrink-0 fill-destructive text-destructive" aria-label="Критичный" />}
                 </label>
               ))}
             </div>

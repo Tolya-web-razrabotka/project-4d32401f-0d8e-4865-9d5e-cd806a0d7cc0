@@ -4,6 +4,7 @@ import { ArrowLeft, Pencil } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useProfile } from "@/lib/profile";
 import { Button } from "@/components/ui/button";
+import { tabsListClass, tabTriggerClass } from "@/lib/ui";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useObject } from "@/components/objects/data";
 import { ObjectHeader } from "@/components/objects/ObjectHeader";
@@ -26,8 +27,6 @@ export const Route = createFileRoute("/_authenticated/objects_/$id")({
   head: () => ({ meta: [{ title: "Объект — Лидер" }] }),
 });
 
-const TAB_CLASS =
-  "h-12 border px-5 text-lg data-[state=active]:bg-primary data-[state=active]:text-primary-foreground";
 
 function ObjectPage() {
   const { id } = Route.useParams();
@@ -40,17 +39,17 @@ function ObjectPage() {
     navigate({ search: { tab: next.tab, ...(next.type ? { type: next.type } : {}) }, replace: true });
 
   const back = (
-    <Link to="/objects" className="mb-4 inline-flex items-center gap-2 text-lg text-primary hover:underline">
-      <ArrowLeft className="size-5" /> К объектам
+    <Link to="/objects" className="mb-4 inline-flex items-center gap-2 text-sm text-primary hover:underline">
+      <ArrowLeft className="size-4" /> К объектам
     </Link>
   );
 
-  if (isLoading) return <div className="text-xl text-muted-foreground">Загрузка…</div>;
+  if (isLoading) return <div className="text-base text-muted-foreground">Загрузка…</div>;
   if (!o) {
     return (
       <div>
         {back}
-        <p className="py-10 text-xl text-muted-foreground">Объект не найден или у вас нет к нему доступа</p>
+        <p className="py-10 text-base text-muted-foreground">Объект не найден или у вас нет к нему доступа</p>
       </div>
     );
   }
@@ -62,9 +61,9 @@ function ObjectPage() {
         o={o}
         actions={
           is_admin && (
-            <Button asChild variant="outline" className="h-12 text-lg">
+            <Button asChild variant="outline" className="h-9 text-sm">
               <Link to="/objects/$id/edit" params={{ id }}>
-                <Pencil className="size-5" /> Редактировать
+                <Pencil className="size-4" /> Редактировать
               </Link>
             </Button>
           )
@@ -79,11 +78,11 @@ function ObjectPage() {
         />
 
         <Tabs value={tab} onValueChange={(v) => go({ tab: v as Tab })} className="min-w-0">
-          <TabsList className="mb-5 flex h-auto flex-wrap justify-start gap-2 bg-transparent p-0">
-            <TabsTrigger value="stages" className={TAB_CLASS}>Этапы</TabsTrigger>
-            <TabsTrigger value="requests" className={TAB_CLASS}>Заявки</TabsTrigger>
-            <TabsTrigger value="members" className={TAB_CLASS}>Участники</TabsTrigger>
-            <TabsTrigger value="history" className={TAB_CLASS}>История</TabsTrigger>
+          <TabsList className={tabsListClass}>
+            <TabsTrigger value="stages" className={tabTriggerClass}>Этапы</TabsTrigger>
+            <TabsTrigger value="requests" className={tabTriggerClass}>Заявки</TabsTrigger>
+            <TabsTrigger value="members" className={tabTriggerClass}>Участники</TabsTrigger>
+            <TabsTrigger value="history" className={tabTriggerClass}>История</TabsTrigger>
           </TabsList>
           <TabsContent value="stages">
             <StagesTable
@@ -140,7 +139,7 @@ function RequestTypeButtons({
 
   return (
     <nav className="flex flex-wrap gap-2 xl:flex-col xl:flex-nowrap" aria-label="Виды заявок">
-      <div className="hidden pb-1 text-base font-semibold text-muted-foreground xl:block">Заявки</div>
+      <div className="hidden pb-1 text-sm font-semibold text-muted-foreground xl:block">Заявки</div>
       {types
         .filter((t) => t.is_active)
         .map((t) => {
@@ -151,18 +150,18 @@ function RequestTypeButtons({
               key={t.id}
               type="button"
               onClick={() => onPick(t.id)}
-              className={`flex min-h-12 items-center gap-2 rounded-lg border-2 px-4 py-2 text-left text-lg font-medium transition-colors ${
+              className={`flex min-h-9 items-center gap-2 rounded-md border-2 px-4 py-2 text-left text-sm font-medium transition-colors ${
                 active ? "border-primary bg-primary text-primary-foreground" : "bg-card hover:bg-accent"
               }`}
             >
               <span className="flex-1">{t.name}</span>
               {c && c.fresh > 0 && (
-                <span title="Новые" className="rounded-full bg-red-600 px-2 text-base font-bold text-white">
+                <span title="Новые" className="rounded-full bg-red-600 px-2 text-sm font-bold text-white">
                   {c.fresh}
                 </span>
               )}
               {c && c.overdue > 0 && (
-                <span title="Просроченные" className="rounded-full bg-red-900 px-2 text-base font-bold text-white">
+                <span title="Просроченные" className="rounded-full bg-red-900 px-2 text-sm font-bold text-white">
                   !{c.overdue}
                 </span>
               )}
@@ -192,11 +191,11 @@ function MembersList({ objectId }: { objectId: string }) {
     },
   });
   if (isLoading) return null;
-  if (data.length === 0) return <p className="py-6 text-lg text-muted-foreground">Участники не назначены</p>;
+  if (data.length === 0) return <p className="py-4 text-sm text-muted-foreground">Участники не назначены</p>;
   return (
-    <div className="divide-y rounded-lg border">
+    <div className="divide-y rounded-md border">
       {data.map((m) => (
-        <div key={m.profile_id} className="flex flex-wrap gap-x-6 gap-y-1 px-4 py-3 text-lg">
+        <div key={m.profile_id} className="flex flex-wrap gap-x-6 gap-y-1 px-4 py-2 text-sm">
           <span className="w-48 text-muted-foreground">{m.profile?.role?.name}</span>
           <span className="flex-1 font-medium">{m.profile?.full_name}</span>
           {m.profile?.phone && <span>{m.profile.phone}</span>}

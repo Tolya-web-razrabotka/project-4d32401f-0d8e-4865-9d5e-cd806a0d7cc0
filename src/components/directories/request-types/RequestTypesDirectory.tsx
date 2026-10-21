@@ -38,12 +38,12 @@ export function RequestTypesDirectory() {
   return (
     <div className="max-w-4xl">
       <div className="mb-4 flex flex-wrap items-center gap-3">
-        <p className="flex-1 text-base text-muted-foreground">
+        <p className="flex-1 text-sm text-muted-foreground">
           Виды заявок — это кнопки на странице объекта, в том же порядке. Нажмите на вид, чтобы настроить его поля.
         </p>
         {is_admin && (
-          <Button onClick={() => open("new")} className="h-12 px-6 text-lg">
-            <Plus className="size-5" /> Добавить
+          <Button onClick={() => open("new")} className="h-9 px-4 text-sm">
+            <Plus className="size-4" /> Добавить
           </Button>
         )}
       </div>
@@ -58,17 +58,17 @@ export function RequestTypesDirectory() {
             className={`flex w-full items-center gap-4 rounded-md py-1 text-left ${t.is_active ? "" : "text-muted-foreground"}`}
           >
             <div className="min-w-0 flex-1">
-              <div className="text-xl font-semibold">
+              <div className="text-base font-semibold">
                 {t.name}
-                {!t.is_active && <span className="ml-3 text-base font-normal">· неактивен</span>}
+                {!t.is_active && <span className="ml-3 text-sm font-normal">· неактивен</span>}
               </div>
-              <div className="mt-1 flex flex-wrap gap-x-5 gap-y-1 text-base text-muted-foreground">
+              <div className="mt-1 flex flex-wrap gap-x-5 gap-y-1 text-sm text-muted-foreground">
                 <span>Полей: {countFields(t.id)}</span>
                 {t.uses_representatives && <span>Выбор из представителей</span>}
                 <span>{t.send_to_email ? `Отправка: ${t.send_to_email}` : "Адрес отправки не указан"}</span>
               </div>
             </div>
-            <ChevronRight className="size-6 shrink-0 text-muted-foreground" />
+            <ChevronRight className="size-4 shrink-0 text-muted-foreground" />
           </button>
         )}
       />

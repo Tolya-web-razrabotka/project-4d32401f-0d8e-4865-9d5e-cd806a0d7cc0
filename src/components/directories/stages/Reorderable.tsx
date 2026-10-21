@@ -47,7 +47,7 @@ export function Reorderable<T extends { id: string }>({
             setDragId(null);
             setOverId(null);
           }}
-          className={`flex items-start gap-2 rounded-lg border bg-card p-3 transition-colors ${
+          className={`flex items-start gap-2 rounded-md border bg-card p-3 transition-colors ${
             dragId === item.id ? "opacity-50" : ""
           } ${overId === item.id && dragId !== item.id ? "border-primary bg-accent" : ""}`}
         >
@@ -67,7 +67,7 @@ export function Reorderable<T extends { id: string }>({
                 title="Перетащите, чтобы изменить порядок"
                 className="cursor-grab rounded p-1 text-muted-foreground hover:bg-muted active:cursor-grabbing"
               >
-                <GripVertical className="size-6" />
+                <GripVertical className="size-4" />
               </span>
               <Button
                 type="button"
@@ -78,7 +78,7 @@ export function Reorderable<T extends { id: string }>({
                 onClick={() => move(index, index - 1)}
                 aria-label="Выше"
               >
-                <ArrowUp className="size-5" />
+                <ArrowUp className="size-4" />
               </Button>
               <Button
                 type="button"
@@ -89,7 +89,7 @@ export function Reorderable<T extends { id: string }>({
                 onClick={() => move(index, index + 1)}
                 aria-label="Ниже"
               >
-                <ArrowDown className="size-5" />
+                <ArrowDown className="size-4" />
               </Button>
             </div>
           )}

@@ -60,37 +60,37 @@ export function RequestProgress({
   const blockedReady = next?.v === "ready" && missingRequired.length > 0;
 
   return (
-    <section className="rounded-xl border-2 p-5">
-      <h2 className="mb-4 text-2xl font-semibold">Ход заявки</h2>
-      <ol className="mb-6 grid gap-3 sm:grid-cols-5">
+    <section className="rounded-lg border-2 p-4">
+      <h2 className="mb-4 text-lg font-semibold">Ход заявки</h2>
+      <ol className="mb-4 grid gap-3 sm:grid-cols-5">
         {REQUEST_STATUSES.map((s, i) => {
           const done = i <= idx;
           const current = i === idx;
           return (
             <li
               key={s.v}
-              className={`rounded-lg border-2 p-3 ${
+              className={`rounded-md border-2 p-3 ${
                 current ? "border-primary bg-accent" : done ? "border-green-600/40 bg-green-50 dark:bg-green-950/30" : "border-border text-muted-foreground"
               }`}
             >
-              <div className="flex items-center gap-2 text-base font-semibold">
+              <div className="flex items-center gap-2 text-sm font-semibold">
                 <span
-                  className={`flex size-7 shrink-0 items-center justify-center rounded-full text-sm ${
+                  className={`flex size-5 shrink-0 items-center justify-center rounded-full text-xs ${
                     done ? "bg-green-600 text-white" : "border-2 border-current"
                   }`}
                 >
-                  {done ? <Check className="size-4" /> : i + 1}
+                  {done ? <Check className="size-3.5" /> : i + 1}
                 </span>
                 {s.label}
               </div>
-              {done && <div className="mt-1 text-sm text-muted-foreground">{when(s.v)}</div>}
+              {done && <div className="mt-1 text-xs text-muted-foreground">{when(s.v)}</div>}
             </li>
           );
         })}
       </ol>
 
       {r.status === "done" ? (
-        <p className="text-lg font-medium text-green-700 dark:text-green-400">
+        <p className="text-sm font-medium text-green-700 dark:text-green-400">
           ✓ Исполнена{r.result_text ? ` · Результат: ${r.result_text}` : ""}
         </p>
       ) : (
@@ -101,18 +101,18 @@ export function RequestProgress({
                 value={result}
                 onChange={(e) => setResult(e.target.value)}
                 placeholder="Результат / номер протокола (необязательно)"
-                className="h-12 max-w-xl text-lg"
+                className="h-9 max-w-xl text-sm"
               />
             )}
             <Button
               onClick={() => m.mutate({ to: next.v, ...(next.v === "done" && result.trim() ? { comment: result.trim() } : {}) })}
               disabled={m.isPending || blockedReady}
-              className="h-14 px-10 text-xl"
+              className="h-10 px-5 text-base"
             >
               {next.next}
             </Button>
             {blockedReady && (
-              <p className="text-base text-muted-foreground">
+              <p className="text-sm text-muted-foreground">
                 Сначала заполните обязательные поля: {missingRequired.join(", ")}.
               </p>
             )}
@@ -121,15 +121,15 @@ export function RequestProgress({
       )}
 
       {prev && (
-        <Button variant="ghost" onClick={() => setBack(true)} className="mt-4 h-11 text-base text-muted-foreground">
-          <Undo2 className="size-5" /> Вернуть на шаг назад («{prev.label}»)
+        <Button variant="ghost" onClick={() => setBack(true)} className="mt-4 h-9 text-sm text-muted-foreground">
+          <Undo2 className="size-4" /> Вернуть на шаг назад («{prev.label}»)
         </Button>
       )}
 
       <Dialog open={back} onOpenChange={setBack}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle className="text-xl">Вернуть на шаг «{prev?.label}»</DialogTitle>
+            <DialogTitle className="text-base">Вернуть на шаг «{prev?.label}»</DialogTitle>
           </DialogHeader>
           <form
             className="space-y-4"
@@ -142,10 +142,10 @@ export function RequestProgress({
               if (prev) m.mutate({ to: prev.v, comment: reason.trim() });
             }}
           >
-            <Textarea autoFocus value={reason} onChange={(e) => setReason(e.target.value)} placeholder="Причина — обязательно" rows={3} className="text-lg" />
+            <Textarea autoFocus value={reason} onChange={(e) => setReason(e.target.value)} placeholder="Причина — обязательно" rows={3} className="text-sm" />
             <div className="flex gap-3">
-              <Button type="submit" disabled={m.isPending} className="h-12 flex-1 text-lg">Вернуть</Button>
-              <Button type="button" variant="outline" onClick={() => setBack(false)} className="h-12 flex-1 text-lg">Отмена</Button>
+              <Button type="submit" disabled={m.isPending} className="h-9 flex-1 text-sm">Вернуть</Button>
+              <Button type="button" variant="outline" onClick={() => setBack(false)} className="h-9 flex-1 text-sm">Отмена</Button>
             </div>
           </form>
         </DialogContent>

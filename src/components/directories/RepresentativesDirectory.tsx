@@ -33,8 +33,8 @@ export function RepresentativesDirectory() {
   return (
     <div>
       <Toolbar search={search} onSearch={setSearch} onAdd={is_admin ? () => setEditing("new") : undefined} />
-      <div className="rounded-lg border">
-        <Table className="text-base">
+      <div className="rounded-md border">
+        <Table className="text-sm">
           <TableHeader>
             <TableRow>
               <TableHead>Название</TableHead>
@@ -101,11 +101,11 @@ function RepForm({ rep, onClose }: { rep: Rep | null; onClose: () => void }) {
         m.mutate();
       }}
     >
-      <Field label="Название" required><Input value={name} onChange={(e) => setName(e.target.value)} className="h-12 text-lg" /></Field>
-      <Field label="Телефон"><Input value={phone} onChange={(e) => setPhone(e.target.value)} className="h-12 text-lg" /></Field>
-      <Field label="Email"><Input type="email" value={email} onChange={(e) => setEmail(e.target.value)} className="h-12 text-lg" /></Field>
-      <Field label="Комментарий"><Textarea value={comment} onChange={(e) => setComment(e.target.value)} className="text-lg" /></Field>
-      <label className="flex items-center gap-3 text-lg"><Switch checked={active} onCheckedChange={setActive} /> Активен</label>
+      <Field label="Название" required><Input value={name} onChange={(e) => setName(e.target.value)} className="h-9 text-sm" /></Field>
+      <Field label="Телефон"><Input value={phone} onChange={(e) => setPhone(e.target.value)} className="h-9 text-sm" /></Field>
+      <Field label="Email"><Input type="email" value={email} onChange={(e) => setEmail(e.target.value)} className="h-9 text-sm" /></Field>
+      <Field label="Комментарий"><Textarea value={comment} onChange={(e) => setComment(e.target.value)} className="text-sm" /></Field>
+      <label className="flex items-center gap-3 text-sm"><Switch checked={active} onCheckedChange={setActive} /> Активен</label>
       <FormActions pending={m.isPending} onCancel={onClose} />
       {rep && (
         <div className="border-t pt-4">

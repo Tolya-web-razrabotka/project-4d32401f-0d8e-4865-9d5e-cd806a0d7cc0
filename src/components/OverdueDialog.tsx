@@ -97,31 +97,31 @@ export function OverdueDialog() {
     <Dialog open={open} onOpenChange={(v) => (!v ? ack() : setOpen(true))}>
       <DialogContent className="flex h-[95vh] max-w-[95vw] flex-col sm:max-w-[95vw]">
         <DialogHeader>
-          <DialogTitle className="flex items-center gap-3 text-3xl text-red-700 dark:text-red-300">
-            <AlertTriangle className="size-9" /> Просрочено: {items.length}
+          <DialogTitle className="flex items-center gap-3 text-xl text-red-700 dark:text-red-300">
+            <AlertTriangle className="size-6" /> Просрочено: {items.length}
           </DialogTitle>
-          <DialogDescription className="text-lg">Эти заявки и этапы требуют внимания.</DialogDescription>
+          <DialogDescription className="text-sm">Эти заявки и этапы требуют внимания.</DialogDescription>
         </DialogHeader>
-        <div className="min-h-0 flex-1 overflow-y-auto rounded-lg border">
-          <table className="w-full text-lg">
+        <div className="min-h-0 flex-1 overflow-y-auto rounded-md border">
+          <table className="w-full text-sm">
             <thead className="sticky top-0 bg-background">
               <tr className="border-b text-left text-muted-foreground">
-                <th className="px-4 py-3 font-semibold">Что</th>
-                <th className="px-4 py-3 font-semibold">Объект</th>
-                <th className="px-4 py-3 font-semibold">Просрочено</th>
-                <th className="px-4 py-3" />
+                <th className="px-4 py-2 font-semibold">Что</th>
+                <th className="px-4 py-2 font-semibold">Объект</th>
+                <th className="px-4 py-2 font-semibold">Просрочено</th>
+                <th className="px-4 py-2" />
               </tr>
             </thead>
             <tbody>
               {items.map((it) => (
                 <tr key={it.key} className="border-t bg-red-50/60 dark:bg-red-950/30">
-                  <td className="px-4 py-3 font-medium">{it.what}</td>
-                  <td className="px-4 py-3">{it.objectName}</td>
-                  <td className="whitespace-nowrap px-4 py-3 font-bold text-red-700 dark:text-red-300">{it.days} дн.</td>
-                  <td className="px-4 py-3 text-right">
+                  <td className="px-4 py-2 font-medium">{it.what}</td>
+                  <td className="px-4 py-2">{it.objectName}</td>
+                  <td className="whitespace-nowrap px-4 py-2 font-bold text-red-700 dark:text-red-300">{it.days} дн.</td>
+                  <td className="px-4 py-2 text-right">
                     <Button
                       variant="outline"
-                      className="h-11 text-base"
+                      className="h-9 text-sm"
                       onClick={() => {
                         ack();
                         it.open();
@@ -135,7 +135,7 @@ export function OverdueDialog() {
             </tbody>
           </table>
         </div>
-        <Button onClick={ack} className="h-14 w-full text-xl sm:w-auto sm:self-end sm:px-16">
+        <Button onClick={ack} className="h-10 w-full text-base sm:w-auto sm:self-end sm:px-10">
           Понятно
         </Button>
       </DialogContent>
