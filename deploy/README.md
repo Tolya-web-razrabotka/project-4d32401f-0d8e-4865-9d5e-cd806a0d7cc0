@@ -60,7 +60,15 @@ DOMAIN=lider.example.ru bash /opt/lider/app/deploy/deploy.sh domain
 certbot --nginx -d lider.example.ru --redirect
 ```
 
-Меняется только файл сайта `lider` в nginx; certbot дописывает HTTPS только в него. Порт 8100 после этого закрывается. Сертификат продлевается сам.
+Меняется только файл сайта `lider` в nginx; certbot дописывает HTTPS только в него.
+
+**Если порт 443 занимает распределитель `stream`** (как на «Сане»: `grep -r "listen 443" /etc/nginx/stream-enabled/`), certbot пропишет `listen 443 ssl`, и nginx не сможет перечитать настройки. Сразу после certbot заменить эту строку на внутренний порт соседних сайтов:
+
+```bash
+cp /etc/nginx/sites-available/lider /opt/lider/nginx-lider.bak
+sed -i 's|^\s*listen 443 ssl; # managed by Certbot|    listen 127.0.0.1:10444 ssl proxy_protocol; # managed by Certbot|' /etc/nginx/sites-available/lider
+nginx -t && systemctl reload nginx
+``` Порт 8100 после этого закрывается. Сертификат продлевается сам.
 
 3. Supabase → Authentication → URL Configuration: добавить `https://lider.example.ru` в Redirect URLs (для писем сброса пароля).
 
