@@ -144,6 +144,11 @@ EOF
 port80_owner() { ss -ltnp '( sport = :80 )' 2>/dev/null | awk 'NR>1{print $NF}' | head -1; }
 
 setup_nginx() {
+  # После certbot файл сайта содержит настройки HTTPS — перезаписывать его нельзя
+  if grep -qs 'managed by Certbot' /etc/nginx/sites-available/lider; then
+    URL="https://$(grep -m1 -oP 'server_name\s+\K[^ ;]+' /etc/nginx/sites-available/lider)/"
+    ok "nginx уже настроен с HTTPS — не меняю ($URL)"; return
+  fi
   local owner; owner="$(port80_owner)"
   if [ -n "$owner" ] && ! echo "$owner" | grep -q nginx; then
     warn "Порт 80 занят не nginx ($owner) — nginx не трогаю"
