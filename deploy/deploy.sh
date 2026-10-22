@@ -134,7 +134,7 @@ EOF
   systemctl enable --quiet "$SERVICE"
   systemctl restart "$SERVICE"
   for _ in $(seq 1 20); do
-    curl -fsS -o /dev/null "http://127.0.0.1:$APP_PORT/login" && { ok "приложение отвечает на 127.0.0.1:$APP_PORT"; return; }
+    curl -fs -o /dev/null "http://127.0.0.1:$APP_PORT/login" && { ok "приложение отвечает на 127.0.0.1:$APP_PORT"; return; }
     sleep 1
   done
   journalctl -u "$SERVICE" -n 40 --no-pager || true
@@ -239,7 +239,7 @@ case "${1:-}" in
   update)
     pull_code; install_node; install_bun; build_app
     systemctl restart "$SERVICE"
-    for _ in $(seq 1 20); do curl -fsS -o /dev/null "http://127.0.0.1:$APP_PORT/login" && { ok "обновлено и работает"; exit 0; }; sleep 1; done
+    for _ in $(seq 1 20); do curl -fs -o /dev/null "http://127.0.0.1:$APP_PORT/login" && { ok "обновлено и работает"; exit 0; }; sleep 1; done
     journalctl -u "$SERVICE" -n 40 --no-pager; die "После обновления приложение не отвечает — журнал выше"
     ;;
   status)
