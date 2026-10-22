@@ -242,8 +242,21 @@ case "${1:-}" in
     for _ in $(seq 1 20); do curl -fs -o /dev/null "http://127.0.0.1:$APP_PORT/login" && { ok "обновлено и работает"; exit 0; }; sleep 1; done
     journalctl -u "$SERVICE" -n 40 --no-pager; die "После обновления приложение не отвечает — журнал выше"
     ;;
+  domain)
+    # Подключить домен к уже установленному «Лидеру»: меняется только файл сайта lider в nginx
+    [ -n "$DOMAIN" ] || die "Укажите домен: DOMAIN=lider.example.ru bash deploy/deploy.sh domain"
+    systemctl is-active --quiet "$SERVICE" || die "Служба $SERVICE не запущена — сначала setup"
+    ip_dns="$(getent ahostsv4 "$DOMAIN" | awk 'NR==1{print $1}')"
+    [ "$ip_dns" = "$(server_ip)" ] || die "Домен $DOMAIN указывает на «${ip_dns:-никуда}», а не на этот сервер. Проверьте A-запись и подождите обновления DNS"
+    setup_nginx
+    if command -v ufw >/dev/null 2>&1 && ufw status | grep -q '^8100/tcp'; then
+      ufw delete allow 8100/tcp >/dev/null && ok "закрыт старый порт 8100 в ufw"
+    fi
+    say "Готово"; echo "  Сайт: $URL"
+    echo "  HTTPS: certbot --nginx -d $DOMAIN --redirect"
+    ;;
   status)
     systemctl status "$SERVICE" --no-pager -l | head -15; journalctl -u "$SERVICE" -n 20 --no-pager
     ;;
-  *) echo "Использование: bash deploy/deploy.sh setup | update | status"; exit 1 ;;
+  *) echo "Использование: bash deploy/deploy.sh setup | update | domain | status"; exit 1 ;;
 esac

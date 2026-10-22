@@ -50,6 +50,20 @@ bash /opt/lider/app/deploy/deploy.sh setup
 
 Если есть домен: `DOMAIN=lider.example.ru bash /opt/lider/app/deploy/deploy.sh setup` (A-запись домена должна указывать на IP сервера). HTTPS после этого: `apt install -y certbot python3-certbot-nginx && certbot --nginx -d lider.example.ru`.
 
+## Домен и HTTPS (когда «Лидер» уже установлен)
+
+1. У регистратора домена (или в DNS Beget) добавить A-запись: `lider.example.ru` → IP сервера. Подождать 5–30 минут.
+2. На сервере:
+
+```bash
+DOMAIN=lider.example.ru bash /opt/lider/app/deploy/deploy.sh domain
+certbot --nginx -d lider.example.ru --redirect
+```
+
+Меняется только файл сайта `lider` в nginx; certbot дописывает HTTPS только в него. Порт 8100 после этого закрывается. Сертификат продлевается сам.
+
+3. Supabase → Authentication → URL Configuration: добавить `https://lider.example.ru` в Redirect URLs (для писем сброса пароля).
+
 ## Обновление после новых коммитов
 
 ```bash
