@@ -98,6 +98,7 @@ build_app() {
   if [ -f .output/nitro.json ] && ! grep -q '"node-server"\|"node"' .output/nitro.json; then
     die "Собралось не под Node.js (см. .output/nitro.json) — пришлите вывод разработчику"
   fi
+  bun pm cache rm >/dev/null 2>&1 || true   # на сервере мало места — кэш пакетов не храним
   chown -R "$APP_USER:$APP_USER" "$APP_DIR/.output"
   ok "сборка готова: .output/server/index.mjs"
 }
@@ -153,11 +154,22 @@ setup_nginx() {
     apt-get update -qq && DEBIAN_FRONTEND=noninteractive apt-get install -y -qq nginx
   fi
   local name="${DOMAIN:-$(server_ip)}"
-  say "nginx: сайт «lider» для $name → 127.0.0.1:$APP_PORT"
+  # Без домена на сервере с другими сайтами порт 80 по IP уже кто-то обслуживает —
+  # тогда «Лидер» получает свой отдельный порт и чужие сайты не пересекаются с ним.
+  local others; others="$(find /etc/nginx/sites-enabled /etc/nginx/conf.d -mindepth 1 ! -name lider ! -name default 2>/dev/null | wc -l)"
+  local web_port="${WEB_PORT:-}"
+  if [ -z "$web_port" ]; then
+    if [ -n "$DOMAIN" ] || [ "$others" -eq 0 ]; then web_port=80; else web_port=8100; fi
+  fi
+  if [ "$web_port" != 80 ] && ss -ltn "( sport = :$web_port )" | grep -q LISTEN \
+     && ! grep -qs "listen $web_port;" /etc/nginx/sites-available/lider; then
+    die "Порт $web_port занят. Запустите с другим: WEB_PORT=8110 bash deploy/deploy.sh setup"
+  fi
+  say "nginx: сайт «lider» на порту $web_port → 127.0.0.1:$APP_PORT"
   cat > /etc/nginx/sites-available/lider <<EOF
 # «Лидер» — добавлено deploy/deploy.sh. Другие сайты не затрагиваются.
 server {
-    listen 80;
+    listen $web_port;
     server_name $name;
     client_max_body_size 60m;
 
@@ -181,10 +193,15 @@ EOF
     rm -f /etc/nginx/sites-enabled/default && warn "отключена стандартная страница nginx (файл сохранён в sites-available)"
   fi
   nginx -t >/dev/null 2>&1 || { nginx -t; rm -f /etc/nginx/sites-enabled/lider; die "Ошибка в конфиге nginx — сайт lider отключён, остальное не тронуто"; }
-  systemctl enable --quiet nginx; systemctl reload nginx 2>/dev/null || systemctl restart nginx
-  open_port 80
-  ok "сайт: http://$name/"
-  URL="http://$name/"
+  # Только плавная перезагрузка: работающие сайты не прерываются. Перезапуск nginx не делаем.
+  if systemctl is-active --quiet nginx; then
+    systemctl reload nginx || die "nginx не перечитал настройки — сайт lider добавлен, но другие сайты работают как прежде"
+  else
+    systemctl enable --quiet nginx; systemctl start nginx
+  fi
+  open_port "$web_port"
+  if [ "$web_port" = 80 ]; then URL="http://$name/"; else URL="http://$name:$web_port/"; fi
+  ok "сайт: $URL"
 }
 
 expose_direct() {
