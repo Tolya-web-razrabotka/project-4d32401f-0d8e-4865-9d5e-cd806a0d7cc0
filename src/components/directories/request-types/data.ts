@@ -12,7 +12,7 @@ export type RequestType = {
   send_to_email: string | null;
 };
 
-export type FieldType = "text" | "number" | "date" | "select" | "checkbox" | "file";
+export type FieldType = "text" | "number" | "date" | "select" | "checkbox" | "file" | "picket_range";
 
 export type RequestField = {
   id: string;
@@ -33,6 +33,7 @@ export const FIELD_TYPES: { v: FieldType; label: string }[] = [
   { v: "select", label: "Выпадающий список" },
   { v: "checkbox", label: "Галочка" },
   { v: "file", label: "Файл (фото, видео, PDF)" },
+  { v: "picket_range", label: "Пикеты (от – до)" },
 ];
 
 export const FILLED_BY: { v: RequestField["filled_by"]; label: string }[] = [
