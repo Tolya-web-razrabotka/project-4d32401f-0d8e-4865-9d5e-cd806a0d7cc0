@@ -2,7 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { daysBetween, mskToday } from "@/lib/dates";
 import { useObjects } from "@/components/objects/data";
-import { statusInfo } from "@/components/requests/data";
+import { statusInfo, useRequestStatuses } from "@/components/requests/data";
 
 export const OVERDUE_KEY = ["overdue"] as const;
 
@@ -31,6 +31,7 @@ export type OverdueItem = {
  */
 export function useOverdueItems() {
   const { data: objects = [], isLoading: objectsLoading } = useObjects();
+  const statuses = useRequestStatuses();
   const q = useQuery({
     queryKey: OVERDUE_KEY,
     refetchInterval: 60_000,
@@ -59,7 +60,7 @@ export function useOverdueItems() {
         ...q.data.requests
           .filter((r) => r.id && r.object_id && r.call_date && active.has(r.object_id))
           .map((r) => {
-            const s = statusInfo(r.status ?? "new");
+            const s = statusInfo(r.status ?? "new", statuses);
             return {
               key: `r-${r.id}`,
               kind: "request" as const,

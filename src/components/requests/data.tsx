@@ -15,7 +15,34 @@ export const REQUEST_STATUSES: { v: RequestStatus; label: string; next: string; 
   { v: "done", label: "Исполнена", next: "Исполнено", color: "#2E7D4F" },
 ];
 
-export const statusInfo = (s: string) => REQUEST_STATUSES.find((x) => x.v === s) ?? REQUEST_STATUSES[0]!;
+export type RequestStatusDef = (typeof REQUEST_STATUSES)[number];
+
+export const statusInfo = (s: string, list: RequestStatusDef[] = REQUEST_STATUSES) =>
+  list.find((x) => x.v === s) ?? list[0]!;
+
+export const REQUEST_STATUSES_KEY = ["dir-request-statuses"] as const;
+
+/**
+ * Шаги «Хода заявки» с названиями, текстом кнопок и цветами из справочника «Статусы заявки»
+ * (правка 2.14, db/10). Коды и порядок — фиксированные; пока справочник не загрузился
+ * или скрипт 10 не выполнен — встроенные значения.
+ */
+export function useRequestStatuses(): RequestStatusDef[] {
+  const { data } = useQuery({
+    queryKey: REQUEST_STATUSES_KEY,
+    staleTime: 5 * 60_000,
+    retry: false,
+    queryFn: async () => {
+      const { data, error } = await supabase.from("request_statuses").select("code, name, action_label, color");
+      if (error) return [];
+      return data ?? [];
+    },
+  });
+  return REQUEST_STATUSES.map((d) => {
+    const row = data?.find((x) => x.code === d.v);
+    return row ? { ...d, label: row.name || d.label, next: row.action_label || d.next, color: row.color || d.color } : d;
+  });
+}
 
 export type RequestRow = {
   id: string;
@@ -109,7 +136,7 @@ export function overdueDays(r: RequestRow) {
 }
 
 export function RequestStatusBadge({ status }: { status: string }) {
-  const s = statusInfo(status);
+  const s = statusInfo(status, useRequestStatuses());
   return <ToneBadge color={s.color}>{s.label}</ToneBadge>;
 }
 

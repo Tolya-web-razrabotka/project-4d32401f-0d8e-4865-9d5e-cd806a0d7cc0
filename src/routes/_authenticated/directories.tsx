@@ -6,6 +6,7 @@ import { RepresentativesDirectory } from "@/components/directories/Representativ
 import { CustomersDirectory } from "@/components/directories/CustomersDirectory";
 import { EmployeesDirectory } from "@/components/directories/EmployeesDirectory";
 import { StatusesDirectory } from "@/components/directories/StatusesDirectory";
+import { RequestStatusesDirectory } from "@/components/directories/RequestStatusesDirectory";
 import { WorkTypesDirectory } from "@/components/directories/WorkTypesDirectory";
 import { ObjectTypesDirectory } from "@/components/directories/ObjectTypesDirectory";
 import { StagesDirectory } from "@/components/directories/stages/StagesDirectory";
@@ -21,6 +22,7 @@ const TABS = [
   { v: "customers", label: "Заказчики" },
   { v: "employees", label: "Сотрудники" },
   { v: "statuses", label: "Статусы этапа" },
+  { v: "request-statuses", label: "Статусы заявки" },
 ] as const;
 
 type TabValue = (typeof TABS)[number]["v"];
@@ -71,6 +73,7 @@ function DirectoriesPage() {
         <TabsContent value="customers"><CustomersDirectory /></TabsContent>
         <TabsContent value="employees"><EmployeesDirectory /></TabsContent>
         <TabsContent value="statuses"><StatusesDirectory /></TabsContent>
+        <TabsContent value="request-statuses"><RequestStatusesDirectory /></TabsContent>
       </Tabs>
     </div>
   );

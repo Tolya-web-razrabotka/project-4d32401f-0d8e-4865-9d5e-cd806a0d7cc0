@@ -12,7 +12,7 @@ import { Toolbar } from "@/components/directories/common";
 import { useRequestTypes } from "@/components/directories/request-types/data";
 import { useObjects } from "@/components/objects/data";
 import {
-  REQUEST_STATUSES,
+  useRequestStatuses,
   RequestStatusBadge,
   formatValue,
   overdueDays,
@@ -57,6 +57,7 @@ export function RequestsList({
   const navigate = useNavigate();
   const { data: rows = [], isLoading } = useRequests(objectId);
   const { data: types = [] } = useRequestTypes();
+  const statuses = useRequestStatuses();
   const { data: objects = [] } = useObjects();
   const ids = rows.map((r) => r.id);
   const { data: values = [] } = useFieldValues(ids, objectId ?? "all");
@@ -116,7 +117,7 @@ export function RequestsList({
     ...(showObject ? [{ header: "Объект", value: (r: RequestRow) => r.object_name, width: 35 }] : []),
     { header: "Кого вызываем", value: (r) => r.representative_name, width: 18 },
     { header: "Поля", value: (r) => keyFields(valuesByRequest[r.id] ?? []).join("; "), width: 40 },
-    { header: "Статус", value: (r) => statusInfo(r.status).label + (r.is_overdue ? ` (не исполнена ${overdueDays(r)} дн.)` : ""), width: 22 },
+    { header: "Статус", value: (r) => statusInfo(r.status, statuses).label + (r.is_overdue ? ` (не исполнена ${overdueDays(r)} дн.)` : ""), width: 22 },
     { header: "Результат", value: (r) => r.result_text, width: 20 },
     { header: "Инициатор", value: (r) => r.initiator_name, width: 20 },
     { header: "Офис-менеджер", value: (r) => r.office_name, width: 20 },
@@ -170,7 +171,7 @@ export function RequestsList({
           <SelectTrigger className="h-9 w-52 text-sm"><SelectValue /></SelectTrigger>
           <SelectContent>
             <SelectItem value={ALL} className="text-sm">Все статусы</SelectItem>
-            {REQUEST_STATUSES.map((s) => (
+            {statuses.map((s) => (
               <SelectItem key={s.v} value={s.v} className="text-sm">{s.label}</SelectItem>
             ))}
           </SelectContent>

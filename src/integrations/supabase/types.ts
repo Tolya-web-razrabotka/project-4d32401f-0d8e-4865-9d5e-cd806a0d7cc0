@@ -975,6 +975,30 @@ export type Database = {
           },
         ]
       }
+      request_statuses: {
+        Row: {
+          action_label: string
+          code: string
+          color: string
+          name: string
+          sort: number
+        }
+        Insert: {
+          action_label: string
+          code: string
+          color: string
+          name: string
+          sort: number
+        }
+        Update: {
+          action_label?: string
+          code?: string
+          color?: string
+          name?: string
+          sort?: number
+        }
+        Relationships: []
+      }
       request_type_fields: {
         Row: {
           deleted_at: string | null

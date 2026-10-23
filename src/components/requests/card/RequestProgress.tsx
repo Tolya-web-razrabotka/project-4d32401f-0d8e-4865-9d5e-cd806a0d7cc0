@@ -9,7 +9,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
-import { REQUEST_STATUSES, type RequestRow } from "../data";
+import { useRequestStatuses, type RequestRow } from "../data";
 
 /** Ход заявки: пять шагов, одна крупная кнопка следующего действия, шаг назад с причиной (ТЗ 7.7). */
 export function RequestProgress({
@@ -24,6 +24,7 @@ export function RequestProgress({
   missingRequired: string[];
   onChanged: () => void;
 }) {
+  const REQUEST_STATUSES = useRequestStatuses(); // названия и кнопки — из справочника «Статусы заявки»
   const idx = REQUEST_STATUSES.findIndex((s) => s.v === r.status);
   const next = REQUEST_STATUSES[idx + 1];
   const prev = idx > 0 ? REQUEST_STATUSES[idx - 1] : undefined;
