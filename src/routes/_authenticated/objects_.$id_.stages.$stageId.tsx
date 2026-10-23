@@ -54,6 +54,9 @@ function StagePage() {
   return (
     <div className="pb-6">
       {back}
+      {/* Правка 2.15: на широком экране справа закреплены действия со статусом этапа */}
+      <div className="grid gap-5 xl:grid-cols-[minmax(0,1fr)_340px] xl:items-start">
+      <div className="min-w-0">
       <div className="mb-4 rounded-lg border bg-card p-4">
         <div className="flex flex-wrap items-start gap-4">
           <h1 className="min-w-0 flex-1 text-xl font-bold leading-tight">
@@ -111,7 +114,14 @@ function StagePage() {
         </TabsContent>
       </Tabs>
 
-      <StageStatusBar stage={stage} conditions={conditions} onChanged={refresh} />
+      <div className="xl:hidden">
+        <StageStatusBar stage={stage} conditions={conditions} onChanged={refresh} />
+      </div>
+      </div>
+      <aside className="hidden xl:sticky xl:top-6 xl:block [&>div]:mt-0">
+        <StageStatusBar stage={stage} conditions={conditions} onChanged={refresh} />
+      </aside>
+      </div>
     </div>
   );
 }

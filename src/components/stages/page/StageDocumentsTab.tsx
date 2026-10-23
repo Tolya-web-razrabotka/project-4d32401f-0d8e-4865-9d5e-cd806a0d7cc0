@@ -17,7 +17,7 @@ export function StageDocumentsTab({ stage }: { stage: ObjectStage }) {
   };
 
   return (
-    <div className="max-w-4xl space-y-5">
+    <div className="space-y-5">
       <div className="flex flex-wrap gap-3">
         <UploadButton
           objectId={stage.object_id}

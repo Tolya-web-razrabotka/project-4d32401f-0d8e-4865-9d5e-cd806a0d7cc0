@@ -102,8 +102,11 @@ function RequestCard() {
   const blockKey = JSON.stringify(values);
 
   return (
-    <div className="max-w-5xl space-y-5 pb-10">
+    <div className="space-y-5 pb-10">
       <BackLink objectId={r.object_id} />
+      {/* Правка 2.15: на широком экране — две колонки, справа закреплён «Ход заявки», чтобы не было пустоты справа */}
+      <div className="grid gap-5 xl:grid-cols-[minmax(0,1fr)_360px] xl:items-start">
+      <div className="min-w-0 space-y-5">
 
       <header className={`rounded-lg border p-4 ${r.is_overdue ? "border-red-400 bg-red-50 dark:bg-red-950/40" : "bg-card"}`}>
         <div className="flex flex-wrap items-start gap-4">
@@ -136,7 +139,9 @@ function RequestCard() {
         {r.stage_id && <StageLink objectId={r.object_id} stageId={r.stage_id} />}
       </header>
 
-      <RequestProgress r={r} doneByName={doneByName} missingRequired={missingRequired} onChanged={refresh} />
+      <div className="xl:hidden">
+        <RequestProgress r={r} doneByName={doneByName} missingRequired={missingRequired} onChanged={refresh} />
+      </div>
 
       {(() => {
         const initiatorFields = active.filter((f) => f.filled_by === "initiator");
@@ -211,6 +216,11 @@ function RequestCard() {
           </Tabs>
         );
       })()}
+      </div>
+      <aside className="hidden xl:sticky xl:top-6 xl:block">
+        <RequestProgress r={r} doneByName={doneByName} missingRequired={missingRequired} onChanged={refresh} vertical />
+      </aside>
+      </div>
     </div>
   );
 }

@@ -60,7 +60,7 @@ export function StageStepsTab({ steps, disabled, onChanged }: { steps: ObjectSte
   const allDone = steps.length > 0 && steps.every((s) => s.state === "done");
 
   return (
-    <div className="max-w-4xl space-y-3">
+    <div className="space-y-3">
       {allDone && (
         <p className="rounded-md bg-green-50 p-4 text-sm text-green-800 dark:bg-green-950/40 dark:text-green-200">
           Все шаги сценария выполнены.

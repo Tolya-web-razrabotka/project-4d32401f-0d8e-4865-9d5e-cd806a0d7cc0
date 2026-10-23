@@ -46,7 +46,7 @@ export function StageConditionsTab({ stage, onChanged }: { stage: ObjectStage; o
   const doneRequired = required.filter((c) => c.is_done).length;
 
   return (
-    <div className="max-w-4xl space-y-4">
+    <div className="space-y-4">
       <p className="text-sm">
         Обязательных выполнено: <span className="font-semibold">{doneRequired} из {required.length}</span>
         {doneRequired === required.length && required.length > 0 && (

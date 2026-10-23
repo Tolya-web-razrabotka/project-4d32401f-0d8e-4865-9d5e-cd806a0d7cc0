@@ -17,12 +17,15 @@ export function RequestProgress({
   doneByName,
   missingRequired,
   onChanged,
+  vertical,
 }: {
   r: RequestRow;
   doneByName: string | null;
   /** Незаполненные обязательные поля — подсказка до «Готова к отправке». */
   missingRequired: string[];
   onChanged: () => void;
+  /** Шаги столбиком — для правой колонки на широком экране (правка 2.15). */
+  vertical?: boolean;
 }) {
   const REQUEST_STATUSES = useRequestStatuses(); // названия и кнопки — из справочника «Статусы заявки»
   const idx = REQUEST_STATUSES.findIndex((s) => s.v === r.status);
@@ -65,14 +68,14 @@ export function RequestProgress({
   return (
     <section className="rounded-lg border bg-card p-4">
       <h2 className="mb-4 text-lg font-semibold">Ход заявки</h2>
-      <ol className="mb-4 grid gap-3 sm:grid-cols-5">
+      <ol className={`mb-4 grid ${vertical ? "gap-2" : "gap-3 sm:grid-cols-5"}`}>
         {REQUEST_STATUSES.map((s, i) => {
           const done = i <= idx;
           const current = i === idx;
           return (
             <li
               key={s.v}
-              className={`rounded-md border p-3 ${
+              className={`rounded-md border ${vertical ? "px-3 py-2" : "p-3"} ${
                 current ? "border-primary bg-accent" : done ? "border-emerald-700/25 bg-emerald-50/70 dark:bg-emerald-950/30" : "border-border bg-card text-muted-foreground"
               }`}
             >
@@ -112,13 +115,13 @@ export function RequestProgress({
                 value={result}
                 onChange={(e) => setResult(e.target.value)}
                 placeholder="Результат / номер протокола (необязательно)"
-                className="h-9 max-w-xl text-sm"
+                className={`h-9 text-sm ${vertical ? "" : "max-w-xl"}`}
               />
             )}
             <Button
               onClick={() => m.mutate({ to: next.v, ...(next.v === "done" && result.trim() ? { comment: result.trim() } : {}) })}
               disabled={m.isPending || blockedReady}
-              className="h-10 px-5 text-base"
+              className={`h-10 px-5 text-sm ${vertical ? "w-full" : ""}`}
             >
               {next.next}
             </Button>

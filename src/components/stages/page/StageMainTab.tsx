@@ -84,7 +84,7 @@ export function StageMainTab({ stage, onSaved }: { stage: ObjectStage; onSaved: 
   );
 
   return (
-    <div className="max-w-4xl space-y-6">
+    <div className="space-y-6">
       {stage.description && <p className="whitespace-pre-line text-sm text-muted-foreground">{stage.description}</p>}
       {stage.return_reason && stage.status_code !== "closed" && (
         <div className="rounded-md border border-orange-400 bg-orange-50 p-4 text-sm dark:bg-orange-950/40">
