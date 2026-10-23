@@ -25,7 +25,7 @@ export const FILE_KIND_LABEL: Record<FileKind, string> = {
 };
 
 /** Ключ в хранилище допускает не все символы (кириллица, пробелы) — оставляем латиницу и цифры; исходное имя хранится в files.file_name. */
-function safeName(name: string) {
+export function safeName(name: string) {
   const dot = name.lastIndexOf(".");
   const ext = dot > 0 ? name.slice(dot).replace(/[^A-Za-z0-9.]/g, "") : "";
   const base = (dot > 0 ? name.slice(0, dot) : name).replace(/[^A-Za-z0-9_-]+/g, "_").slice(0, 60) || "file";
@@ -89,4 +89,71 @@ export function formatSize(bytes: number | null | undefined) {
   if (!bytes) return "";
   if (bytes < 1024 * 1024) return `${Math.max(1, Math.round(bytes / 1024))} КБ`;
   return `${(bytes / 1024 / 1024).toFixed(1)} МБ`;
+}
+
+// ---------------------------------------------------------------------
+// Файлы-образцы у этапов справочника: «От нас» / «Ждём» (правка 2.3, db/06)
+// ---------------------------------------------------------------------
+export const TEMPLATES_BUCKET = "lider-templates";
+
+export type TemplateDocKind = "outgoing" | "expected";
+
+export type TemplateFile = {
+  id: string;
+  template_id: string;
+  kind: TemplateDocKind;
+  storage_path: string;
+  file_name: string;
+  mime_type: string | null;
+  size_bytes: number | null;
+  created_at: string;
+};
+
+export async function listTemplateFiles(templateId: string) {
+  const { data, error } = await supabase
+    .from("stage_template_files")
+    .select("id, template_id, kind, storage_path, file_name, mime_type, size_bytes, created_at")
+    .eq("template_id", templateId)
+    .is("deleted_at", null)
+    .order("created_at");
+  if (error) throw error;
+  return (data ?? []) as TemplateFile[];
+}
+
+export async function uploadTemplateFile(templateId: string, kind: TemplateDocKind, file: File, profileId: string | null) {
+  const path = `${templateId}/${kind}/${crypto.randomUUID()}-${safeName(file.name)}`;
+  const up = await supabase.storage.from(TEMPLATES_BUCKET).upload(path, file, {
+    contentType: file.type || "application/octet-stream",
+    upsert: false,
+  });
+  if (up.error) throw up.error;
+  const { error } = await supabase.from("stage_template_files").insert({
+    template_id: templateId,
+    kind,
+    storage_path: path,
+    file_name: file.name,
+    mime_type: file.type || null,
+    size_bytes: file.size,
+    uploaded_by: profileId,
+  });
+  if (error) {
+    await supabase.storage.from(TEMPLATES_BUCKET).remove([path]); // не оставляем файл без записи
+    throw error;
+  }
+}
+
+/** Удаление: запись помечается удалённой, сам файл стирается из хранилища. */
+export async function removeTemplateFile(f: TemplateFile) {
+  const { error } = await supabase
+    .from("stage_template_files")
+    .update({ deleted_at: new Date().toISOString() })
+    .eq("id", f.id);
+  if (error) throw error;
+  await supabase.storage.from(TEMPLATES_BUCKET).remove([f.storage_path]);
+}
+
+export async function openTemplateFile(path: string) {
+  const { data, error } = await supabase.storage.from(TEMPLATES_BUCKET).createSignedUrl(path, 600);
+  if (error) throw error;
+  window.open(data.signedUrl, "_blank", "noopener");
 }

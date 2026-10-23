@@ -1338,6 +1338,60 @@ export type Database = {
           },
         ]
       }
+      stage_template_files: {
+        Row: {
+          created_at: string
+          deleted_at: string | null
+          file_name: string
+          id: string
+          kind: string
+          mime_type: string | null
+          size_bytes: number | null
+          storage_path: string
+          template_id: string
+          uploaded_by: string | null
+        }
+        Insert: {
+          created_at?: string
+          deleted_at?: string | null
+          file_name: string
+          id?: string
+          kind: string
+          mime_type?: string | null
+          size_bytes?: number | null
+          storage_path: string
+          template_id: string
+          uploaded_by?: string | null
+        }
+        Update: {
+          created_at?: string
+          deleted_at?: string | null
+          file_name?: string
+          id?: string
+          kind?: string
+          mime_type?: string | null
+          size_bytes?: number | null
+          storage_path?: string
+          template_id?: string
+          uploaded_by?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "stage_template_files_template_id_fkey"
+            columns: ["template_id"]
+            isOneToOne: false
+            referencedRelation: "stage_templates"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "stage_template_files_uploaded_by_fkey"
+            columns: ["uploaded_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       stage_templates: {
         Row: {
           confirmer_role: string | null

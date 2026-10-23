@@ -13,6 +13,8 @@ import { Field } from "@/components/directories/common";
 import { toIntOrNull } from "@/components/directories/stages/data";
 import { useActiveProfiles } from "@/components/objects/data";
 import { StatusBadge, useObjectStages, type ObjectStage } from "../data";
+import { FileText } from "lucide-react";
+import { formatSize, listTemplateFiles, openTemplateFile, type TemplateFile } from "@/lib/files";
 
 const NONE = "__none";
 
@@ -111,6 +113,7 @@ export function StageMainTab({ stage, onSaved }: { stage: ObjectStage; onSaved: 
           Документ{stage.outgoing_doc ? ` «${stage.outgoing_doc}»` : ""}
           {stage.expected_doc ? ` → ждём «${stage.expected_doc}»` : ""}
         </div>
+        <TemplateSamples templateId={stage.template_id} />
         <div className="grid gap-5 sm:grid-cols-4">
           <Field label="Отправлен">{date("doc_sent_at")}</Field>
           <Field label="Дней на ответ">
@@ -205,5 +208,46 @@ function LinkedRequests({ stage }: { stage: ObjectStage }) {
         ))}
       </div>
     </section>
+  );
+}
+
+/** Образцы «От нас» / «Ждём» из справочника этапов (правка 2.3). Нет файлов — блока нет. */
+function TemplateSamples({ templateId }: { templateId: string | null }) {
+  const { data: files = [] } = useQuery({
+    queryKey: ["template-files", templateId ?? "none"],
+    enabled: !!templateId,
+    queryFn: () => listTemplateFiles(templateId!),
+  });
+  if (files.length === 0) return null;
+  const group = (kind: TemplateFile["kind"], label: string) => {
+    const list = files.filter((f) => f.kind === kind);
+    if (list.length === 0) return null;
+    return (
+      <div className="min-w-0 flex-1">
+        <div className="mb-1 text-xs text-muted-foreground">{label}</div>
+        <ul className="space-y-0.5">
+          {list.map((f) => (
+            <li key={f.id} className="flex items-center gap-2 text-sm">
+              <FileText className="size-3.5 shrink-0 text-muted-foreground" />
+              <button
+                type="button"
+                onClick={() => openTemplateFile(f.storage_path).catch(showError)}
+                className="min-w-0 truncate text-left text-primary hover:underline"
+                title={f.file_name}
+              >
+                {f.file_name}
+              </button>
+              <span className="shrink-0 text-xs text-muted-foreground">{formatSize(f.size_bytes)}</span>
+            </li>
+          ))}
+        </ul>
+      </div>
+    );
+  };
+  return (
+    <div className="mb-4 flex flex-wrap gap-x-8 gap-y-3 rounded-md bg-muted/40 p-3">
+      {group("outgoing", "Образцы «От нас» из справочника")}
+      {group("expected", "Образцы «Ждём» из справочника")}
+    </div>
   );
 }
