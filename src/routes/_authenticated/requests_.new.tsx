@@ -218,7 +218,7 @@ function NewRequestPage() {
           </Field>
         )}
 
-        <Button type="submit" disabled={create.isPending} className="h-10 px-5 text-base">
+        <Button type="submit" disabled={create.isPending} className="h-9 px-5 text-sm">
           {create.isPending ? "Создание…" : "Создать заявку"}
         </Button>
       </form>

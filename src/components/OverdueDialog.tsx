@@ -112,7 +112,7 @@ export function OverdueDialog() {
           >
             Открыть раздел
           </Button>
-          <Button onClick={ack} className="h-10 text-base sm:px-10">
+          <Button onClick={ack} className="h-10 text-sm sm:px-10">
             Понятно
           </Button>
         </div>

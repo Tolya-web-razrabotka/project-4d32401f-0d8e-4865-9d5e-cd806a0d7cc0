@@ -89,7 +89,7 @@ function NewObjectPage() {
   };
 
   return (
-    <div className="pb-28">
+    <div>
       {back}
       <h1 className="mb-4 text-xl font-bold">Новый объект</h1>
 
@@ -132,8 +132,9 @@ function NewObjectPage() {
         <StagesPicker templates={templates} selected={stageIds ?? []} onChange={setStageIds} />
       )}
 
-      <div className="fixed inset-x-0 bottom-0 z-20 border-t bg-background/95 px-4 py-2.5 backdrop-blur lg:left-56">
-        <div className="flex max-w-5xl flex-wrap gap-3">
+      {/* Кнопки — сразу под полями, по их левому краю и ширине; на длинном списке этапов прилипают к низу экрана */}
+      <div className={`sticky bottom-0 z-20 mt-6 border-t bg-background/95 py-3 backdrop-blur ${step === 0 ? "max-w-3xl" : "max-w-5xl"}`}>
+        <div className="flex flex-wrap gap-3">
           {step > 0 && (
             <Button variant="outline" onClick={() => setStep((s) => s - 1)} className="h-9 px-4 text-sm">
               Назад
