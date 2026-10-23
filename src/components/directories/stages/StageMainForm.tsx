@@ -138,6 +138,7 @@ export function StageMainForm({
             ))}
           </SelectContent>
         </Select>
+        {!readOnly && <p className="text-xs text-muted-foreground">Список настраивается в Справочниках, вкладка «Виды работ».</p>}
       </Field>
       <Field label="Описание">
         <Textarea value={description} onChange={(e) => setDescription(e.target.value)} disabled={readOnly} className="text-sm" />
