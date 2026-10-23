@@ -8,7 +8,6 @@ import { tabsListClass, tabTriggerClass } from "@/lib/ui";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useObject } from "@/components/objects/data";
 import { ObjectHeader } from "@/components/objects/ObjectHeader";
-import { useRequestTypes } from "@/components/directories/request-types/data";
 import { StagesTable } from "@/components/stages/StagesTable";
 import { StagesExport } from "@/components/stages/StagesExport";
 import { HistoryFeed } from "@/components/history/HistoryFeed";
@@ -70,13 +69,8 @@ function ObjectPage() {
         }
       />
 
-      <div className="grid gap-6 xl:grid-cols-[200px_minmax(0,1fr)]">
-        <RequestTypeButtons
-          objectId={id}
-          activeType={tab === "requests" ? type : undefined}
-          onPick={(t) => go({ tab: "requests", type: t })}
-        />
-
+      <div>
+        {/* Кнопки видов заявок слева убраны по правке 2.9 — вид выбирается фильтром на вкладке «Заявки» */}
         <Tabs value={tab} onValueChange={(v) => go({ tab: v as Tab })} className="min-w-0">
           <TabsList className={tabsListClass}>
             <TabsTrigger value="stages" className={tabTriggerClass}>Этапы</TabsTrigger>
@@ -102,73 +96,6 @@ function ObjectPage() {
         </Tabs>
       </div>
     </div>
-  );
-}
-
-/** Крупные кнопки видов заявок с бейджами новых/просроченных по объекту (ТЗ 7.4). */
-function RequestTypeButtons({
-  objectId,
-  activeType,
-  onPick,
-}: {
-  objectId: string;
-  activeType: string | undefined;
-  onPick: (typeId: string) => void;
-}) {
-  const { data: types = [] } = useRequestTypes();
-  const { data: counts = {} } = useQuery({
-    queryKey: ["object-request-counts", objectId],
-    refetchInterval: 60_000,
-    queryFn: async () => {
-      const { data, error } = await supabase
-        .from("v_requests")
-        .select("request_type_id, is_new, is_overdue")
-        .eq("object_id", objectId)
-        .or("is_new.eq.true,is_overdue.eq.true");
-      if (error) throw error;
-      const m: Record<string, { fresh: number; overdue: number }> = {};
-      for (const r of data ?? []) {
-        const k = r.request_type_id as string;
-        const c = (m[k] ??= { fresh: 0, overdue: 0 });
-        if (r.is_new) c.fresh++;
-        if (r.is_overdue) c.overdue++;
-      }
-      return m;
-    },
-  });
-
-  return (
-    <nav className="flex flex-wrap gap-2 xl:flex-col xl:flex-nowrap" aria-label="Виды заявок">
-      <div className="hidden pb-1 text-sm font-semibold text-muted-foreground xl:block">Заявки</div>
-      {types
-        .filter((t) => t.is_active)
-        .map((t) => {
-          const c = counts[t.id];
-          const active = activeType === t.id;
-          return (
-            <button
-              key={t.id}
-              type="button"
-              onClick={() => onPick(t.id)}
-              className={`flex min-h-9 items-center gap-2 rounded-md border px-3 py-1.5 text-left text-sm font-medium transition-colors ${
-                active ? "border-primary bg-primary text-primary-foreground" : "bg-card hover:bg-accent"
-              }`}
-            >
-              <span className="flex-1">{t.name}</span>
-              {c && c.fresh > 0 && (
-                <span title="Новые" className="min-w-5 rounded-full bg-destructive px-1.5 text-center text-[11px] font-semibold leading-5 text-destructive-foreground">
-                  {c.fresh}
-                </span>
-              )}
-              {c && c.overdue > 0 && (
-                <span title="Просроченные" className="min-w-5 rounded-full bg-red-100 px-1.5 text-center text-[11px] font-semibold leading-5 text-red-800 ring-1 ring-inset ring-red-300">
-                  !{c.overdue}
-                </span>
-              )}
-            </button>
-          );
-        })}
-    </nav>
   );
 }
 
