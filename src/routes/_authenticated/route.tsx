@@ -1,13 +1,14 @@
 import { createFileRoute, Link, Outlet, redirect, useNavigate, useRouterState } from "@tanstack/react-router";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
-import { Building2, ClipboardList, BookOpen, History, LogOut, Menu } from "lucide-react";
+import { AlertTriangle, Building2, ClipboardList, BookOpen, History, LogOut, Menu } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTitle } from "@/components/ui/sheet";
 import { ProfileContext, type CurrentProfile } from "@/lib/profile";
 import { OverdueDialog, clearOverdueAck } from "@/components/OverdueDialog";
 import { BrandMark } from "@/components/BrandMark";
+import { useOverdueItems } from "@/components/overdue/data";
 
 export const Route = createFileRoute("/_authenticated")({
   ssr: false,
@@ -93,7 +94,8 @@ function useAttentionCount() {
 
 const items = [
   { to: "/objects", label: "Объекты", icon: Building2 },
-  { to: "/requests", label: "Заявки", icon: ClipboardList, badge: true },
+  { to: "/requests", label: "Заявки", icon: ClipboardList, badge: "requests" },
+  { to: "/overdue", label: "Просрочено", icon: AlertTriangle, badge: "overdue" },
   { to: "/directories", label: "Справочники", icon: BookOpen },
   { to: "/history", label: "История", icon: History },
 ] as const;
@@ -101,6 +103,8 @@ const items = [
 function Nav({ profile, onSignOut, onNavigate }: { profile: CurrentProfile; onSignOut: () => void; onNavigate?: () => void }) {
   const path = useRouterState({ select: (s) => s.location.pathname });
   const { data: count = 0 } = useAttentionCount();
+  const { items: overdue } = useOverdueItems();
+  const badges = { requests: count, overdue: overdue.length };
   return (
     <div className="flex h-full flex-col bg-sidebar text-sidebar-foreground">
       <div className="flex items-center gap-2.5 px-4 pb-5 pt-5">
@@ -127,9 +131,9 @@ function Nav({ profile, onSignOut, onNavigate }: { profile: CurrentProfile; onSi
               {active && <span aria-hidden className="absolute inset-y-2 left-0 w-0.5 rounded-full bg-signal" />}
               <it.icon className="size-4 shrink-0 opacity-80" />
               <span className="flex-1">{it.label}</span>
-              {"badge" in it && count > 0 && (
+              {"badge" in it && badges[it.badge] > 0 && (
                 <span className="min-w-5 rounded-full bg-destructive px-1.5 text-center text-[11px] font-semibold leading-5 text-destructive-foreground">
-                  {count}
+                  {badges[it.badge]}
                 </span>
               )}
             </Link>

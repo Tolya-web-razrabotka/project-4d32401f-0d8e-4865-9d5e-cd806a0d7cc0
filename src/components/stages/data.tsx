@@ -152,6 +152,7 @@ export function useRefreshStages() {
   return (objectId: string, stageId?: string) => {
     qc.invalidateQueries({ queryKey: stagesKey(objectId) });
     qc.invalidateQueries({ queryKey: conditionsKey(objectId) });
+    qc.invalidateQueries({ queryKey: ["overdue"] });
     qc.invalidateQueries({ queryKey: OBJECTS_KEY });
     qc.invalidateQueries({ queryKey: ["history"] });
     if (stageId) {

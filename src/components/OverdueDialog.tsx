@@ -1,12 +1,9 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "@tanstack/react-router";
-import { useQuery } from "@tanstack/react-query";
 import { AlertTriangle } from "lucide-react";
-import { supabase } from "@/integrations/supabase/client";
-import { daysBetween, mskToday } from "@/lib/dates";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
-import { useObjects } from "@/components/objects/data";
+import { useOverdueItems } from "@/components/overdue/data";
 
 /** Флаг «Понятно» живёт до следующего входа (sessionStorage), при выходе сбрасывается. */
 export const OVERDUE_ACK_KEY = "lider-overdue-ack";
@@ -27,57 +24,23 @@ export function clearOverdueAck() {
   }
 }
 
-type Item = { key: string; what: string; objectName: string; days: number; open: () => void };
-
-/** Окно «Просрочено» при входе (ТЗ 7.8): просроченные заявки и этапы по видимым объектам. */
+/** Окно «Просрочено» при входе (ТЗ 7.8): просроченные заявки и этапы по видимым объектам.
+ *  Данные — те же, что в разделе «Просрочено» (правка 2.2). */
 export function OverdueDialog() {
   const navigate = useNavigate();
   const [open, setOpen] = useState(false);
   const [acked, setAcked] = useState(readAck);
-  const { data: objects = [] } = useObjects();
-
-  const { data } = useQuery({
-    queryKey: ["overdue-on-login"],
-    enabled: !acked,
-    queryFn: async () => {
-      const [req, st] = await Promise.all([
-        supabase.from("v_requests").select("id, number, type_name, object_id, call_date").eq("is_overdue", true),
-        supabase
-          .from("v_object_stages")
-          .select("id, number, name, object_id, due_date")
-          .eq("is_overdue", true)
-          .eq("is_excluded", false),
-      ]);
-      if (req.error) throw req.error;
-      if (st.error) throw st.error;
-      return { requests: req.data ?? [], stages: st.data ?? [] };
-    },
-  });
-
-  const activeObjects = new Map(objects.filter((o) => o.status !== "completed").map((o) => [o.id, o.name]));
-  const today = mskToday();
-  const items: Item[] = data
-    ? [
-        ...data.requests
-          .filter((r) => activeObjects.has(r.object_id!))
-          .map((r) => ({
-            key: `r-${r.id}`,
-            what: `Заявка №${r.number} «${r.type_name}» — не исполнена`,
-            objectName: activeObjects.get(r.object_id!) ?? "",
-            days: daysBetween(r.call_date!, today),
-            open: () => navigate({ to: "/requests/$requestId", params: { requestId: r.id! } }),
-          })),
-        ...data.stages
-          .filter((s) => activeObjects.has(s.object_id!))
-          .map((s) => ({
-            key: `s-${s.id}`,
-            what: `Этап ${s.number} «${s.name}» — срок прошёл`,
-            objectName: activeObjects.get(s.object_id!) ?? "",
-            days: daysBetween(s.due_date!, today),
-            open: () => navigate({ to: "/objects/$id/stages/$stageId", params: { id: s.object_id!, stageId: s.id! } }),
-          })),
-      ].sort((a, b) => b.days - a.days)
-    : [];
+  const { items: all } = useOverdueItems();
+  const items = all.map((it) => ({
+    key: it.key,
+    what: it.kind === "request" ? `${it.title} — не исполнена` : `${it.title} — срок прошёл`,
+    objectName: it.objectName,
+    days: it.days,
+    open: () =>
+      it.kind === "request"
+        ? navigate({ to: "/requests/$requestId", params: { requestId: it.id } })
+        : navigate({ to: "/objects/$id/stages/$stageId", params: { id: it.objectId, stageId: it.id } }),
+  }));
 
   useEffect(() => {
     if (!acked && items.length > 0) setOpen(true);
@@ -135,9 +98,24 @@ export function OverdueDialog() {
             </tbody>
           </table>
         </div>
-        <Button onClick={ack} className="h-10 w-full text-base sm:w-auto sm:self-end sm:px-10">
-          Понятно
-        </Button>
+        <div className="flex flex-col-reverse gap-2 sm:flex-row sm:items-center sm:justify-end">
+          <p className="text-sm text-muted-foreground sm:mr-auto">
+            Этот список всегда доступен в разделе «Просрочено» в меню слева.
+          </p>
+          <Button
+            variant="outline"
+            className="h-10 text-sm"
+            onClick={() => {
+              ack();
+              navigate({ to: "/overdue" });
+            }}
+          >
+            Открыть раздел
+          </Button>
+          <Button onClick={ack} className="h-10 text-base sm:px-10">
+            Понятно
+          </Button>
+        </div>
       </DialogContent>
     </Dialog>
   );

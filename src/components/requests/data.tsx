@@ -119,6 +119,7 @@ export function useRefreshRequests() {
   return (requestId?: string) => {
     qc.invalidateQueries({ queryKey: requestsKey });
     qc.invalidateQueries({ queryKey: ["requests-attention-count"] });
+    qc.invalidateQueries({ queryKey: ["overdue"] });
     qc.invalidateQueries({ queryKey: ["object-request-counts"] });
     qc.invalidateQueries({ queryKey: OBJECTS_KEY });
     qc.invalidateQueries({ queryKey: ["history"] });
