@@ -10,14 +10,10 @@ import { Textarea } from "@/components/ui/textarea";
 
 type Comment = { id: string; text: string; created_at: string; author: { full_name: string } | null };
 
-/** Переписка по заявке: «технадзор связался, они на связи» и т. п. (ТЗ 7.7). */
-export function RequestComments({ requestId }: { requestId: string }) {
-  const me = useProfile();
-  const qc = useQueryClient();
-  const key = ["request-comments", requestId];
-  const [text, setText] = useState("");
-  const { data = [] } = useQuery({
-    queryKey: key,
+/** Запрос переписки — общий для блока и счётчика на вкладке (правка 2.12). */
+export function commentsQuery(requestId: string) {
+  return {
+    queryKey: ["request-comments", requestId],
     queryFn: async () => {
       const { data, error } = await supabase
         .from("request_comments")
@@ -27,7 +23,16 @@ export function RequestComments({ requestId }: { requestId: string }) {
       if (error) throw error;
       return (data ?? []) as unknown as Comment[];
     },
-  });
+  };
+}
+
+/** Переписка по заявке: «технадзор связался, они на связи» и т. п. (ТЗ 7.7). */
+export function RequestComments({ requestId }: { requestId: string }) {
+  const me = useProfile();
+  const qc = useQueryClient();
+  const key = ["request-comments", requestId];
+  const [text, setText] = useState("");
+  const { data = [] } = useQuery(commentsQuery(requestId));
   const send = useMutation({
     mutationFn: async () => {
       const t = text.trim();

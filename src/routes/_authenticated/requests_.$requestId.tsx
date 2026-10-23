@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { ArrowLeft, CalendarClock } from "lucide-react";
@@ -19,15 +19,28 @@ import { isEmptyValue } from "@/components/requests/FieldInput";
 import { RequestStatusBadge, overdueDays, useRefreshRequests, type FieldValue, type RequestRow } from "@/components/requests/data";
 import { RequestFieldsBlock } from "@/components/requests/card/RequestFieldsBlock";
 import { RequestProgress } from "@/components/requests/card/RequestProgress";
-import { RequestComments } from "@/components/requests/card/RequestComments";
+import { RequestComments, commentsQuery } from "@/components/requests/card/RequestComments";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { tabsListClass, tabTriggerClass } from "@/lib/ui";
+
+/** Вкладки карточки заявки (правка 2.12). Выбранная вкладка — в адресе, чтобы «назад» и обновление её не сбрасывали. */
+const TABS = ["initiator", "office", "comments", "files", "history"] as const;
+type Tab = (typeof TABS)[number];
 
 export const Route = createFileRoute("/_authenticated/requests_/$requestId")({
+  validateSearch: (search: Record<string, unknown>): { tab?: Tab } => {
+    const tab = TABS.find((t) => t === search["tab"]);
+    return tab ? { tab } : {};
+  },
   component: RequestCard,
   head: () => ({ meta: [{ title: "Заявка — Лидер" }] }),
 });
 
 function RequestCard() {
   const { requestId } = Route.useParams();
+  const { tab = "initiator" } = Route.useSearch();
+  const navigate = useNavigate({ from: "/requests/$requestId" });
+  const { data: comments = [] } = useQuery(commentsQuery(requestId));
   const qc = useQueryClient();
   const refreshAll = useRefreshRequests();
   const { data: r, isLoading } = useQuery({
@@ -97,8 +110,12 @@ function RequestCard() {
           <h1 className="min-w-0 flex-1 text-xl font-bold leading-tight">
             <span className="font-medium text-muted-foreground">№{r.number}</span> {r.type_name}
           </h1>
-          {r.is_new && <span className="rounded bg-destructive px-2 py-0.5 text-xs font-semibold text-destructive-foreground">Новая</span>}
-          <RequestStatusBadge status={r.status} />
+          {/* «Новая» — красной плашкой (ТЗ); отдельный бейдж статуса для новой не дублируем */}
+          {r.is_new ? (
+            <span className="rounded bg-destructive px-2 py-0.5 text-xs font-semibold text-destructive-foreground">Новая</span>
+          ) : (
+            <RequestStatusBadge status={r.status} />
+          )}
         </div>
         <div className="mt-3 flex flex-wrap gap-x-6 gap-y-2 text-sm">
           <Link to="/objects/$id" params={{ id: r.object_id }} className="text-primary hover:underline">
@@ -121,52 +138,79 @@ function RequestCard() {
 
       <RequestProgress r={r} doneByName={doneByName} missingRequired={missingRequired} onChanged={refresh} />
 
-      <RequestFieldsBlock
-        key={`i-${blockKey}`}
-        title="Данные прораба"
-        requestId={r.id}
-        fields={active.filter((f) => f.filled_by === "initiator")}
-        values={values}
-        orphanValues={orphan}
-        readOnly={readOnly}
-        onSaved={refresh}
-      />
-      <RequestFieldsBlock
-        key={`o-${blockKey}`}
-        title="Данные офис-менеджера"
-        hint="Заполняются перед отправкой заявки."
-        requestId={r.id}
-        fields={active.filter((f) => f.filled_by === "office")}
-        values={values}
-        orphanValues={[]}
-        readOnly={readOnly}
-        onSaved={refresh}
-      />
+      {(() => {
+        const initiatorFields = active.filter((f) => f.filled_by === "initiator");
+        const officeFields = active.filter((f) => f.filled_by === "office");
+        const count = (n: number) => (n > 0 ? <span className="ml-1.5 tabular-nums text-muted-foreground">{n}</span> : null);
+        return (
+          <Tabs value={tab === "office" && officeFields.length === 0 ? "initiator" : tab} onValueChange={(v) => navigate({ search: { tab: v as Tab }, replace: true })}>
+            <TabsList className={tabsListClass}>
+              <TabsTrigger value="initiator" className={tabTriggerClass}>Данные прораба</TabsTrigger>
+              {officeFields.length > 0 && (
+                <TabsTrigger value="office" className={tabTriggerClass}>Данные офис-менеджера</TabsTrigger>
+              )}
+              <TabsTrigger value="comments" className={tabTriggerClass}>Переписка{count(comments.length)}</TabsTrigger>
+              <TabsTrigger value="files" className={tabTriggerClass}>Файлы{count(files.length)}</TabsTrigger>
+              <TabsTrigger value="history" className={tabTriggerClass}>История</TabsTrigger>
+            </TabsList>
 
-      <RequestComments requestId={r.id} />
-
-      <section className="rounded-lg border bg-card p-4">
-        <div className="mb-4 flex flex-wrap items-center gap-3">
-          <h2 className="flex-1 text-lg font-semibold">Файлы</h2>
-          <UploadButton
-            objectId={r.object_id}
-            entityType="request_field"
-            entityId={r.id}
-            kind="photo"
-            label="Добавить файлы"
-            onUploaded={() => {
-              qc.invalidateQueries({ queryKey: filesKey });
-              qc.invalidateQueries({ queryKey: ["history"] });
-            }}
-          />
-        </div>
-        {files.length === 0 ? <p className="text-sm text-muted-foreground">Файлов нет</p> : <FileList files={files} />}
-      </section>
-
-      <section>
-        <h2 className="mb-3 text-lg font-semibold">История</h2>
-        <HistoryFeed filter={{ entityType: "request", entityId: r.id }} />
-      </section>
+            <TabsContent value="initiator">
+              {initiatorFields.length === 0 && orphan.length === 0 ? (
+                <p className="rounded-lg border bg-card p-4 text-sm text-muted-foreground">У этого вида заявки нет полей прораба</p>
+              ) : (
+                <RequestFieldsBlock
+                  key={`i-${blockKey}`}
+                  title="Данные прораба"
+                  requestId={r.id}
+                  fields={initiatorFields}
+                  values={values}
+                  orphanValues={orphan}
+                  readOnly={readOnly}
+                  onSaved={refresh}
+                />
+              )}
+            </TabsContent>
+            <TabsContent value="office">
+              <RequestFieldsBlock
+                key={`o-${blockKey}`}
+                title="Данные офис-менеджера"
+                hint="Заполняются перед отправкой заявки."
+                requestId={r.id}
+                fields={officeFields}
+                values={values}
+                orphanValues={[]}
+                readOnly={readOnly}
+                onSaved={refresh}
+              />
+            </TabsContent>
+            <TabsContent value="comments">
+              <RequestComments requestId={r.id} />
+            </TabsContent>
+            <TabsContent value="files">
+              <section className="rounded-lg border bg-card p-4">
+                <div className="mb-4 flex flex-wrap items-center gap-3">
+                  <h2 className="flex-1 text-lg font-semibold">Файлы</h2>
+                  <UploadButton
+                    objectId={r.object_id}
+                    entityType="request_field"
+                    entityId={r.id}
+                    kind="photo"
+                    label="Добавить файлы"
+                    onUploaded={() => {
+                      qc.invalidateQueries({ queryKey: filesKey });
+                      qc.invalidateQueries({ queryKey: ["history"] });
+                    }}
+                  />
+                </div>
+                {files.length === 0 ? <p className="text-sm text-muted-foreground">Файлов нет</p> : <FileList files={files} />}
+              </section>
+            </TabsContent>
+            <TabsContent value="history">
+              <HistoryFeed filter={{ entityType: "request", entityId: r.id }} />
+            </TabsContent>
+          </Tabs>
+        );
+      })()}
     </div>
   );
 }
