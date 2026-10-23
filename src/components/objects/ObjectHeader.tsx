@@ -1,10 +1,11 @@
 import type { ReactNode } from "react";
 import { formatDate } from "@/lib/format";
-import { TONE_CLASS, contractTone, daysLeftText, statusLabel, typeLabel, type ObjectRow } from "./data";
+import { TONE_CLASS, contractTone, daysLeftText, statusLabel, useObjectTypes, type ObjectRow } from "./data";
 
 /** Шапка объекта (ТЗ 7.4): название, адрес, заказчик, срок по договору с подсветкой. */
 export function ObjectHeader({ o, actions }: { o: ObjectRow; actions?: ReactNode }) {
   const tone = o.status === "completed" ? "none" : contractTone(o.contract_days_left);
+  const { label: typeLabel } = useObjectTypes();
   return (
     <div className="mb-4 rounded-lg border bg-card p-4">
       <div className="flex flex-wrap items-start gap-4">

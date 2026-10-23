@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Plus } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -7,13 +7,13 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/u
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Field } from "@/components/directories/common";
 import { CustomerForm } from "@/components/directories/CustomerForm";
-import { OBJECT_STATUSES, OBJECT_TYPES, useActiveProfiles, useCustomersShort } from "./data";
+import { OBJECT_STATUSES, useActiveProfiles, useCustomersShort, useObjectTypes } from "./data";
 
 export type ObjectDraft = {
   name: string;
   address: string;
   customer_id: string;
-  object_type: "uks" | "urip";
+  object_type: string;
   contract_start: string;
   contract_end: string;
   responsible_id: string;
@@ -25,7 +25,7 @@ export const EMPTY_DRAFT: ObjectDraft = {
   name: "",
   address: "",
   customer_id: "",
-  object_type: "uks",
+  object_type: "", // первый тип из справочника подставляется при открытии формы
   contract_start: "",
   contract_end: "",
   responsible_id: "",
@@ -39,6 +39,7 @@ const NONE = "__none";
 export function validateDraft(d: ObjectDraft): string | null {
   if (!d.name.trim()) return "Укажите название договора объекта";
   if (!d.customer_id) return "Выберите заказчика";
+  if (!d.object_type) return "Выберите тип объекта";
   if (!d.contract_start || !d.contract_end) return "Укажите даты начала и окончания по договору";
   if (d.contract_end < d.contract_start) return "Дата окончания раньше даты начала";
   return null;
@@ -74,6 +75,15 @@ export function ObjectCardFields({
   const [addCustomer, setAddCustomer] = useState(false);
   const set = <K extends keyof ObjectDraft>(k: K, v: ObjectDraft[K]) => onChange({ ...value, [k]: v });
 
+  // Типы объектов из справочника; у редактируемого объекта оставляем его тип, даже если тип удалили
+  const { all: objectTypes, active: activeTypes } = useObjectTypes();
+  const typeChoices = objectTypes.filter((t) => !t.deleted_at || t.code === value.object_type);
+  const firstType = activeTypes[0]?.code;
+  useEffect(() => {
+    if (!value.object_type && firstType) onChange({ ...value, object_type: firstType });
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- только когда справочник загрузился
+  }, [firstType]);
+
   return (
     <div className="max-w-3xl space-y-5">
       <Field label="Название договора объекта" required>
@@ -101,14 +111,15 @@ export function ObjectCardFields({
       </Field>
       <div className="grid gap-5 sm:grid-cols-2">
         <Field label="Тип объекта">
-          <Select value={value.object_type} onValueChange={(v) => set("object_type", v as ObjectDraft["object_type"])}>
-            <SelectTrigger className="h-9 text-sm"><SelectValue /></SelectTrigger>
+          <Select value={value.object_type} onValueChange={(v) => set("object_type", v)}>
+            <SelectTrigger className="h-9 text-sm"><SelectValue placeholder="Выберите тип" /></SelectTrigger>
             <SelectContent>
-              {OBJECT_TYPES.map((t) => (
-                <SelectItem key={t.v} value={t.v} className="text-sm">{t.label}</SelectItem>
+              {typeChoices.map((t) => (
+                <SelectItem key={t.code} value={t.code} className="text-sm">{t.name}</SelectItem>
               ))}
             </SelectContent>
           </Select>
+          <p className="text-xs text-muted-foreground">Список настраивается в Справочниках, вкладка «Типы объектов».</p>
         </Field>
         <Field label="Ответственный">
           <Select value={value.responsible_id || NONE} onValueChange={(v) => set("responsible_id", v === NONE ? "" : v)}>

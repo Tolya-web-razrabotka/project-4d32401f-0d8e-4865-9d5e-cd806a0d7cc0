@@ -9,7 +9,7 @@ export type ObjectRow = {
   address: string | null;
   customer_id: string | null;
   customer_name: string | null;
-  object_type: "uks" | "urip";
+  object_type: string;
   contract_start: string | null;
   contract_end: string | null;
   contract_days_left: number | null;
@@ -30,10 +30,28 @@ export type ObjectRow = {
   requests_overdue: number;
 };
 
-export const OBJECT_TYPES = [
-  { v: "uks", label: "УКС" },
-  { v: "urip", label: "УРиП" },
-] as const;
+/** Справочник «Типы объектов» (правка 2.5, db/07). Удалённые тоже грузим — для подписей у старых объектов. */
+export const OBJECT_TYPES_KEY = ["dir-object-types"] as const;
+export type ObjectType = { code: string; name: string; sort: number; deleted_at: string | null };
+
+export function useObjectTypes() {
+  const q = useQuery({
+    queryKey: OBJECT_TYPES_KEY,
+    queryFn: async () => {
+      const { data, error } = await supabase.from("object_types").select("code, name, sort, deleted_at").order("sort");
+      if (error) throw error;
+      return (data ?? []) as ObjectType[];
+    },
+  });
+  const all = q.data ?? [];
+  return {
+    ...q,
+    all,
+    /** Для выбора — только не удалённые. */
+    active: all.filter((t) => !t.deleted_at),
+    label: (code: string | null | undefined) => all.find((t) => t.code === code)?.name ?? "",
+  };
+}
 
 export const OBJECT_STATUSES = [
   { v: "planned", label: "Планируется" },
@@ -50,7 +68,6 @@ export const MEMBER_ROLES = [
   { code: "office", label: "Офис-менеджер" },
 ] as const;
 
-export const typeLabel = (v: string | null | undefined) => OBJECT_TYPES.find((t) => t.v === v)?.label ?? "";
 export const statusLabel = (v: string | null | undefined) => OBJECT_STATUSES.find((t) => t.v === v)?.label ?? "";
 
 const num = (v: unknown) => (v === null || v === undefined ? 0 : Number(v));

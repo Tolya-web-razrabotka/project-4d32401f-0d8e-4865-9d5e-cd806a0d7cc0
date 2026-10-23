@@ -690,6 +690,30 @@ export type Database = {
           },
         ]
       }
+      object_types: {
+        Row: {
+          code: string
+          created_at: string
+          deleted_at: string | null
+          name: string
+          sort: number
+        }
+        Insert: {
+          code?: string
+          created_at?: string
+          deleted_at?: string | null
+          name: string
+          sort?: number
+        }
+        Update: {
+          code?: string
+          created_at?: string
+          deleted_at?: string | null
+          name?: string
+          sort?: number
+        }
+        Relationships: []
+      }
       objects: {
         Row: {
           address: string | null

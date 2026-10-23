@@ -61,7 +61,7 @@ function EditObjectPage() {
     name: obj.name,
     address: obj.address ?? "",
     customer_id: obj.customer_id ?? "",
-    object_type: obj.object_type as ObjectDraft["object_type"],
+    object_type: obj.object_type,
     contract_start: obj.contract_start ?? "",
     contract_end: obj.contract_end ?? "",
     responsible_id: obj.responsible_id ?? "",

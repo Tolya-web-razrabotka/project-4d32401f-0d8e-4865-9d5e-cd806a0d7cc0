@@ -10,12 +10,11 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { EmptyRow, Toolbar, matches } from "@/components/directories/common";
 import {
   OBJECT_STATUSES,
-  OBJECT_TYPES,
   TONE_CLASS,
   contractTone,
   daysLeftText,
   statusLabel,
-  typeLabel,
+  useObjectTypes,
   useObjects,
   type ObjectRow,
 } from "@/components/objects/data";
@@ -62,6 +61,9 @@ function ObjectsPage() {
   const [search, setSearch] = useState("");
   const [status, setStatus] = useState("all");
   const [type, setType] = useState("all");
+  const { all: objectTypes } = useObjectTypes();
+  // В фильтре — действующие типы и те удалённые, у которых остались объекты
+  const typeOptions = objectTypes.filter((t) => !t.deleted_at || objects.some((o) => o.object_type === t.code));
   const [archive, setArchive] = useState(false);
   const [problem, setProblem] = useState<Problem | null>(null);
 
@@ -130,8 +132,8 @@ function ObjectsPage() {
           <SelectTrigger className="h-9 w-40 text-sm"><SelectValue /></SelectTrigger>
           <SelectContent>
             <SelectItem value="all" className="text-sm">Все типы</SelectItem>
-            {OBJECT_TYPES.map((t) => (
-              <SelectItem key={t.v} value={t.v} className="text-sm">{t.label}</SelectItem>
+            {typeOptions.map((t) => (
+              <SelectItem key={t.code} value={t.code} className="text-sm">{t.name}</SelectItem>
             ))}
           </SelectContent>
         </Select>
@@ -195,6 +197,7 @@ function ObjectsPage() {
 
 function ObjectTableRow({ o, onOpen }: { o: ObjectRow; onOpen: () => void }) {
   const tone = o.status === "completed" ? "none" : contractTone(o.contract_days_left);
+  const { label: typeLabel } = useObjectTypes();
   const chips: { n: number; text: string; cls: string }[] = [
     { n: o.stages_overdue, text: "просрочено", cls: "bg-red-50 text-red-800 ring-1 ring-inset ring-red-200" },
     { n: o.stages_no_response, text: "нет ответа", cls: "border border-red-600 text-red-700 dark:text-red-300" },
