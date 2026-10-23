@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import type { RequestField } from "@/components/directories/request-types/data";
@@ -57,6 +58,16 @@ export function FieldInput({
             ))}
           </SelectContent>
         </Select>
+      );
+    case "textarea":
+      return (
+        <Textarea
+          disabled={disabled}
+          rows={3}
+          value={typeof value === "string" ? value : value === null || value === undefined ? "" : String(value)}
+          onChange={(e) => onChange(e.target.value)}
+          className="min-h-20 text-sm"
+        />
       );
     case "picket_range":
       return <PicketRangeInput value={value} onChange={onChange} disabled={disabled} />;

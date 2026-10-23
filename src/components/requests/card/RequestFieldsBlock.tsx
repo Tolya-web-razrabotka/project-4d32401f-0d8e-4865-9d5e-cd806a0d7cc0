@@ -62,19 +62,22 @@ export function RequestFieldsBlock({
       <div className="mt-4 grid gap-5 sm:grid-cols-2">
         {editable.map((f) => (
           // Подпись — из снимка в заявке, если значение уже сохранено: переименование поля в справочнике её не меняет
-          <Field key={f.id} label={values.find((v) => v.field_id === f.id)?.label ?? f.label} required={f.is_required}>
-            <FieldInput
-              field={f}
-              value={draft[f.id]}
-              disabled={readOnly}
-              onChange={(v) => setDraft((x) => ({ ...x, [f.id]: v }))}
-            />
-          </Field>
+          // Многострочные поля и пикеты — на всю ширину карточки
+          <div key={f.id} className={f.field_type === "textarea" || f.field_type === "picket_range" ? "sm:col-span-2" : ""}>
+            <Field label={values.find((v) => v.field_id === f.id)?.label ?? f.label} required={f.is_required}>
+              <FieldInput
+                field={f}
+                value={draft[f.id]}
+                disabled={readOnly}
+                onChange={(v) => setDraft((x) => ({ ...x, [f.id]: v }))}
+              />
+            </Field>
+          </div>
         ))}
         {orphanValues.map((v) => (
           <div key={v.field_id} className="space-y-2">
             <div className="text-sm text-muted-foreground">{v.label}</div>
-            <div className="flex h-9 items-center rounded-md border bg-muted px-3 text-sm">{formatValue(v.field_type, v.value)}</div>
+            <div className="flex min-h-9 items-center whitespace-pre-line rounded-md border bg-muted px-3 py-2 text-sm">{formatValue(v.field_type, v.value)}</div>
           </div>
         ))}
       </div>

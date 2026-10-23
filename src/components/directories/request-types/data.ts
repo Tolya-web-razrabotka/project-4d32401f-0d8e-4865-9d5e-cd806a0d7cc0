@@ -12,7 +12,7 @@ export type RequestType = {
   send_to_email: string | null;
 };
 
-export type FieldType = "text" | "number" | "date" | "select" | "checkbox" | "file" | "picket_range";
+export type FieldType = "text" | "textarea" | "number" | "date" | "select" | "checkbox" | "file" | "picket_range";
 
 export type RequestField = {
   id: string;
@@ -28,6 +28,7 @@ export type RequestField = {
 
 export const FIELD_TYPES: { v: FieldType; label: string }[] = [
   { v: "text", label: "Текст" },
+  { v: "textarea", label: "Многострочный текст" },
   { v: "number", label: "Число" },
   { v: "date", label: "Дата" },
   { v: "select", label: "Выпадающий список" },
